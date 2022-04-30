@@ -1,6 +1,6 @@
 package com.fitclub.fitclub.shared;
 
-import com.fitclub.fitclub.file.FileService;
+import com.fitclub.fitclub.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

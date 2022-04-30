@@ -1,6 +1,6 @@
-package com.fitclub.fitclub.user.vm;
+package com.fitclub.fitclub.model;
 
-import com.fitclub.fitclub.user.User;
+import com.fitclub.fitclub.model.Entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

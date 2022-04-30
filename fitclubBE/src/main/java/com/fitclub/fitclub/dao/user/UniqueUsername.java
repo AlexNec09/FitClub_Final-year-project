@@ -1,4 +1,6 @@
-package com.fitclub.fitclub.user;
+package com.fitclub.fitclub.dao.user;
+
+import com.fitclub.fitclub.controller.UniqueUsernameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,7 +1,7 @@
 package com.fitclub.fitclub;
 
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.UserRepository;
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.dao.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

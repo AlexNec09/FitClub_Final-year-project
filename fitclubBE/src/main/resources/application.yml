@@ -2,16 +2,16 @@ spring:
   profiles:
     active:
       - dev
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   jpa:
     properties:
       javax:
         persistence:
           validation:
             mode: none
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
   data:
     web:
       pageable:
@@ -22,27 +22,33 @@ spring:
   config:
     activate:
       on-profile: prod
-  datasource:
-    url: jdbc:h2:./fitclub-prod
-    username: sa
-  h2:
-    console:
-      enabled: false
   jpa:
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/licensedb
+    username: root
+    password: root
 fitclub:
   upload-path: uploads-prod
+
 ---
 spring:
   config:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:h2:mem:fitclub-dev
-    username: sa
+    url: jdbc:mysql://localhost:3306/licensedb
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
 fitclub:
   upload-path: uploads-dev
+
 ---
 spring:
   config:
@@ -50,3 +56,89 @@ spring:
       on-profile: test
 fitclub:
   upload-path: uploads-test
+
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    registerWithEureka: true
+#    fetchRegistry: false
+#    serviceUrl:
+#      defaultZone: http://localhost:3000/eureka
+
+
+
+#spring:
+#  profiles:
+#    active:
+#      - dev
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#  jpa:
+#    properties:
+#      javax:
+#        persistence:
+#          validation:
+#            mode: none
+#  data:
+#    web:
+#      pageable:
+#        default-page-size: 10
+#        max-page-size: 100
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    database-platform: org.hibernate.dialect.MySQL57Dialect
+#
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/licensedb
+#    username: root
+#    password: root
+#
+##  datasource:
+##    url: jdbc:h2:./fitclub-prod
+##    username: sa
+##  h2:
+##    console:
+##      enabled: false
+##  jpa:
+##    hibernate:
+##      ddl-auto: update
+#
+#fitclub:
+#  upload-path: uploads-prod
+#---
+#spring:
+#  jpa:
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#  datasource:
+#    url: jdbc:h2:mem:hoaxify-dev
+##spring:
+##  config:
+##    activate:
+##      on-profile: dev
+##  datasource:
+##    url: jdbc:h2:mem:fitclub-dev
+##    username: sa
+#fitclub:
+#  upload-path: uploads-dev
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: test
+#fitclub:
+#  upload-path: uploads-test

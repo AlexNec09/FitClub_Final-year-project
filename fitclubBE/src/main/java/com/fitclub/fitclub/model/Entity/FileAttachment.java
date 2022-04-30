@@ -1,6 +1,6 @@
-package com.fitclub.fitclub.file;
+package com.fitclub.fitclub.model.Entity;
 
-import com.fitclub.fitclub.message.Message;
+import com.fitclub.fitclub.model.Entity.Message;
 import lombok.Data;
 
 import javax.persistence.*;

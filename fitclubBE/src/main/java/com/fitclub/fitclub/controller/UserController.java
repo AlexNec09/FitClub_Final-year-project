@@ -1,27 +1,21 @@
-package com.fitclub.fitclub.user;
+package com.fitclub.fitclub.controller;
 
-import com.fitclub.fitclub.error.ApiError;
+import com.fitclub.fitclub.model.Entity.User;
 import com.fitclub.fitclub.shared.CurrentUser;
-import com.fitclub.fitclub.user.vm.UserUpdateVM;
-import com.fitclub.fitclub.user.vm.UserVM;
+import com.fitclub.fitclub.model.UserUpdateVM;
+import com.fitclub.fitclub.model.UserVM;
+import com.fitclub.fitclub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.fitclub.fitclub.shared.GenericResponse;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/1.0")

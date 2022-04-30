@@ -1,4 +1,4 @@
-package com.fitclub.fitclub.user.vm;
+package com.fitclub.fitclub.model;
 
 import com.fitclub.fitclub.shared.ProfileImage;
 import lombok.Data;

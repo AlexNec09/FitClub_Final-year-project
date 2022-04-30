@@ -3,9 +3,9 @@ package com.fitclub.fitclub;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fitclub.fitclub.error.ApiError;
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.UserRepository;
-import com.fitclub.fitclub.user.UserService;
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.dao.user.UserRepository;
+import com.fitclub.fitclub.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

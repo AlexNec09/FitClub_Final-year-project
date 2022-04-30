@@ -1,7 +1,7 @@
 package com.fitclub.fitclub.configuration;
 
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.UserRepository;
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.dao.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

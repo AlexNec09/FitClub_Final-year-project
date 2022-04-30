@@ -1,5 +1,8 @@
-package com.fitclub.fitclub.user;
+package com.fitclub.fitclub.controller;
 
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.dao.user.UniqueUsername;
+import com.fitclub.fitclub.dao.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

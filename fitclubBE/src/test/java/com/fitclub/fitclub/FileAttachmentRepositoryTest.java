@@ -1,8 +1,8 @@
 package com.fitclub.fitclub;
 
-import com.fitclub.fitclub.file.FileAttachment;
-import com.fitclub.fitclub.file.FileAttachmentRepository;
-import com.fitclub.fitclub.message.Message;
+import com.fitclub.fitclub.model.Entity.FileAttachment;
+import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
+import com.fitclub.fitclub.model.Entity.Message;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

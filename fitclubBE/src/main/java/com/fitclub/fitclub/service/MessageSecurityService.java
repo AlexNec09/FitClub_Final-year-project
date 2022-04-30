@@ -1,6 +1,8 @@
-package com.fitclub.fitclub.message;
+package com.fitclub.fitclub.service;
 
-import com.fitclub.fitclub.user.User;
+import com.fitclub.fitclub.dao.message.MessageRepository;
+import com.fitclub.fitclub.model.Entity.Message;
+import com.fitclub.fitclub.model.Entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

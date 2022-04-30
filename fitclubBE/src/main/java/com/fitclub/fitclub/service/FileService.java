@@ -1,6 +1,8 @@
-package com.fitclub.fitclub.file;
+package com.fitclub.fitclub.service;
 
 import com.fitclub.fitclub.configuration.AppConfiguration;
+import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
+import com.fitclub.fitclub.model.Entity.FileAttachment;
 import org.apache.commons.io.FileUtils;
 import org.apache.tika.Tika;
 import org.springframework.scheduling.annotation.EnableScheduling;

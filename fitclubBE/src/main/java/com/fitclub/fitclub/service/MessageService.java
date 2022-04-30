@@ -1,20 +1,15 @@
-package com.fitclub.fitclub.message;
+package com.fitclub.fitclub.service;
 
-import com.fitclub.fitclub.file.FileAttachment;
-import com.fitclub.fitclub.file.FileAttachmentRepository;
-import com.fitclub.fitclub.file.FileService;
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.UserService;
+import com.fitclub.fitclub.dao.message.MessageRepository;
+import com.fitclub.fitclub.model.Entity.FileAttachment;
+import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
+import com.fitclub.fitclub.model.Entity.Message;
+import com.fitclub.fitclub.model.Entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

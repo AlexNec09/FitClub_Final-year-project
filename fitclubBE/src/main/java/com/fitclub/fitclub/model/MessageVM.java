@@ -1,9 +1,6 @@
-package com.fitclub.fitclub.message.vm;
+package com.fitclub.fitclub.model;
 
-import com.fitclub.fitclub.file.FileAttachmentVM;
-import com.fitclub.fitclub.message.Message;
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.vm.UserVM;
+import com.fitclub.fitclub.model.Entity.Message;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

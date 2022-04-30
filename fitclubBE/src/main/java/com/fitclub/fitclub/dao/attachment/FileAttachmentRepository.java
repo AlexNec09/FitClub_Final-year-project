@@ -1,5 +1,6 @@
-package com.fitclub.fitclub.file;
+package com.fitclub.fitclub.dao.attachment;
 
+import com.fitclub.fitclub.model.Entity.FileAttachment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;

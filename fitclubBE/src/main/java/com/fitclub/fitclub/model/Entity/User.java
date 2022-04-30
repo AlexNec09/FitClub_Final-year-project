@@ -1,4 +1,4 @@
-package com.fitclub.fitclub.user;
+package com.fitclub.fitclub.model.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -7,8 +7,7 @@ import javax.validation.constraints.Size;
 import java.beans.Transient;
 
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fitclub.fitclub.message.Message;
+import com.fitclub.fitclub.dao.user.UniqueUsername;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

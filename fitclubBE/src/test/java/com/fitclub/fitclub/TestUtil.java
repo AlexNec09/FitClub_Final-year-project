@@ -1,7 +1,7 @@
 package com.fitclub.fitclub;
 
-import com.fitclub.fitclub.message.Message;
-import com.fitclub.fitclub.user.User;
+import com.fitclub.fitclub.model.Entity.Message;
+import com.fitclub.fitclub.model.Entity.User;
 
 public class TestUtil {
 

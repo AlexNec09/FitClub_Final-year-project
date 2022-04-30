@@ -1,9 +1,11 @@
-package com.fitclub.fitclub.message;
+package com.fitclub.fitclub.controller;
 
-import com.fitclub.fitclub.message.vm.MessageVM;
+import com.fitclub.fitclub.service.MessageService;
+import com.fitclub.fitclub.model.MessageVM;
+import com.fitclub.fitclub.model.Entity.Message;
 import com.fitclub.fitclub.shared.CurrentUser;
 import com.fitclub.fitclub.shared.GenericResponse;
-import com.fitclub.fitclub.user.User;
+import com.fitclub.fitclub.model.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,7 +1,5 @@
 package com.fitclub.fitclub.shared;
 
-import com.fitclub.fitclub.user.UniqueUsernameValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.ElementType;

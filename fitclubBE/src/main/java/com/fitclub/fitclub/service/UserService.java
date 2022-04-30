@@ -1,18 +1,15 @@
-package com.fitclub.fitclub.user;
+package com.fitclub.fitclub.service;
 
+import com.fitclub.fitclub.dao.user.UserRepository;
 import com.fitclub.fitclub.error.NotFoundHandler;
-import com.fitclub.fitclub.file.FileService;
-import com.fitclub.fitclub.user.vm.UserUpdateVM;
-import javassist.NotFoundException;
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.model.UserUpdateVM;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Service
 public class UserService {

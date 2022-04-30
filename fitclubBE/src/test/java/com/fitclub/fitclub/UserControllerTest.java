@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fitclub.fitclub.configuration.AppConfiguration;
 import com.fitclub.fitclub.error.ApiError;
-import com.fitclub.fitclub.user.UserService;
-import com.fitclub.fitclub.user.vm.UserUpdateVM;
-import com.fitclub.fitclub.user.vm.UserVM;
+import com.fitclub.fitclub.service.UserService;
+import com.fitclub.fitclub.model.UserUpdateVM;
+import com.fitclub.fitclub.model.UserVM;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,18 +17,16 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fitclub.fitclub.shared.GenericResponse;
-import com.fitclub.fitclub.user.User;
-import com.fitclub.fitclub.user.UserRepository;
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.dao.user.UserRepository;
 
 import java.io.File;
 import java.io.IOException;

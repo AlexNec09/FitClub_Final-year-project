@@ -1,5 +1,6 @@
-package com.fitclub.fitclub.file;
+package com.fitclub.fitclub.model;
 
+import com.fitclub.fitclub.model.Entity.FileAttachment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

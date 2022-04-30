@@ -1,8 +1,5 @@
-package com.fitclub.fitclub.message;
+package com.fitclub.fitclub.model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fitclub.fitclub.file.FileAttachment;
-import com.fitclub.fitclub.user.User;
 import lombok.Data;
 
 import javax.persistence.*;

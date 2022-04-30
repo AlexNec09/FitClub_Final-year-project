@@ -1,10 +1,10 @@
 package com.fitclub.fitclub;
 
 import com.fitclub.fitclub.configuration.AppConfiguration;
-import com.fitclub.fitclub.file.FileAttachment;
-import com.fitclub.fitclub.file.FileAttachmentRepository;
-import com.fitclub.fitclub.user.UserRepository;
-import com.fitclub.fitclub.user.UserService;
+import com.fitclub.fitclub.model.Entity.FileAttachment;
+import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
+import com.fitclub.fitclub.dao.user.UserRepository;
+import com.fitclub.fitclub.service.UserService;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

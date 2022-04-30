@@ -1,9 +1,9 @@
 package com.fitclub.fitclub;
 
 import com.fitclub.fitclub.configuration.AppConfiguration;
-import com.fitclub.fitclub.file.FileAttachment;
-import com.fitclub.fitclub.file.FileAttachmentRepository;
-import com.fitclub.fitclub.file.FileService;
+import com.fitclub.fitclub.model.Entity.FileAttachment;
+import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
+import com.fitclub.fitclub.service.FileService;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
