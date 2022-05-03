@@ -4,7 +4,9 @@ import Input from './Input';
 import ButtonWithProgress from './ButtonWithProgress';
 
 const ProfileCard = (props) => {
-    const { displayName, username, image } = props.user;
+    const { displayName, username, image, followed } = props.user;
+
+    console.log(props.user);
 
     const showEditButton = props.isEditable && !props.inEditMode;
 
@@ -66,6 +68,15 @@ const ProfileCard = (props) => {
                             </button>
                         </div>
                     )}
+                {props.isFollowable && <div className="mx-2 text-center">
+                    <ButtonWithProgress
+                        className="btn btn-primary"
+                        onClick={props.onToggleFollow}
+                        disabled={props.pendingFollowToggleCall}
+                        pendingApiCall={props.pendingFollowToggleCall}
+                        text={followed ? 'Unfollow' : 'Follow'}
+                    />
+                </div>}
             </div>
         </div>
     );

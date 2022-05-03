@@ -1,7 +1,14 @@
 package com.fitclub.fitclub;
 
+import com.fitclub.fitclub.model.Entity.User;
+import com.fitclub.fitclub.service.UserService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class FitClubApplication {

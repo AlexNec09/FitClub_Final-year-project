@@ -35,10 +35,16 @@ public class UserController {
         return userService.getUsers(loggedInUser, page).map(UserVM::new);
     }
 
+//    @GetMapping("/users/{username}")
+//    UserVM getUserByName(@PathVariable String username) {
+//        User user = userService.getByUsername(username);
+//        return new UserVM(user);
+//    }
+
     @GetMapping("/users/{username}")
-    UserVM getUserByName(@PathVariable String username) {
+    UserVM getUserByName(@PathVariable String username, @CurrentUser User currentUser) {
         User user = userService.getByUsername(username);
-        return new UserVM(user);
+        return new UserVM(user, currentUser);
     }
 
     @PutMapping("/users/{id:[0-9]+}")

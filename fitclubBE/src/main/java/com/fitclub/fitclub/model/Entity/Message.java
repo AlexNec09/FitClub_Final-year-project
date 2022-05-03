@@ -1,7 +1,7 @@
 package com.fitclub.fitclub.model.Entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,9 +10,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Message {
 
     @Id
@@ -28,6 +30,7 @@ public class Message {
     private Date timestamp;
 
     @ManyToOne
+//    @ToString.Exclude
     private User user;
 
     @OneToOne(mappedBy = "message", orphanRemoval = true)

@@ -1,5 +1,7 @@
 package com.fitclub.fitclub.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitclub.fitclub.dao.message.MessageRepository;
 import com.fitclub.fitclub.error.NotFoundHandler;
 import com.fitclub.fitclub.model.Entity.FileAttachment;
@@ -56,6 +58,13 @@ public class MessageService {
         return messageRepository.findByUser(inDB, pageable);
     }
 
+    public Page<Message> getMessagesForUser(Pageable pageable, String username) {
+        User inDB = userService.getByUsername(username);
+        Set<User> users = inDB.getFollows();
+        users.add(inDB);
+        return messageRepository.findByUserInOrderByIdDesc(users, pageable);
+    }
+
     public Page<Message> getOldMessages(long id, String username, Pageable pageable) {  // like getOldMessagesGlobal
         Specification<Message> spec = Specification.where(idLessThan(id));
         if (username != null) {
@@ -81,14 +90,6 @@ public class MessageService {
             spec = spec.and(userIs(inDB));
         }
         return messageRepository.count(spec);
-    }
-
-
-    public Page<Message> getMessagesForUser(Pageable pageable, User user) {
-        User forUser = userService.getByUsername(user.getUsername());
-        Set<User> users = forUser.getFollows();
-        users.add(forUser);
-        return messageRepository.findByUserInOrderByIdDesc(users, pageable);
     }
 
     public Page<Message> getOldMessagesForUser(long id, String username, Pageable pageable) {

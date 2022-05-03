@@ -79,12 +79,12 @@ const MessageView = (props) => {
           />
         </div>
       )}
-      <div className="pl-5 d-flex">
+      <div className="ps-5 pt-3 d-flex">
         <div className={reactions && reactions.loggedUserReaction === "LIKE" ? "text-success w-25" : "text-muted w-25"} data-testid="like-reaction" style={{ cursor: 'pointer' }} onClick={onClickLike}>
-          <i className="far fa-thumbs-up"></i><span className="pl-1">{reactions && reactions.likeCount}</span>
+          <i className="far fa-thumbs-up"></i><span className="ps-1">{reactions && reactions.likeCount}</span>
         </div>
         <div className={reactions && reactions.loggedUserReaction === "DISLIKE" ? "text-danger w-25" : "text-muted w-25"} data-testid="dislike-reaction" style={{ cursor: 'pointer' }} onClick={onClickDislike}>
-          <i className="far fa-thumbs-down"></i><span className="pl-1">{reactions && reactions.dislikeCount}</span>
+          <i className="far fa-thumbs-down"></i><span className="ps-1">{reactions && reactions.dislikeCount}</span>
         </div>
       </div>
     </div>

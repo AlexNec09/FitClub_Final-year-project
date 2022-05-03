@@ -72,7 +72,7 @@ public class UserService {
         userRepository.save(currentUserInDB);
     }
 
-    @Transactional // IDK
+    @Transactional
     public void unfollow(long id, User currentUser) {
         User targetUser = getById(id);
         User currentUserInDB = getById(currentUser.getId());

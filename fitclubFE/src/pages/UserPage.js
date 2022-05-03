@@ -92,6 +92,25 @@ const reducer = (state, action) => {
       ...state,
       inEditMode: true,
     };
+  } else if (action.type === "follow-op-init") {
+    return {
+      ...state,
+      pendingFollowToggleCall: true,
+    }
+  } else if (action.type === "user-follow") {
+    return {
+      ...state,
+      pendingFollowToggleCall: false,
+      user: {
+        ...state.user,
+        followed: action.payload,
+      }
+    }
+  } else if (action.type === "follow-op-failure") {
+    return {
+      ...state,
+      pendingFollowToggleCall: false,
+    }
   }
   return state;
 };
@@ -104,6 +123,7 @@ const UserPage = (props) => {
     inEditMode: false,
     originalDisplayName: undefined,
     pendingUpdateCall: false,
+    pendingFollowToggleCall: false,
     image: undefined,
     errors: {},
   });
@@ -168,6 +188,24 @@ const UserPage = (props) => {
     reader.readAsDataURL(file);
   };
 
+  const onToggleFollow = () => {
+    dispatch({ type: "follow-op-init" });
+    apiCalls.follow(state.user.id, !state.user.followed)
+      .then((response) => {
+        dispatch({ type: "user-follow", payload: !state.user.followed });
+        const updatedUser = { ...state.user };
+        updatedUser.followed = !state.user.followed;
+
+        const action = {
+          type: "user-follow",
+          payload: updatedUser,
+        };
+        props.dispatch(action);
+      }).catch(err => {
+        dispatch({ type: "follow-op-failure" });
+      });
+  }
+
   let pageContent;
   if (state.isLoadingUser) {
     pageContent = <Spinner />;
@@ -212,6 +250,9 @@ const UserPage = (props) => {
             pendingUpdateCall={state.pendingUpdateCall}
             loadedImage={state.image}
             onFileSelect={onFileSelect}
+            isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
+            onToggleFollow={onToggleFollow}
+            pendingFollowToggleCall={state.pendingFollowToggleCall}
             errors={state.errors}
           />
         </div>

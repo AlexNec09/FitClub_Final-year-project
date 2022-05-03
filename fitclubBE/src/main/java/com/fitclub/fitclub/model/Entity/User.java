@@ -7,9 +7,10 @@ import javax.validation.constraints.Size;
 import java.beans.Transient;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fitclub.fitclub.dao.user.UniqueUsername;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User implements UserDetails {
 
     @Id
@@ -45,12 +48,15 @@ public class User implements UserDetails {
     private String image;
 
     @OneToMany(mappedBy = "user")
+//    @ToString.Exclude
+    @JsonIgnore
     private List<Message> messages;
 
     @ManyToMany
     Set<User> followedBy = new HashSet<>();
 
     @ManyToMany
+    @JsonIgnore
     Set<User> follows = new HashSet<>();
 
     @Override

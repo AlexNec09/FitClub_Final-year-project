@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class FileAttachment {
 
     @Id
