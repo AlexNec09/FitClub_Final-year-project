@@ -18,13 +18,16 @@ public class MessageVM {
 
     private FileAttachmentVM attachment;
 
+    private ReactionVM reactions;
+
     public MessageVM(Message message) {
         this.setId(message.getId());
         this.setContent(message.getContent());
         this.setDate(message.getTimestamp().getTime());
-        this.setUser(new UserVM(message.getUser()));
+        this.setUser(UserVM.createUserVM(message.getUser()));
         if (message.getAttachment() != null) {
             this.setAttachment(new FileAttachmentVM(message.getAttachment()));
         }
+        this.setReactions(new ReactionVM(message.getMessageReactions()));
     }
 }

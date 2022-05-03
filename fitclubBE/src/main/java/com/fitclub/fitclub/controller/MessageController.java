@@ -32,8 +32,15 @@ public class MessageController {
         return new MessageVM(messageService.save(user, message));
     }
 
+//    @GetMapping("/messages")
+//    Page<MessageVM> getAllMessages(Pageable pageable) {
+//        return messageService.getAllMessages(pageable).map(MessageVM::new);
+//    }
+
     @GetMapping("/messages")
-    Page<MessageVM> getAllMessages(Pageable pageable) {
+    Page<?> getAllMessages(Pageable pageable, @CurrentUser User user) {
+        if (user != null)
+            return messageService.getMessagesForUser(pageable, user).map(MessageVM::new);
         return messageService.getAllMessages(pageable).map(MessageVM::new);
     }
 
@@ -49,15 +56,15 @@ public class MessageController {
                                           @RequestParam(name = "direction", defaultValue = "after") String direction,
                                           @RequestParam(name = "count", defaultValue = "false", required = false) boolean count) {
         if (!direction.equalsIgnoreCase("after")) {
-            return ResponseEntity.ok(messageService.getOldMessages(id, username, pageable).map(MessageVM::new));
+            return ResponseEntity.ok(messageService.getOldMessagesForUser(id, username, pageable).map(MessageVM::new));
         }
 
         if (count) {
-            long newMessagesCount = messageService.getNewMessagesCount(id, username);
+            long newMessagesCount = messageService.getNewMessagesCountForUser(id, username);
             return ResponseEntity.ok(Collections.singletonMap("count", newMessagesCount));
         }
 
-        List<MessageVM> newMessages = messageService.getNewMessages(id, username, pageable).stream()
+        List<MessageVM> newMessages = messageService.getNewMessagesForUser(id, username, pageable).stream()
                 .map(MessageVM::new).collect(Collectors.toList());
         return ResponseEntity.ok(newMessages);
     }
@@ -66,6 +73,6 @@ public class MessageController {
     @PreAuthorize("@messageSecurityService.isAllowedToDelete(#id, principal)")
     GenericResponse deleteMessage(@PathVariable long id) {
         messageService.deleteMessage(id);
-        return new GenericResponse("Message is removed!");
+        return new GenericResponse("Post removed!");
     }
 }

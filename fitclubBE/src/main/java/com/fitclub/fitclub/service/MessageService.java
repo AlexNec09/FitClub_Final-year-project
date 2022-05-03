@@ -1,18 +1,19 @@
 package com.fitclub.fitclub.service;
 
 import com.fitclub.fitclub.dao.message.MessageRepository;
+import com.fitclub.fitclub.error.NotFoundHandler;
 import com.fitclub.fitclub.model.Entity.FileAttachment;
 import com.fitclub.fitclub.dao.attachment.FileAttachmentRepository;
 import com.fitclub.fitclub.model.Entity.Message;
+import com.fitclub.fitclub.model.Entity.MessageReaction;
 import com.fitclub.fitclub.model.Entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.*;
 
 @Service
 public class MessageService {
@@ -50,12 +51,12 @@ public class MessageService {
         return messageRepository.findAll(pageable);
     }
 
-    public Page<Message> getMessagesOfUser(String username, Pageable pageable) {
+    public Page<Message> getMessagesOfUser(String username, Pageable pageable) {  // this is showing on user page
         User inDB = userService.getByUsername(username);
         return messageRepository.findByUser(inDB, pageable);
     }
 
-    public Page<Message> getOldMessages(long id, String username, Pageable pageable) {
+    public Page<Message> getOldMessages(long id, String username, Pageable pageable) {  // like getOldMessagesGlobal
         Specification<Message> spec = Specification.where(idLessThan(id));
         if (username != null) {
             User inDB = userService.getByUsername(username);
@@ -64,7 +65,7 @@ public class MessageService {
         return messageRepository.findAll(spec, pageable);
     }
 
-    public List<Message> getNewMessages(long id, String username, Pageable pageable) {
+    public List<Message> getNewMessages(long id, String username, Pageable pageable) {  // like getNewMessagesGlobal
         Specification<Message> spec = Specification.where(idGreaterThan(id));
         if (username != null) {
             User inDB = userService.getByUsername(username);
@@ -73,13 +74,73 @@ public class MessageService {
         return messageRepository.findAll(spec, pageable.getSort());
     }
 
-    public long getNewMessagesCount(long id, String username) {
+    public long getNewMessagesCount(long id, String username) {  // like getNewMessagesCountGlobal
         Specification<Message> spec = Specification.where(idGreaterThan(id));
         if (username != null) {
             User inDB = userService.getByUsername(username);
             spec = spec.and(userIs(inDB));
         }
         return messageRepository.count(spec);
+    }
+
+
+    public Page<Message> getMessagesForUser(Pageable pageable, User user) {
+        User forUser = userService.getByUsername(user.getUsername());
+        Set<User> users = forUser.getFollows();
+        users.add(forUser);
+        return messageRepository.findByUserInOrderByIdDesc(users, pageable);
+    }
+
+    public Page<Message> getOldMessagesForUser(long id, String username, Pageable pageable) {
+        Specification<Message> spec = Specification.where(idLessThan(id));
+
+        if (username != null) {
+            User inDB = userService.getByUsername(username);
+            Set<User> users = inDB.getFollows();
+            users.add(inDB);
+            Specification<Message> query = Specification.where(idLessThan(id)).and(getUsersIn(users));
+            return messageRepository.findAll(query, pageable);
+        }
+        return messageRepository.findAll(spec, pageable);
+    }
+
+    public List<Message> getNewMessagesForUser(long id, String username, Pageable pageable) {
+        Specification<Message> spec = Specification.where(idGreaterThan(id));
+
+        if (username != null) {
+            User inDB = userService.getByUsername(username);
+            Set<User> users = inDB.getFollows();
+            users.add(inDB);
+            Specification<Message> query = Specification.where(idGreaterThan(id)).and(getUsersIn(users));
+            return messageRepository.findAll(query, pageable.getSort());
+        }
+        return messageRepository.findAll(spec, pageable.getSort());
+    }
+
+    public long getNewMessagesCountForUser(long id, String username) {
+        Specification<Message> spec = Specification.where(idGreaterThan(id));
+
+        if (username != null) {
+            User inDB = userService.getByUsername(username);
+            Set<User> users = inDB.getFollows();
+            users.add(inDB);
+            Specification<Message> query = Specification.where(idGreaterThan(id)).and(getUsersIn(users));
+            return messageRepository.count(query);
+        }
+        return messageRepository.count(spec);
+    }
+
+    public Message getMessage(long id) {
+        return messageRepository.findById(id).orElseThrow(() -> new NotFoundHandler("Post not found!"));
+    }
+
+    private Specification<Message> getUsersIn(Set<User> users) {
+        return (root, query, criteriaBuilder) -> {
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
+            CriteriaBuilder.In<User> inResult = criteriaBuilder.in(root.get("user"));
+            users.forEach(inResult::value);
+            return inResult;
+        };
     }
 
     private Specification<Message> userIs(User user) {

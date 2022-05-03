@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -57,4 +59,36 @@ public class UserService {
         }
         return userRepository.save(inDB);
     }
+
+    @Transactional // IDK
+    public void follow(long id, User currentUser) {
+        User targetUser = getById(id);
+        User currentUserInDB = getById(currentUser.getId());
+
+        targetUser.getFollowedBy().add(currentUserInDB);
+        userRepository.save(targetUser);
+
+        currentUserInDB.getFollows().add(targetUser);
+        userRepository.save(currentUserInDB);
+    }
+
+    @Transactional // IDK
+    public void unfollow(long id, User currentUser) {
+        User targetUser = getById(id);
+        User currentUserInDB = getById(currentUser.getId());
+
+        targetUser.getFollowedBy().remove(currentUserInDB);
+        userRepository.save(targetUser);
+
+        currentUserInDB.getFollows().remove(targetUser);
+        userRepository.save(currentUserInDB);
+    }
+
+    private User getById(long id) {
+        Optional<User> inDB = userRepository.findById(id);
+        if (!inDB.isPresent())
+            throw new NotFoundHandler("User not found");
+        return inDB.get();
+    }
+
 }

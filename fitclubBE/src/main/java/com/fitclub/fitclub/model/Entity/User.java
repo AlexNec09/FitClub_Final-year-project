@@ -9,15 +9,19 @@ import java.beans.Transient;
 
 import com.fitclub.fitclub.dao.user.UniqueUsername;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User implements UserDetails {
 
     @Id
@@ -42,6 +46,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Message> messages;
+
+    @ManyToMany
+    Set<User> followedBy = new HashSet<>();
+
+    @ManyToMany
+    Set<User> follows = new HashSet<>();
 
     @Override
     @Transient

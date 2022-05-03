@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitFor,
   waitForElementToBeRemoved,
+  waitForDomChange,
 } from "@testing-library/react";
 import MessageFeed from "./MessageFeed";
 import * as apiCalls from "../api/apiCalls";
@@ -65,6 +66,34 @@ const mockEmptyResponse = {
   data: {
     content: [],
   },
+};
+
+const mockResponseWithLoadedMessagePage = () => {
+  return {
+    data: {
+      content: [
+        {
+          id: 15,
+          content: 'This is the loaded message',
+          date: new Date().getTime(),
+          user: {
+            username: 'user5',
+            displayName: 'display5'
+          },
+          reactions: {
+            likeCount: 5,
+            dislikeCount: 7,
+            loggedUserReaction: null
+          }
+        }
+      ],
+      number: 0,
+      first: true,
+      last: true,
+      size: 5,
+      totalPages: 1
+    }
+  }
 };
 
 const mockSuccessGetNewMessagesList = {
@@ -815,7 +844,132 @@ describe("MessageFeed", () => {
         expect(spinner).not.toBeInTheDocument();
       });
     });
+
+
+
+    //////////
+
+    it('calls the messageReaction when clicked the like button', async () => {
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockResponseWithLoadedMessagePage());
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const like = queryByTestId('like-reaction');
+      fireEvent.click(like);
+      expect(apiCalls.messageReaction).toBeCalledWith(15, 'like');
+    });
+
+    it('updates the loggedUserReaction to like and count after the successfull messageReaction when clicked the like button', async () => {
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockResponseWithLoadedMessagePage());
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const like = queryByTestId('like-reaction');
+      fireEvent.click(like);
+
+      await waitForDomChange();
+      const likeAfterClick = queryByTestId('like-reaction');
+      expect(likeAfterClick.className).toContain('text-success');
+      expect(likeAfterClick.textContent).toBe("6");
+    });
+
+    it('updates the loggedUserReaction from like to null and count after the successfull messageReaction when clicked the like button', async () => {
+      const mockData = mockResponseWithLoadedMessagePage()
+      mockData.data.content[0].reactions.loggedUserReaction = 'LIKE';
+
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockData);
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const like = queryByTestId('like-reaction');
+      fireEvent.click(like);
+
+      await waitForDomChange();
+      const likeAfterClick = queryByTestId('like-reaction');
+      expect(likeAfterClick.className).not.toContain('text-success');
+      expect(likeAfterClick.textContent).toBe("4");
+    });
+
+    it('updates the loggedUserReaction to dislike and count after the successfull messageReaction when clicked the dislike button', async () => {
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockResponseWithLoadedMessagePage());
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const dislike = queryByTestId('dislike-reaction');
+      fireEvent.click(dislike);
+
+      await waitForDomChange();
+      const dislikeAfterClick = queryByTestId('dislike-reaction');
+      expect(dislikeAfterClick.className).toContain('text-danger');
+      expect(dislikeAfterClick.textContent).toBe("8");
+    });
+
+    it('updates the loggedUserReaction from dislike to null and count after the successfull messageReaction when clicked the dislike button', async () => {
+      const mockData = mockResponseWithLoadedMessagePage()
+      mockData.data.content[0].reactions.loggedUserReaction = 'DISLIKE';
+
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockData);
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const dislike = queryByTestId('dislike-reaction');
+      fireEvent.click(dislike);
+
+      await waitForDomChange();
+      const dislikeAfterClick = queryByTestId('dislike-reaction');
+      expect(dislikeAfterClick.className).not.toContain('text-danger');
+      expect(dislikeAfterClick.textContent).toBe("6");
+    });
+
+    it('updates the loggedUserReaction from dislike to like and count after the successfull messageReaction when clicked the like button', async () => {
+      const mockData = mockResponseWithLoadedMessagePage()
+      mockData.data.content[0].reactions.loggedUserReaction = 'DISLIKE';
+
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockData);
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const like = queryByTestId('like-reaction');
+      fireEvent.click(like);
+
+      await waitForDomChange();
+      const likeAfterClick = queryByTestId('like-reaction');
+      expect(likeAfterClick.className).toContain('text-success');
+      expect(likeAfterClick.textContent).toBe("6");
+
+      const dislikeAfterClick = queryByTestId('dislike-reaction');
+      expect(dislikeAfterClick.className).not.toContain('text-danger');
+      expect(dislikeAfterClick.textContent).toBe("6");
+    });
+
+    it('updates the loggedUserReaction from like to dislike and count after the successfull messageReaction when clicked the dislike button', async () => {
+      const mockData = mockResponseWithLoadedMessagePage()
+      mockData.data.content[0].reactions.loggedUserReaction = 'LIKE';
+
+      apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockData);
+      apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
+      const { queryByTestId, queryByText } = setup();
+      await waitFor(() => queryByText('This is the loaded message'));
+
+      const dislike = queryByTestId('dislike-reaction');
+      fireEvent.click(dislike);
+
+      await waitForDomChange();
+      const likeAfterClick = queryByTestId('like-reaction');
+      expect(likeAfterClick.className).not.toContain('text-success');
+      expect(likeAfterClick.textContent).toBe("4");
+
+      const dislikeAfterClick = queryByTestId('dislike-reaction');
+      expect(dislikeAfterClick.className).toContain('text-danger');
+      expect(dislikeAfterClick.textContent).toBe("8");
+    });
   });
 });
 
-console.error = () => {};
+console.error = () => { };

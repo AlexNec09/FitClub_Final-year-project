@@ -10,8 +10,8 @@ import useClickTracker from "../shared/useClickTracker";
 const MessageView = (props) => {
   const actionArea = useRef();
   const dropDownVisible = useClickTracker(actionArea);
-  const { message, onClickDelete } = props;
-  const { user, date } = message;
+  const { message, onClickDelete, onClickLike, onClickDislike } = props;
+  const { user, date, reactions } = message;
   const { username, displayName, image } = user;
 
   const relativeDate = format(date);
@@ -79,6 +79,14 @@ const MessageView = (props) => {
           />
         </div>
       )}
+      <div className="pl-5 d-flex">
+        <div className={reactions && reactions.loggedUserReaction === "LIKE" ? "text-success w-25" : "text-muted w-25"} data-testid="like-reaction" style={{ cursor: 'pointer' }} onClick={onClickLike}>
+          <i className="far fa-thumbs-up"></i><span className="pl-1">{reactions && reactions.likeCount}</span>
+        </div>
+        <div className={reactions && reactions.loggedUserReaction === "DISLIKE" ? "text-danger w-25" : "text-muted w-25"} data-testid="dislike-reaction" style={{ cursor: 'pointer' }} onClick={onClickDislike}>
+          <i className="far fa-thumbs-down"></i><span className="pl-1">{reactions && reactions.dislikeCount}</span>
+        </div>
+      </div>
     </div>
   );
 };

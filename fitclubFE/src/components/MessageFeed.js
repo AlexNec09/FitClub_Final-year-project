@@ -126,6 +126,41 @@ const MessageFeed = (props) => {
     setClosedModal(false);
   };
 
+  const onReact = (currentPost, reaction) => {
+    apiCalls.messageReaction(currentPost.id, reaction).then(res => {
+      const messages = page.content.filter(message => {
+        if (message.id !== currentPost.id) {
+          return message;
+        }
+
+        const previousReaction = message.reactions.loggedUserReaction;
+
+        if (previousReaction === 'LIKE') {
+          message.reactions.likeCount -= 1;
+        } else if (previousReaction === 'DISLIKE') {
+          message.reactions.dislikeCount -= 1;
+        }
+
+        const newReaction = reaction.toUpperCase();
+        if (previousReaction === newReaction) {
+          message.reactions.loggedUserReaction = null;
+        } else {
+          message.reactions.loggedUserReaction = newReaction;
+          if (newReaction === 'LIKE') {
+            message.reactions.likeCount += 1;
+          } else {
+            message.reactions.dislikeCount += 1;
+          }
+        }
+        return message;
+      })
+      setPage((previousPage) => ({
+        ...previousPage,
+        content: messages
+      }));
+    });
+  }
+
   if (isLoadingMessages) {
     return <Spinner />;
   }
@@ -157,6 +192,8 @@ const MessageFeed = (props) => {
             key={message.id}
             message={message}
             onClickDelete={() => setMessageToBeDeleted(message)}
+            onClickLike={() => onReact(message, 'like')}
+            onClickDislike={() => onReact(message, 'dislike')}
           />
         );
       })}

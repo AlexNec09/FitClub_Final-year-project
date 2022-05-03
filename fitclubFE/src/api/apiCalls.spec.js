@@ -184,4 +184,48 @@ describe("apiCalls", () => {
       expect(path).toBe("/api/1.0/messages/5");
     });
   });
+
+  describe('follow', () => {
+    it('calls /api/1.0/users/5/follow when calling the follow with only 5 as user id', () => {
+      const mockFollow = jest.fn();
+      axios.put = mockFollow;
+
+      apiCalls.follow('5');
+      expect(mockFollow).toBeCalledWith('/api/1.0/users/5/follow');
+    });
+
+    it('calls /api/1.0/users/5/unfollow when calling the follow with 5 as user id and false for isCallingForFollow', () => {
+      const mockUnfollow = jest.fn();
+      axios.put = mockUnfollow;
+
+      apiCalls.follow('5', false);
+      expect(mockUnfollow).toBeCalledWith('/api/1.0/users/5/unfollow');
+    });
+  });
+
+  describe('messageReaction', () => {
+    it('calls /api/1.0/messages/7/like when calling the messageReaction with 7 and like', () => {
+      const mockPut = jest.fn();
+      axios.put = mockPut;
+
+      apiCalls.messageReaction(7, 'like');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/like');
+    });
+
+    it('calls /api/1.0/messages/7/dislike when calling the messageReaction with 7 and dislike', () => {
+      const mockPut = jest.fn();
+      axios.put = mockPut;
+
+      apiCalls.messageReaction(7, 'dislike');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/dislike');
+    });
+
+    it('calls /api/1.0/messages/7/like when calling the messageReaction with 7 and random words', () => {
+      const mockPut = jest.fn();
+      axios.put = mockPut;
+
+      apiCalls.messageReaction(7, 'this is something else');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/like');
+    });
+  })
 });

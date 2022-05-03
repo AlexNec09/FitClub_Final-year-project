@@ -35,6 +35,33 @@ const messageWithoutAttachment = {
   },
 };
 
+const getMessageWithReactions = () => {
+  const oneMinute = 60 * 1000;
+  const date = new Date(new Date().getTime() - oneMinute);
+
+  return {
+    id: 15,
+    content: 'Message content',
+    date: date.getTime(),
+    user: {
+      username: 'user5',
+      displayName: 'display5',
+      image: ''
+    },
+    attachments: [
+      {
+        name: 'attached-image.png',
+        type: 'file'
+      }
+    ],
+    reactions: {
+      likeCount: 5,
+      dislikeCount: 7,
+      myReaction: null
+    }
+  }
+}
+
 const messageWithAttachment = {
   id: 8,
   content: "This is the first message",

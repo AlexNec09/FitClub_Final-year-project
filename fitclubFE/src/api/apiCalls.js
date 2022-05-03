@@ -73,3 +73,11 @@ export const postMessageFile = (file) => {
 export const deleteMessage = (messageId) => {
   return axios.delete("/api/1.0/messages/" + messageId);
 };
+
+export const follow = (userid, isCallingForFollow = true) => {
+  return axios.put(`/api/1.0/users/${userid}/${isCallingForFollow ? 'follow' : 'unfollow'}`)
+}
+
+export const messageReaction = (id, reaction) => {
+  return axios.put(`/api/1.0/messages/${id}/${reaction === 'dislike' ? 'dislike' : 'like'}`);
+}
