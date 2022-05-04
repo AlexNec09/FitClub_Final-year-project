@@ -49,51 +49,23 @@ public class MessageController {
         return new GenericResponse("Message is removed");
     }
 
-//    @GetMapping("/messages/{id:[0-9]+}")
-//    ResponseEntity<?> getMessagesRelative(@CurrentUser User user, @PathVariable long id,
-//                                          @RequestParam(name = "direction", defaultValue = "after") String direction,
-//                                          @RequestParam(name = "count", defaultValue = "false", required = false) boolean count,
-//                                          Pageable pageable) {
-//        if (direction.equalsIgnoreCase("after")) {
-//            if (count) {
-//                long messageCount = messageService.countMessagesAfter(id, user);
-//                return ResponseEntity.ok(Collections.singletonMap("count", messageCount));
-//            } else {
-//                List<MessageVM> messages = messageService.getMessagesAfter(id, user).stream().map(MessageVM::new).collect(Collectors.toList());
-//                return ResponseEntity.ok(messages);
-//            }
-//        }
-//        Page<Message> messagesBefore = messageService.getMessagesBefore(id, user, pageable);
-//        return ResponseEntity.ok(messagesBefore.map(MessageVM::new));
-//    }
-//
-//    @GetMapping("/users/{username}/messages/{id:[0-9]+}")
-//    ResponseEntity<?> getMessagesRelativeToUser(@PathVariable String username, @PathVariable long id,
-//                                                @RequestParam(name = "direction", defaultValue = "before") String direction,
-//                                                Pageable pageable) {
-//        Page<Message> messagesBefore = messageService.getMessagesBeforeForUser(id, username, pageable);
-//        return ResponseEntity.ok(messagesBefore.map(MessageVM::new));
-//    }
-
-
-        @GetMapping({"/messages/{id:[0-9]+}", "/users/{username}/messages/{id:[0-9]+}"})
-    ResponseEntity<?> getMessagesRelative(@PathVariable long id,
+    @GetMapping({"/messages/{id:[0-9]+}", "/users/{username}/messages/{id:[0-9]+}"})
+    ResponseEntity<?> getMessagesRelative(@CurrentUser User user, @PathVariable long id,
                                           @PathVariable(required = false) String username,
-                                          Pageable pageable,
                                           @RequestParam(name = "direction", defaultValue = "after") String direction,
-                                          @RequestParam(name = "count", defaultValue = "false", required = false) boolean count) {
+                                          @RequestParam(name = "count", defaultValue = "false", required = false) boolean count,
+                                          Pageable pageable) {
         if (!direction.equalsIgnoreCase("after")) {
-            return ResponseEntity.ok(messageService.getMessagesBefore(id, username, pageable).map(MessageVM::new));
+            return ResponseEntity.ok(messageService.getMessagesBefore(id, username, user, pageable).map(MessageVM::new));
         }
 
         if (count) {
-            long newMessagesCount = messageService.countMessagesAfter(id, username);
+            long newMessagesCount = messageService.countMessagesAfter(id, username, user);
             return ResponseEntity.ok(Collections.singletonMap("count", newMessagesCount));
         }
 
-        List<MessageVM> newMessages = messageService.getMessagesAfter(id, username).stream()
+        List<MessageVM> newMessages = messageService.getMessagesAfter(id, username, user, pageable).stream()
                 .map(MessageVM::new).collect(Collectors.toList());
         return ResponseEntity.ok(newMessages);
     }
-
 }

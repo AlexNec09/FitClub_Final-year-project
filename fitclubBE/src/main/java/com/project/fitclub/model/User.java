@@ -46,7 +46,7 @@ public class User implements UserDetails {
     @ManyToMany
     Set<User> followedBy = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     Set<User> follows = new HashSet<>();
 
     @Override

@@ -6,6 +6,7 @@ import com.project.fitclub.error.NotFoundHandler;
 import com.project.fitclub.model.FileAttachment;
 import com.project.fitclub.model.Message;
 import com.project.fitclub.model.User;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -77,13 +78,56 @@ public class MessageService {
         return messageRepository.findByUserInOrderByIdDesc(users, pageable);
     }
 
+
+    public long countMessagesAfter(long id, String username, User loggedInUser) {
+        Set<User> users = new HashSet<>();
+        if (username != null) {
+            User forUser = userService.getByUsername(username);
+            users.add(forUser);
+        } else {
+            User forUser = userService.getByUsername(loggedInUser.getUsername());
+            users = forUser.getFollows();
+            users.add(forUser);
+        }
+
+        Specification<Message> query = Specification.where(getMessagesAfter(id)).and(getUsersIn(users));
+        return messageRepository.count(query);
+    }
+
+    public List<Message> getMessagesAfter(long id, String username, User loggedInUser, Pageable pageable) {
+        Specification<Message> spec = Specification.where(getMessagesAfter(id));
+        spec = handleUsersSet(username, loggedInUser, spec);
+
+        return messageRepository.findAll(spec, pageable.getSort());
+    }
+
+    public Page<Message> getMessagesBefore(long id, String username, User loggedInUser, Pageable pageable) {
+        Specification<Message> spec = Specification.where(getMessagesBefore(id));
+        spec = handleUsersSet(username, loggedInUser, spec);
+        return messageRepository.findAll(spec, pageable);
+    }
+
     private Specification<Message> getUsersIn(Set<User> users) {
         return (root, query, cb) -> {
             query.orderBy(cb.desc(root.get("id")));
             CriteriaBuilder.In<User> inResult = cb.in(root.get("user"));
-            users.forEach(u -> inResult.value(u));
+            users.forEach(inResult::value);
             return inResult;
         };
+    }
+
+    private Specification<Message> handleUsersSet(String username, User loggedInUser, Specification<Message> spec) {
+        Set<User> users = new HashSet<>();
+        if (username != null) {
+            User forUser = userService.getByUsername(username);
+            users.add(forUser);
+            spec = spec.and(getUsersIn(users));
+        } else {
+            users = loggedInUser.getFollows();
+            users.add(loggedInUser);
+            spec = spec.and(getUsersIn(users));
+        }
+        return spec;
     }
 
     private Specification<Message> getMessagesAfter(long id) {
@@ -93,48 +137,11 @@ public class MessageService {
         };
     }
 
-
-    public long countMessagesAfter(long id, String username) {
-        User forUser = userService.getByUsername(username);
-        Set<User> users = forUser.getFollows();
-        users.add(forUser);
-
-        Specification<Message> query = Specification.where(getMessagesAfter(id)).and(getUsersIn(users));
-        return messageRepository.count(query);
-    }
-
-    public List<Message> getMessagesAfter(long id, String username) {
-        User forUser = userService.getByUsername(username);
-        Set<User> users = forUser.getFollows();
-        users.add(forUser);
-
-        Specification<Message> query = Specification.where(getMessagesAfter(id)).and(getUsersIn(users));
-        return messageRepository.findAll(query);
-    }
-
-    public Page<Message> getMessagesBefore(long id, String username, Pageable pageable) {
-        User forUser = userService.getByUsername(username);
-        Set<User> users = forUser.getFollows();
-        users.add(forUser);
-
-        Specification<Message> query = Specification.where(getMessagesBefore(id)).and(getUsersIn(users));
-        return messageRepository.findAll(query, pageable);
-    }
-
     private Specification<Message> getMessagesBefore(long id) {
         return (root, query, cb) -> {
             query.orderBy(cb.desc(root.get("id")));
             return cb.lessThan(root.get("id"), id);
         };
-    }
-
-    public Page<Message> getMessagesBeforeForUser(long id, String username, Pageable pageable) {
-        User forUser = userService.getByUsername(username);
-        Set<User> users = new HashSet<>();
-        users.add(forUser);
-
-        Specification<Message> query = Specification.where(getMessagesBefore(id)).and(getUsersIn(users));
-        return messageRepository.findAll(query, pageable);
     }
 
 }
