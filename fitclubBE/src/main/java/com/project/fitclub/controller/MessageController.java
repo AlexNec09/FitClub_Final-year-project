@@ -46,7 +46,7 @@ public class MessageController {
     @PreAuthorize("@messageSecurityService.isAllowedToDelete(#user, #id)")
     GenericResponse deleteMessage(@CurrentUser User user, @PathVariable long id) {
         messageService.deleteMessage(id);
-        return new GenericResponse("Message is removed");
+        return new GenericResponse("Post removed!");
     }
 
     @GetMapping({"/messages/{id:[0-9]+}", "/users/{username}/messages/{id:[0-9]+}"})

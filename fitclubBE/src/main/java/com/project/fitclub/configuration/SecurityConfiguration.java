@@ -27,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests().antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/1.0/messages").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/1.0/login").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").authenticated()

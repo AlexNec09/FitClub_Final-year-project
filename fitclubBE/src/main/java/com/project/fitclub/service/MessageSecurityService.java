@@ -17,11 +17,11 @@ public class MessageSecurityService {
         this.messageRepository = messageRepository;
     }
 
-    public boolean isAllowedToDelete(long messageId, User loggedInUser) {
-        Optional<Message> optionalMessage = messageRepository.findById(messageId);
-        if (optionalMessage.isPresent()) {
-            Message inDB = optionalMessage.get();
-            return inDB.getUser().getId() == loggedInUser.getId();
+    public boolean isAllowedToDelete(User user, long messageId) {
+        Optional<Message> optMessage = messageRepository.findById(messageId);
+        if (optMessage.isPresent()) {
+            Message inDB = optMessage.get();
+            return user.equals(inDB.getUser());
         }
         return false;
     }

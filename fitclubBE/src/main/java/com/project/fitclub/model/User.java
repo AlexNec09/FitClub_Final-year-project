@@ -3,6 +3,7 @@ package com.project.fitclub.model;
 import com.project.fitclub.validation.UniqueUsername;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import java.beans.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +16,8 @@ import java.util.*;
 
 @Entity
 @Data
-@UniqueUsername
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User implements UserDetails {
-    private static final long serialVersionUID = -366996750361593076L;
 
     @Id
     @GeneratedValue
@@ -27,6 +26,7 @@ public class User implements UserDetails {
 
     @NotNull(message = "{fitclub.constraints.username.NotNull.message}")
     @Size(min = 4, max = 255)
+    @UniqueUsername
     @EqualsAndHashCode.Include
     String username;
 
@@ -35,6 +35,7 @@ public class User implements UserDetails {
     String displayName;
 
     @NotNull
+    @Size(min = 8, max = 255)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{fitclub.constraints.password.Pattern.message}")
     String password;
 
@@ -46,8 +47,12 @@ public class User implements UserDetails {
     @ManyToMany
     Set<User> followedBy = new HashSet<>();
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<User> follows = new HashSet<>();
+
+    public User() {
+        super();
+    }
 
     @Override
     @Transient
@@ -83,6 +88,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

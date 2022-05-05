@@ -35,6 +35,6 @@ public class Message {
     @OneToOne(mappedBy = "message", orphanRemoval = true)
     private FileAttachment attachment;
 
-    @OneToMany(mappedBy = "message", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "message", orphanRemoval = true)
     Set<MessageReaction> messageReactions = new HashSet<>();
 }
