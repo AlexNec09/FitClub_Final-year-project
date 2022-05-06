@@ -6,8 +6,6 @@ import ButtonWithProgress from './ButtonWithProgress';
 const ProfileCard = (props) => {
     const { displayName, username, image, followed } = props.user;
 
-    console.log(props.user);
-
     const showEditButton = props.isEditable && !props.inEditMode;
 
     return (

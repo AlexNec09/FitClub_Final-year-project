@@ -869,9 +869,13 @@ describe("MessageFeed", () => {
       const like = queryByTestId('like-reaction');
       fireEvent.click(like);
 
-      await waitForDomChange();
-      const likeAfterClick = queryByTestId('like-reaction');
-      expect(likeAfterClick.className).toContain('text-success');
+      let likeAfterClick;
+
+      await waitFor(() => {
+        likeAfterClick = queryByTestId('like-reaction');
+        expect(likeAfterClick.className).toContain('text-success');
+      });
+
       expect(likeAfterClick.textContent).toBe("6");
     });
 
@@ -887,9 +891,12 @@ describe("MessageFeed", () => {
       const like = queryByTestId('like-reaction');
       fireEvent.click(like);
 
-      await waitForDomChange();
-      const likeAfterClick = queryByTestId('like-reaction');
-      expect(likeAfterClick.className).not.toContain('text-success');
+      let likeAfterClick;
+
+      await waitFor(() => {
+        likeAfterClick = queryByTestId('like-reaction');
+        expect(likeAfterClick.className).toContain('text-success');
+      });
       expect(likeAfterClick.textContent).toBe("4");
     });
 
@@ -902,9 +909,13 @@ describe("MessageFeed", () => {
       const dislike = queryByTestId('dislike-reaction');
       fireEvent.click(dislike);
 
-      await waitForDomChange();
-      const dislikeAfterClick = queryByTestId('dislike-reaction');
-      expect(dislikeAfterClick.className).toContain('text-danger');
+      let dislikeAfterClick;
+
+      await waitFor(() => {
+        dislikeAfterClick = queryByTestId('dislike-reaction');
+        expect(dislikeAfterClick.className).toContain('text-danger');
+      });
+
       expect(dislikeAfterClick.textContent).toBe("8");
     });
 
@@ -920,9 +931,13 @@ describe("MessageFeed", () => {
       const dislike = queryByTestId('dislike-reaction');
       fireEvent.click(dislike);
 
-      await waitForDomChange();
-      const dislikeAfterClick = queryByTestId('dislike-reaction');
-      expect(dislikeAfterClick.className).not.toContain('text-danger');
+      let dislikeAfterClick;
+
+      await waitFor(() => {
+        dislikeAfterClick = queryByTestId('dislike-reaction');
+        expect(dislikeAfterClick.className).toContain('text-danger');
+      });
+
       expect(dislikeAfterClick.textContent).toBe("6");
     });
 
@@ -938,9 +953,13 @@ describe("MessageFeed", () => {
       const like = queryByTestId('like-reaction');
       fireEvent.click(like);
 
-      await waitForDomChange();
-      const likeAfterClick = queryByTestId('like-reaction');
-      expect(likeAfterClick.className).toContain('text-success');
+      let likeAfterClick;
+
+      await waitFor(() => {
+        likeAfterClick = queryByTestId('like-reaction');
+        expect(likeAfterClick.className).toContain('text-success');
+      });
+
       expect(likeAfterClick.textContent).toBe("6");
 
       const dislikeAfterClick = queryByTestId('dislike-reaction');
@@ -960,9 +979,13 @@ describe("MessageFeed", () => {
       const dislike = queryByTestId('dislike-reaction');
       fireEvent.click(dislike);
 
-      await waitForDomChange();
-      const likeAfterClick = queryByTestId('like-reaction');
-      expect(likeAfterClick.className).not.toContain('text-success');
+      let likeAfterClick;
+
+      await waitFor(() => {
+        likeAfterClick = queryByTestId('like-reaction');
+        expect(likeAfterClick.className).toContain('text-success');
+      });
+
       expect(likeAfterClick.textContent).toBe("4");
 
       const dislikeAfterClick = queryByTestId('dislike-reaction');
