@@ -3,7 +3,9 @@ package com.project.fitclub.model;
 import com.project.fitclub.validation.UniqueUsername;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.beans.Transient;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +19,7 @@ import java.util.*;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue
@@ -52,40 +54,5 @@ public class User implements UserDetails {
 
     public User() {
         super();
-    }
-
-    @Override
-    @Transient
-//    @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("Role_USER");
-    }
-
-    @Override
-//    @JsonIgnore
-    @Transient
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-//    @JsonIgnore
-    @Transient
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-//    @JsonIgnore
-    @Transient
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-//    @JsonIgnore
-    @Transient
-    public boolean isEnabled() {
-        return true;
     }
 }

@@ -1,16 +1,19 @@
 package com.project.fitclub.controller;
 
+import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.Message;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.MessageVM;
 import com.project.fitclub.service.MessageService;
 import com.project.fitclub.shared.CurrentUser;
 import com.project.fitclub.shared.GenericResponse;
+import com.project.fitclub.shared.response.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,10 +28,15 @@ public class MessageController {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/messages")
-    Page<?> getAllMessages(Pageable pageable, @CurrentUser User user) {
-        if (user != null)
-            return messageService.getMessagesForUser(pageable, user).map(MessageVM::new);
+    Page<?> getAllMessages(Pageable pageable, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        if (userPrincipal != null) {
+            User userDB = userRepository.findById(userPrincipal.getId()).get();
+            return messageService.getMessagesForUser(pageable, userDB).map(MessageVM::new);
+        }
         return messageService.getAllMessages(pageable).map(MessageVM::new);
     }
 
@@ -38,33 +46,35 @@ public class MessageController {
     }
 
     @PostMapping("/messages")
-    MessageVM createMessage(@Valid @RequestBody Message message, @CurrentUser User user) {
-        return new MessageVM(messageService.save(user, message));
+    MessageVM createMessage(@Valid @RequestBody Message message, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User userDB = userRepository.findById(userPrincipal.getId()).get();
+        return new MessageVM(messageService.save(userDB, message));
     }
 
     @DeleteMapping("/messages/{id:[0-9]+}")
-    @PreAuthorize("@messageSecurityService.isAllowedToDelete(#user, #id)")
-    GenericResponse deleteMessage(@CurrentUser User user, @PathVariable long id) {
+    @PreAuthorize("@messageSecurityService.isAllowedToDelete(principal, #id)")
+    GenericResponse deleteMessage(@PathVariable long id) {
         messageService.deleteMessage(id);
         return new GenericResponse("Post removed!");
     }
 
     @GetMapping({"/messages/{id:[0-9]+}", "/users/{username}/messages/{id:[0-9]+}"})
-    ResponseEntity<?> getMessagesRelative(@CurrentUser User user, @PathVariable long id,
+    ResponseEntity<?> getMessagesRelative(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable long id,
                                           @PathVariable(required = false) String username,
                                           @RequestParam(name = "direction", defaultValue = "after") String direction,
                                           @RequestParam(name = "count", defaultValue = "false", required = false) boolean count,
                                           Pageable pageable) {
+        User userDB = userRepository.findById(userPrincipal.getId()).get();
         if (!direction.equalsIgnoreCase("after")) {
-            return ResponseEntity.ok(messageService.getMessagesBefore(id, username, user, pageable).map(MessageVM::new));
+            return ResponseEntity.ok(messageService.getMessagesBefore(id, username, userDB, pageable).map(MessageVM::new));
         }
 
         if (count) {
-            long newMessagesCount = messageService.countMessagesAfter(id, username, user);
+            long newMessagesCount = messageService.countMessagesAfter(id, username, userDB);
             return ResponseEntity.ok(Collections.singletonMap("count", newMessagesCount));
         }
 
-        List<MessageVM> newMessages = messageService.getMessagesAfter(id, username, user, pageable).stream()
+        List<MessageVM> newMessages = messageService.getMessagesAfter(id, username, userDB, pageable).stream()
                 .map(MessageVM::new).collect(Collectors.toList());
         return ResponseEntity.ok(newMessages);
     }
