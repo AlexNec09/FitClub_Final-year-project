@@ -14,7 +14,8 @@ const configureStore = (addLogger = true) => {
         displayName: '',
         image: '',
         password: '',
-        isLoggedIn: false
+        isLoggedIn: false,
+        jwt: '',
     };
     if (localStorageData) {
         try {

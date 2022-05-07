@@ -155,7 +155,7 @@ const UserPage = (props) => {
     };
     dispatch({ type: "update-in-progress" });
     apiCalls
-      .updateUser(userId, userUpdate)
+      .updateUser(userId, userUpdate, props.loggedInUser.jwt)
       .then((response) => {
         dispatch({ type: "update-success", payload: response.data.image });
         const updatedUser = { ...state.user };

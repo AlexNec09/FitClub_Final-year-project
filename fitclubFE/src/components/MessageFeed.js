@@ -3,6 +3,7 @@ import * as apiCalls from "../api/apiCalls";
 import Spinner from "./Spinner";
 import MessageView from "./MessageView";
 import ModalView from "./ModalView";
+import { connect } from "react-redux";
 
 const MessageFeed = (props) => {
   const [page, setPage] = useState({ content: [] });
@@ -19,7 +20,7 @@ const MessageFeed = (props) => {
     const loadMessages = () => {
       setLoadingMessages(true);
       apiCalls
-        .loadMessages(props.user)
+        .loadMessages(props.user, props.loggedInUser.jwt)
         .then((response) => {
           setLoadingMessages(false);
           setPage(response.data);
@@ -29,10 +30,13 @@ const MessageFeed = (props) => {
         });
     };
     loadMessages();
-  }, [props.user]);
+  }, [props.user, props.loggedInUser.jwt]);
 
   useEffect(() => {
+    console.log("@@@@@@@@@@@@: " + props.loggedInUser.jwt);
+
     const checkCount = () => {
+      console.log("@@@@@@@@@@@@: " + props.loggedInUser.jwt);
       const messages = page.content;
       let topMessageId = 0;
       if (messages.length > 0) {
@@ -45,6 +49,8 @@ const MessageFeed = (props) => {
         });
     };
     intervalRef.current = setInterval(checkCount, 2500);
+    // intervalRef.current = setInterval(checkCount, 50000);
+
     return function cleanup() {
       if (isLoadingNewMessages) {
         clearInterval(intervalRef.current);
@@ -52,7 +58,7 @@ const MessageFeed = (props) => {
       }
       clearInterval(intervalRef.current);
     };
-  }, [props.user, page.content, isLoadingNewMessages]);
+  }, [props.user, page.content, isLoadingNewMessages, props.loggedInUser.jwt]);
 
   const onClickLoadMore = () => {
     if (isLoadingOldMessages) {
@@ -65,7 +71,7 @@ const MessageFeed = (props) => {
     const messageAtBottom = messages[messages.length - 1];
     setLoadingOldMessages(true);
     apiCalls
-      .loadOldMessages(messageAtBottom.id, props.user)
+      .loadOldMessages(messageAtBottom.id, props.user, props.loggedInUser.jwt)
       .then((response) => {
         setPage((previousPage) => ({
           ...previousPage,
@@ -92,7 +98,7 @@ const MessageFeed = (props) => {
     clearInterval(intervalRef.current);
     intervalRef.current = null;
     apiCalls
-      .loadNewMessages(topMessageId, props.user)
+      .loadNewMessages(topMessageId, props.user, props.loggedInUser.jwt)
       .then((response) => {
         setPage((previousPage) => ({
           ...previousPage,
@@ -108,7 +114,7 @@ const MessageFeed = (props) => {
 
   const onClickModalOk = () => {
     setDeletingMessage(true);
-    apiCalls.deleteMessage(messageToBeDeleted.id).then((response) => {
+    apiCalls.deleteMessage(messageToBeDeleted.id, props.loggedInUser.jwt).then((response) => {
       setPage((previousPage) => ({
         ...previousPage,
         content: previousPage.content.filter(
@@ -127,7 +133,7 @@ const MessageFeed = (props) => {
   };
 
   const onReact = (currentPost, reaction) => {
-    apiCalls.messageReaction(currentPost.id, reaction).then(res => {
+    apiCalls.messageReaction(currentPost.id, reaction, props.loggedInUser.jwt).then(res => {
       const messages = page.content.filter(message => {
         if (message.id !== currentPost.id) {
           return message;
@@ -225,4 +231,11 @@ const MessageFeed = (props) => {
   );
 };
 
-export default MessageFeed;
+
+const mapStateToProps = (state) => {
+  return {
+    loggedInUser: state,
+  };
+};
+
+export default connect(mapStateToProps)(MessageFeed);

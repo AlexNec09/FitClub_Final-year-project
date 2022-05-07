@@ -48,7 +48,7 @@ class MessageSubmit extends Component {
   uploadFile = () => {
     const body = new FormData();
     body.append("file", this.state.file);
-    apiCalls.postMessageFile(body).then((response) => {
+    apiCalls.postMessageFile(body, this.props.loggedInUser.jwt).then((response) => {
       this.setState({ attachment: response.data });
     });
   };
@@ -76,7 +76,7 @@ class MessageSubmit extends Component {
     });
 
     apiCalls
-      .postMessage(body)
+      .postMessage(body, this.props.loggedInUser.jwt)
       .then((response) => {
         this.resetState();
       })
