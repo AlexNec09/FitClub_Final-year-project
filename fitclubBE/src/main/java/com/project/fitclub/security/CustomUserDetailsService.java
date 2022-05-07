@@ -1,13 +1,16 @@
 package com.project.fitclub.security;
 
 import com.project.fitclub.dao.UserRepository;
+import com.project.fitclub.error.NotFoundHandler;
 import com.project.fitclub.model.User;
-import com.project.fitclub.shared.response.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -17,12 +20,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+        // Let people login with either username or email
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username or email : " + username);
+        }
 
-        if (user == null) throw new UsernameNotFoundException(username);
-
+        System.out.println("Password on Custom User Details Service: " + user.getPassword());
         return UserPrincipal.create(user);
     }
 
+    @Transactional
+    public UserDetails loadUserById(Long id) {
+        Optional<User> optUser = userRepository.findById(id);
+        if (!optUser.isPresent()) {
+            throw new UsernameNotFoundException("User with id " + id + " was not found.");
+        }
+        return UserPrincipal.create(optUser.get());
+    }
 }

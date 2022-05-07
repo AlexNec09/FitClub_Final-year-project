@@ -1,35 +1,27 @@
-package com.project.fitclub.shared.response;
+package com.project.fitclub.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.fitclub.model.User;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-@Data
-@Service
-@NoArgsConstructor
 public class UserPrincipal implements UserDetails {
-
     private Long id;
     private String username;
     private String displayName;
     private String password;
     private String image;
     private String jwt;
-    private Collection<? extends GrantedAuthority> authorities;
-    private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String username, String displayName, String image, String password, Collection<? extends GrantedAuthority> authorities) {
+    private Collection<? extends GrantedAuthority> authorities;
+
+    public UserPrincipal(Long id, String username, String displayName, String password, String image, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
@@ -39,46 +31,86 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
+                new SimpleGrantedAuthority(role.getName().name())
+        ).collect(Collectors.toList());
 
         return new UserPrincipal(
                 user.getId(),
                 user.getUsername(),
                 user.getDisplayName(),
-                user.getImage(),
                 user.getPassword(),
+                user.getImage(),
                 authorities
         );
     }
 
-    @Override
-    @Transient
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_USER");
+    public Long getId() {
+        return id;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     @Override
-    @Transient
+    public String getUsername() {
+        return username;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    @Transient
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    @Transient
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    @Transient
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserPrincipal that = (UserPrincipal) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

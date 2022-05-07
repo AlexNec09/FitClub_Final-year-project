@@ -13,27 +13,22 @@ spring:
       pageable:
         default-page-size: 10
         max-page-size: 100
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL57Dialect
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/newprojdb
+    username: root
+    password: root
 fitclub:
-  app:
-    jwtExpiration: 86400
-    jwtSecret: jwtFitClubSecretKey
-#---
-#spring:
-#  config:
-#    activate:
-#      on-profile: prod
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    database-platform: org.hibernate.dialect.MySQL57Dialect
-#
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/newprojdb
-#    username: root
-#    password: root
-#fitclub:
-#  upload-path: uploads-prod
+  upload-path: uploads-prod
 
 ---
 spring:
@@ -41,7 +36,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/newprojdb
+    url: jdbc:mysql://localhost:3306/testing
     username: root
     password: root
   jpa:

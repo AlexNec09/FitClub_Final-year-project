@@ -19,14 +19,12 @@ public class UserFollowController {
     UserService userService;
 
     @PutMapping("/users/{id:[0-9]+}/follow")
-    @PreAuthorize("#id != principal.id")
     GenericResponse handleFollow(@PathVariable long id, @CurrentUser User currentUser) {
         userService.follow(id, currentUser);
         return new GenericResponse("You followed this user.");
     }
 
     @PutMapping("/users/{id:[0-9]+}/unfollow")
-    @PreAuthorize("#id != principal.id")
     GenericResponse handleUnFollow(@PathVariable long id, @CurrentUser User currentUser) {
         userService.unfollow(id, currentUser);
         return new GenericResponse("You unfollowed this user.");

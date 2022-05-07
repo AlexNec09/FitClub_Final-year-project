@@ -1,10 +1,6 @@
-package com.project.fitclub.shared.request;
+package com.project.fitclub.security.payload;
 
-import javax.validation.constraints.Email;
-import java.io.Serializable;
-
-public class LoginRequest implements Serializable {
-
+public class LoginRequest {
     private String username;
 
     private String password;

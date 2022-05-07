@@ -43,7 +43,7 @@ const MessageFeed = (props) => {
         topMessageId = messages[0].id;
       }
       apiCalls
-        .loadNewMessagesCount(topMessageId, props.user)
+        .loadNewMessagesCount(topMessageId, props.user, props.loggedInUser.jwt)
         .then((response) => {
           setNewMessagesCount(response.data.count);
         });

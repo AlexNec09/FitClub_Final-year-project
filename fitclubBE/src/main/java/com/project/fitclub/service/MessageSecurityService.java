@@ -3,8 +3,7 @@ package com.project.fitclub.service;
 import com.project.fitclub.dao.MessageRepository;
 import com.project.fitclub.model.Message;
 import com.project.fitclub.model.User;
-import com.project.fitclub.shared.response.UserPrincipal;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.project.fitclub.security.UserPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,7 +18,7 @@ public class MessageSecurityService {
         this.messageRepository = messageRepository;
     }
 
-    public boolean isAllowedToDelete(@AuthenticationPrincipal UserPrincipal userPrincipal, long messageId) {
+    public boolean isAllowedToDelete(UserPrincipal userPrincipal, long messageId) {
         Optional<Message> optionalHoax = messageRepository.findById(messageId);
         if (optionalHoax.isPresent()) {
             Message inDB = optionalHoax.get();

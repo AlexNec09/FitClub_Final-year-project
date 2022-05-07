@@ -1,4 +1,4 @@
-package com.project.fitclub.shared.request;
+package com.project.fitclub.security.payload;
 
 import com.project.fitclub.model.FileAttachment;
 import lombok.Data;

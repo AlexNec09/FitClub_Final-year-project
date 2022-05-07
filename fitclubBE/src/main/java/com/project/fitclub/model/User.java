@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import java.beans.Transient;
 
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,8 @@ import java.util.*;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class User {
+@NoArgsConstructor
+public class User extends DateAudit {
 
     @Id
     @GeneratedValue
@@ -43,6 +45,12 @@ public class User {
 
     String image;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     @OneToMany(mappedBy = "user")
     List<Message> messages = new ArrayList<>();
 
@@ -52,7 +60,9 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<User> follows = new HashSet<>();
 
-    public User() {
-        super();
+    public User(String displayName, String username, String password) {
+        this.displayName = displayName;
+        this.username = username;
+        this.password = password;
     }
 }

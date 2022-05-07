@@ -9,11 +9,14 @@ import com.project.fitclub.shared.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/1.0")
@@ -31,12 +34,6 @@ public class UserController {
     UserVM getUserByName(@PathVariable String username, @CurrentUser User currentUser) {
         User user = userService.getByUsername(username);
         return new UserVM(user, currentUser);
-    }
-
-    @PostMapping("/users")
-    GenericResponse createUser(@Valid @RequestBody User user) {
-        userService.save(user);
-        return new GenericResponse("User saved!");
     }
 
     @PutMapping("/users/{id:[0-9]+}")

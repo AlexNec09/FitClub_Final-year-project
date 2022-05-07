@@ -1,9 +1,11 @@
 package com.project.fitclub.configuration;
 
 import com.project.fitclub.security.CustomUserDetailsService;
-import com.project.fitclub.security.TokenAuthenticationFilter;
+import com.project.fitclub.security.JwtAuthenticationEntryPoint;
+import com.project.fitclub.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -25,9 +27,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    TokenAuthenticationFilter tokenAuthenticationFilter;
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -36,16 +43,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .csrf().disable().authorizeRequests().and()
+                .cors()
+                .and()
+                .csrf()
+                .disable().authorizeRequests().and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .headers().frameOptions().disable().and()
-
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/",
-                        "/error",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -53,27 +65,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js").permitAll()
-
-                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/auth/**").permitAll()
+                        "/**/*.js")
+                .permitAll()
+                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/**", "/api/1.0/users/{id:[0-9]+}/**").permitAll()
                 .and()
 
                 .authorizeRequests()
 
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").authenticated()
-                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").authenticated()
-                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").authenticated()
-                .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/1.0/messages/{id:[0-9]+}").authenticated()
-                .and().
-                authorizeRequests().anyRequest().permitAll();
+                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").permitAll()
+                .anyRequest()
+                .authenticated();
 
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // we avoid having a session object for each user
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.headers().frameOptions().disable();
-        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -85,5 +93,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

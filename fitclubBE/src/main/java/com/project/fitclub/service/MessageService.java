@@ -71,8 +71,8 @@ public class MessageService {
         return messageRepository.findById(id).orElseThrow(() -> new NotFoundHandler("Message not found!"));
     }
 
-    public Page<Message> getMessagesForUser(Pageable pageable, User user) {
-        User forUser = userService.getByUsername(user.getUsername());
+    public Page<Message> getMessagesForUser(Pageable pageable, Long id) {
+        User forUser = userService.getById(id);
         Set<User> users = forUser.getFollows();
         users.add(forUser);
         return messageRepository.findByUserInOrderByIdDesc(users, pageable);

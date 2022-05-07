@@ -15,6 +15,7 @@
     <description>Final Project using Spring Boot and React</description>
     <properties>
         <java.version>11</java.version>
+        <jjwt.version>0.9.0</jjwt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -113,21 +114,22 @@
             <artifactId>javassist</artifactId>
             <version>3.23.1-GA</version>
         </dependency>
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <!-- For Java 8 Date/Time Support -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.6.3</version>
         </dependency>
     </dependencies>
 
@@ -136,9 +138,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <addResources>true</addResources>
-                </configuration>
             </plugin>
         </plugins>
     </build>
