@@ -6,6 +6,8 @@ import com.project.fitclub.error.ApiError;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.model.vm.UserVM;
+import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.LoginRequest;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.GenericResponse;
 import org.apache.commons.io.FileUtils;
@@ -40,6 +42,8 @@ public class UserControllerTest {
 
     private static final String API_1_0_USERS = "/api/1.0/users";
 
+    private static final String API_1_0_USERS_SIGNUP = "/api/1.0/auth/signup";
+
     @Autowired
     TestRestTemplate testRestTemplate;
 
@@ -59,12 +63,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserIsValid_receiveOk() {
+    public void postUser_whenUserIsValid_receiveCreated() {
         User user = TestUtil.createValidUser();
 
         ResponseEntity<Object> response = postSignup(user, Object.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
@@ -86,7 +90,7 @@ public class UserControllerTest {
     @Test
     public void postUser_whenUserIsValid_passwordIsHashedInDatabase() {
         User user = TestUtil.createValidUser();
-        testRestTemplate.postForEntity(API_1_0_USERS, user, Object.class);
+        postSignup(user, Object.class);
         List<User> users = userRepository.findAll();
         User inDB = users.get(0);
         assertThat(inDB.getPassword()).isNotEqualTo(user.getPassword());
@@ -195,7 +199,7 @@ public class UserControllerTest {
     public void postUser_whenUserIsInvalid_receiveApiError() {
         User user = new User();
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
-        assertThat(response.getBody().getUrl()).isEqualTo(API_1_0_USERS);
+        assertThat(response.getBody().getUrl()).isEqualTo(API_1_0_USERS_SIGNUP);
     }
 
     @Test
@@ -333,13 +337,15 @@ public class UserControllerTest {
 
     @Test
     public void getUsers_whenUserLoggedIn_receivePageWithoutLoggedInUser() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.save(TestUtil.createValidUser("test-user"));
         userService.save(TestUtil.createValidUser("user2"));
         userService.save(TestUtil.createValidUser("user3"));
-        authenticate("user1");
-        ResponseEntity<TestPage<Object>> response = getUsers(new ParameterizedTypeReference<TestPage<Object>>() {
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        authenticateUser(loggingUser);
+
+        ResponseEntity<TestPage<Object>> response = getUsers(new ParameterizedTypeReference<>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(2);
+        assertThat(response.getBody().getTotalElements()).isEqualTo(3);
     }
 
     @Test
@@ -641,9 +647,14 @@ public class UserControllerTest {
                 .getInterceptors().add(new BasicAuthenticationInterceptor(username, "P4ssword"));
     }
 
+    private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {
+        ResponseEntity<UserPrincipal> userPrincipalResponseEntity = testRestTemplate.postForEntity("/api/1.0/auth/login", loggingUser, UserPrincipal.class);
+        return userPrincipalResponseEntity;
+    }
+
 
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response) {
-        return testRestTemplate.postForEntity(API_1_0_USERS, request, response);
+        return testRestTemplate.postForEntity(API_1_0_USERS_SIGNUP, request, response);
     }
 
     public <T> ResponseEntity<T> getUsers(ParameterizedTypeReference<T> responseType) {

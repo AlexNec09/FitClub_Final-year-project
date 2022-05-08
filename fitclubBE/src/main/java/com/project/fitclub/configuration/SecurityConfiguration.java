@@ -42,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().and().csrf().disable();
 
         http.httpBasic().authenticationEntryPoint(new BasicAuthenticationEntryPoint());
 
@@ -55,9 +55,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").permitAll()
+                .antMatchers("/images/**", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").permitAll()
 
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/messages").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/1.0/messages/upload").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/1.0/login").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").authenticated()
@@ -65,6 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").authenticated()
                 .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/1.0/messages/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/messages/**").authenticated()
                 .and().
                 authorizeRequests().anyRequest().permitAll();
 //                .authorizeRequests()

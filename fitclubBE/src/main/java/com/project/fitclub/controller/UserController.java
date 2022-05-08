@@ -27,15 +27,18 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    Page<UserVM> getUsers(@CurrentUser User loggedInUser, Pageable page) {
+    Page<UserVM> getUsers(@CurrentUser UserPrincipal loggedInUser, Pageable page) {
         return userService.getUsers(loggedInUser, page).map(UserVM::new);
     }
 
     @GetMapping("/users/{username}")
     UserVM getUserByName(@PathVariable String username, @CurrentUser UserPrincipal currentUser) {
         User user = userService.getByUsername(username);
-        User myUser = userService.getByUsername(currentUser.getUsername());
-        return new UserVM(user, myUser);
+        if (currentUser != null) {
+            User myUser = userService.getByUsername(currentUser.getUsername());
+            return new UserVM(user, myUser);
+        }
+        return new UserVM(user);
     }
 
     @PutMapping("/users/{id:[0-9]+}")

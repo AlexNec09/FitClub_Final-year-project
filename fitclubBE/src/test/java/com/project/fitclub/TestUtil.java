@@ -2,6 +2,7 @@ package com.project.fitclub;
 
 import com.project.fitclub.model.Message;
 import com.project.fitclub.model.User;
+import com.project.fitclub.security.payload.LoginRequest;
 
 public class TestUtil {
 
@@ -18,6 +19,13 @@ public class TestUtil {
         User user = createValidUser();
         user.setUsername(username);
         return user;
+    }
+
+    public static LoginRequest createLoginUser() {
+        LoginRequest userForLogin = new LoginRequest();
+        userForLogin.setUsername("test-user");
+        userForLogin.setPassword("P4ssword");
+        return userForLogin;
     }
 
     public static Message createValidMessage() {

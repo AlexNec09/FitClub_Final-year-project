@@ -31,7 +31,7 @@ public class MessageController {
     UserRepository userRepository;
 
     @GetMapping("/messages")
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     Page<?> getAllMessages(Pageable pageable, @CurrentUser UserPrincipal userPrincipal) {
         if (userPrincipal != null) {
             System.out.println(userPrincipal.getUsername());
@@ -41,13 +41,13 @@ public class MessageController {
     }
 
     @GetMapping("/users/{username}/messages")
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     Page<?> getMessagesOfUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable String username, Pageable pageable) {
         return messageService.getMessagesOfUser(username, pageable).map(MessageVM::new);
     }
 
     @PostMapping("/messages")
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     MessageVM createMessage(@Valid @RequestBody Message message, @CurrentUser UserPrincipal userPrincipal) {
         User user = userRepository.findByUsername(userPrincipal.getUsername());
         return new MessageVM(messageService.save(user, message));
@@ -66,6 +66,9 @@ public class MessageController {
                                           @RequestParam(name = "direction", defaultValue = "after") String direction,
                                           @RequestParam(name = "count", defaultValue = "false", required = false) boolean count,
                                           Pageable pageable) {
+        if(userPrincipal == null){
+            return ResponseEntity.badRequest().body("Full authentication is required!");
+        }
         User user = userRepository.findByUsername(userPrincipal.getUsername());
         if (!direction.equalsIgnoreCase("after")) {
             return ResponseEntity.ok(messageService.getMessagesBefore(id, username, user, pageable).map(MessageVM::new));

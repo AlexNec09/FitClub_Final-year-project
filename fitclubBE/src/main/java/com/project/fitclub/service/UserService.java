@@ -7,6 +7,7 @@ import com.project.fitclub.model.Role;
 import com.project.fitclub.model.RoleName;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
+import com.project.fitclub.security.UserPrincipal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,9 +56,10 @@ public class UserService {
         return userRepository.save(inDB);
     }
 
-    public Page<User> getUsers(User loggedInUser, Pageable pageable) {
-        if (loggedInUser != null)
+    public Page<User> getUsers(UserPrincipal loggedInUser, Pageable pageable) {
+        if (loggedInUser != null) {
             return userRepository.findByUsernameNot(loggedInUser.getUsername(), pageable);
+        }
         return userRepository.findAll(pageable);
     }
 

@@ -11,6 +11,8 @@ import com.project.fitclub.model.Message;
 import com.project.fitclub.model.Reaction;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.MessageVM;
+import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.LoginRequest;
 import com.project.fitclub.service.FileService;
 import com.project.fitclub.service.MessageReactionService;
 import com.project.fitclub.service.MessageService;
@@ -25,12 +27,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,6 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@ContextConfiguration
 public class MessageControllerTest {
 
     public static final String API_1_0_MESSAGES = "/api/1.0/messages";
@@ -291,91 +295,154 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getMessages_whenThereAreNoMessages_receiveOk() {
-        ResponseEntity<Object> responseEntity = getMessages(new ParameterizedTypeReference<>() {
+    public void getMessages_whenThereAreNoMessages_receiveOk() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        ResponseEntity<Object> responseEntity = getMessages(headers, new ParameterizedTypeReference<>() {
         });
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getMessages_whenThereAreNoMessages_receivePageWithZeroItems() {
-        ResponseEntity<TestPage<Object>> response = getMessages(new ParameterizedTypeReference<TestPage<Object>>() {
+    public void getMessages_whenThereAreNoMessages_receivePageWithZeroItems() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        ResponseEntity<TestPage<Object>> result = getMessages(headers, new ParameterizedTypeReference<TestPage<Object>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(0);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(0);
     }
 
     @Test
-    public void getMessages_whenThereAreMessages_receivePageWithItems() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getMessages_whenThereAreMessages_receivePageWithItems() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<Object>> response = getMessages(new ParameterizedTypeReference<TestPage<Object>>() {
+        ResponseEntity<TestPage<Object>> result = getMessages(headers, new ParameterizedTypeReference<TestPage<Object>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(3);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(3);
     }
 
     @Test
-    public void getMessages_whenThereAreMessages_receivePageWithMessageVM() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getMessages_whenThereAreMessages_receivePageWithMessageVM() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<MessageVM>> response = getMessages(new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        MessageVM storedMessage = response.getBody().getContent().get(0);
-        assertThat(storedMessage.getUser().getUsername()).isEqualTo("user1");
+        MessageVM storedMessage = result.getBody().getContent().get(0);
+        assertThat(storedMessage.getUser().getUsername()).isEqualTo("test-user");
     }
 
     @Test
-    public void getMessagesOfUser_whenUserExists_receiveOk() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        ResponseEntity<Object> response = getMessagesOfUser("user1", new ParameterizedTypeReference<Object>() {
+    public void getMessagesOfUser_whenUserExists_receiveOk() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        ResponseEntity<Object> result = getMessagesOfUser("test-user", headers, new ParameterizedTypeReference<Object>() {
         });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getMessagesOfUser_whenUserDoesNotExist_receiveNotFound() {
-        ResponseEntity<Object> response = getMessagesOfUser("unknown-user", new ParameterizedTypeReference<Object>() {
+    public void getMessagesOfUser_whenUserDoesNotExist_receiveUnauthorized() throws URISyntaxException {
+        ResponseEntity<Object> response = getMessagesOfUser("unknown-user", null, new ParameterizedTypeReference<Object>() {
         });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void getMessagesOfUser_whenUserExists_receivePageWithZeroMessages() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        ResponseEntity<TestPage<Object>> response = getMessagesOfUser("user1", new ParameterizedTypeReference<TestPage<Object>>() {
+    public void getMessagesOfUser_whenUserExists_receivePageWithZeroMessages() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        ResponseEntity<TestPage<Object>> result = getMessagesOfUser("test-user", headers, new ParameterizedTypeReference<TestPage<Object>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(0);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(0);
     }
 
     @Test
-    public void getMessagesOfUser_whenUserExistWithMessage_receivePageWithMessageVM() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getMessagesOfUser_whenUserExistWithMessage_receivePageWithMessageVM() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        messageService.save(myUser, TestUtil.createValidMessage());
+
+
+        ResponseEntity<TestPage<MessageVM>> result = getMessagesOfUser("test-user", headers, new ParameterizedTypeReference<>() {
+        });
+        MessageVM storedMessage = result.getBody().getContent().get(0);
+        assertThat(storedMessage.getUser().getUsername()).isEqualTo("test-user");
+    }
+
+    @Test
+    public void getMessagesOfUser_whenUserExistWithMultipleMessages_receivePageWithMatchingMessageCount() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        messageService.save(user, TestUtil.createValidMessage());
+        messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<MessageVM>> response = getMessagesOfUser("user1", new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessagesOfUser("test-user", headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        MessageVM storedMessage = response.getBody().getContent().get(0);
-        assertThat(storedMessage.getUser().getUsername()).isEqualTo("user1");
+        assertThat(result.getBody().getTotalElements()).isEqualTo(3);
     }
 
     @Test
-    public void getMessagesOfUser_whenUserExistWithMultipleMessages_receivePageWithMatchingMessageCount() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        messageService.save(user, TestUtil.createValidMessage());
-        messageService.save(user, TestUtil.createValidMessage());
-        messageService.save(user, TestUtil.createValidMessage());
+    public void getMessagesOfUser_whenMultipleUsersExistWithMultipleMessages_receivePageWithMatchingMessageCount() throws URISyntaxException {
+        User userWithThreeMessages = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        ResponseEntity<TestPage<MessageVM>> response = getMessagesOfUser("user1", new ParameterizedTypeReference<TestPage<MessageVM>>() {
-        });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(3);
-    }
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
-    @Test
-    public void getMessagesOfUser_whenMultipleUsersExistWithMultipleMessages_receivePageWithMatchingMessageCount() {
-        User userWithThreeMessages = userService.save(TestUtil.createValidUser("user1"));
         IntStream.rangeClosed(1, 3).forEach(i -> {
             messageService.save(userWithThreeMessages, TestUtil.createValidMessage());
         });
@@ -385,15 +452,20 @@ public class MessageControllerTest {
             messageService.save(userWithFiveMessages, TestUtil.createValidMessage());
         });
 
-        ResponseEntity<TestPage<MessageVM>> response = getMessagesOfUser(userWithFiveMessages.getUsername(), new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessagesOfUser(userWithFiveMessages.getUsername(), headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(5);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(5);
     }
 
     @Test
-    public void getMessages_whenLoggedIn_returnsMessagesOfFollowed() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getMessages_whenLoggedIn_returnsMessagesOfFollowed() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -403,7 +475,7 @@ public class MessageControllerTest {
         messageService.save(user3, TestUtil.createValidMessage());
         follow(user2.getId(), Object.class);
 
-        ResponseEntity<TestPage<MessageVM>> result = getMessages(new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
         assertThat(result.getBody().getTotalElements()).isEqualTo(2);
     }
@@ -448,51 +520,72 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() {
-        userService.save(TestUtil.createValidUser("user1"));
-        ResponseEntity<Object> response = getOldMessagesOfUser(5, "user1", new ParameterizedTypeReference<Object>() {
+    public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        ResponseEntity<Object> result = getOldMessagesOfUser(5, "test-user", headers, new ParameterizedTypeReference<Object>() {
         });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getOldMessagesOfUser_whenUserExistAndThereAreMessages_receivePageWithItemsBeforeProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getOldMessagesOfUser_whenUserExistAndThereAreMessages_receivePageWithItemsBeforeProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<Object>> response = getOldMessagesOfUser(fourthMessage.getId(), "user1", new ParameterizedTypeReference<TestPage<Object>>() {
+        ResponseEntity<TestPage<Object>> result = getOldMessagesOfUser(fourthMessage.getId(), "test-user", headers, new ParameterizedTypeReference<TestPage<Object>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(3);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(3);
     }
 
     @Test
-    public void getOldMessagesOfUser_whenUserExistThereAreMessages_receivePageWithMessageVMBeforeProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getOldMessagesOfUser_whenUserExistThereAreMessages_receivePageWithMessageVMBeforeProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<MessageVM>> response = getOldMessagesOfUser(fourthMessage.getId(), "user1", new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getOldMessagesOfUser(fourthMessage.getId(), "test-user", headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        assertThat(response.getBody().getContent().get(0).getDate()).isGreaterThan(0);
+        assertThat(result.getBody().getContent().get(0).getDate()).isGreaterThan(0);
     }
 
     @Test
-    public void getOldMessagesOfUser_whenUserDoesNotExistThereAreNoMessages_receiveNotFound() {
-        ResponseEntity<Object> response = getOldMessagesOfUser(5, "user1", new ParameterizedTypeReference<Object>() {
-        });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
+    public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receivePageWithZeroItemsBeforeProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-    @Test
-    public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receivePageWithZeroItemsBeforeProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
@@ -501,9 +594,9 @@ public class MessageControllerTest {
 
         userService.save(TestUtil.createValidUser("user2"));
 
-        ResponseEntity<TestPage<MessageVM>> response = getOldMessagesOfUser(fourthMessage.getId(), "user2", new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getOldMessagesOfUser(fourthMessage.getId(), "test-another-user", headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(0);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(0);
     }
 
     @Test
@@ -544,51 +637,73 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() {
-        userService.save(TestUtil.createValidUser("user1"));
-        ResponseEntity<Object> response = getNewMessagesOfUser(5, "user1", new ParameterizedTypeReference<Object>() {
+    public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        ResponseEntity<Object> result = getNewMessagesOfUser(5, "test-user", headers, new ParameterizedTypeReference<Object>() {
         });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void getNewMessagesOfUser_whenUserExistAndThereAreMessages_receiveListWithItemsAfterProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getNewMessagesOfUser_whenUserExistAndThereAreMessages_receiveListWithItemsAfterProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<List<Object>> response = getNewMessagesOfUser(fourthMessage.getId(), "user1", new ParameterizedTypeReference<List<Object>>() {
+        ResponseEntity<List<Object>> result = getNewMessagesOfUser(fourthMessage.getId(), "test-user", headers, new ParameterizedTypeReference<List<Object>>() {
         });
-        assertThat(response.getBody().size()).isEqualTo(1);
+        assertThat(result.getBody().size()).isEqualTo(1);
     }
 
     @Test
-    public void getNewMessagesOfUser_whenUserExistThereAreMessages_receiveListWithMessageVMAfterProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getNewMessagesOfUser_whenUserExistThereAreMessages_receiveListWithMessageVMAfterProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<List<MessageVM>> response = getNewMessagesOfUser(fourthMessage.getId(), "user1", new ParameterizedTypeReference<List<MessageVM>>() {
+        ResponseEntity<List<MessageVM>> result = getNewMessagesOfUser(fourthMessage.getId(), "test-user", headers, new ParameterizedTypeReference<List<MessageVM>>() {
         });
-        assertThat(response.getBody().get(0).getDate()).isGreaterThan(0);
+        assertThat(result.getBody().get(0).getDate()).isGreaterThan(0);
     }
 
     @Test
-    public void getNewMessagesOfUser_whenUserDoesNotExistThereAreNoMessages_receiveNotFound() {
-        ResponseEntity<Object> response = getNewMessagesOfUser(5, "user1", new ParameterizedTypeReference<Object>() {
-        });
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
+    public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveListWithZeroItemsAfterProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-    @Test
-    public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveListWithZeroItemsAfterProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
@@ -597,9 +712,9 @@ public class MessageControllerTest {
 
         userService.save(TestUtil.createValidUser("user2"));
 
-        ResponseEntity<List<MessageVM>> response = getNewMessagesOfUser(fourthMessage.getId(), "user2", new ParameterizedTypeReference<List<MessageVM>>() {
+        ResponseEntity<List<MessageVM>> result = getNewMessagesOfUser(fourthMessage.getId(), "user2", headers, new ParameterizedTypeReference<List<MessageVM>>() {
         });
-        assertThat(response.getBody().size()).isEqualTo(0);
+        assertThat(result.getBody().size()).isEqualTo(0);
     }
 
     @Test
@@ -622,17 +737,24 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getNewMessagesCountOfUser_whenThereAreMessages_receiveCountAfterProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getNewMessagesCountOfUser_whenThereAreMessages_receiveCountAfterProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<Map<String, Long>> response = getNewMessagesCountOfUser(fourthMessage.getId(), "user1", new ParameterizedTypeReference<Map<String, Long>>() {
+        ResponseEntity<Map<String, Long>> result = getNewMessagesCountOfUser(fourthMessage.getId(), "test-user", headers, new ParameterizedTypeReference<Map<String, Long>>() {
         });
-        assertThat(response.getBody().get("count")).isEqualTo(1);
+        assertThat(result.getBody().get("count")).isEqualTo(1);
     }
 
     @Test
@@ -676,9 +798,14 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getReactions_whenThereIsMessageWithReactionWithCurrentLoggedInUser_returnsUsersReaction() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getReactions_whenThereIsMessageWithReactionWithCurrentLoggedInUser_returnsUsersReaction() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -689,10 +816,11 @@ public class MessageControllerTest {
 
         messageReactionService.dislike(message.getId(), user3);
 
-        ResponseEntity<TestPage<MessageVM>> result = testRestTemplate.exchange(API_1_0_MESSAGES, HttpMethod.GET, null, new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<>() {
         });
-        MessageVM messageWithReaction = result.getBody().getContent().get(0);
-        assertThat(messageWithReaction.getReactions().getLoggedUserReaction()).isEqualTo(Reaction.LIKE);
+
+        assertThat(result.getBody().getContent().get(0).getReactions().getLoggedUserReaction()).isEqualTo(Reaction.LIKE);
+
     }
 
     @Test
@@ -709,8 +837,7 @@ public class MessageControllerTest {
 
         ResponseEntity<TestPage<MessageVM>> result = testRestTemplate.exchange(API_1_0_MESSAGES, HttpMethod.GET, null, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
-        MessageVM messageWithReaction = result.getBody().getContent().get(0);
-        assertThat(messageWithReaction.getReactions().getLoggedUserReaction()).isNull();
+        assertThat(result.getBody().getContent()).isNull();
     }
 
     @Test
@@ -827,9 +954,9 @@ public class MessageControllerTest {
         return testRestTemplate.exchange(path, HttpMethod.PUT, null, responseType);
     }
 
-    public <T> ResponseEntity<T> getNewMessagesCountOfUser(long messageId, String username, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getNewMessagesCountOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = "/api/1.0/users/" + username + "/messages/" + messageId + "?direction=after&count=true";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
     }
 
     public <T> ResponseEntity<T> getNewMessages(long messageId, ParameterizedTypeReference<T> responseType) {
@@ -837,9 +964,10 @@ public class MessageControllerTest {
         return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
     }
 
-    public <T> ResponseEntity<T> getNewMessagesOfUser(long messageId, String username, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getNewMessagesOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = "/api/1.0/users/" + username + "/messages/" + messageId + "?direction=after&sort=id,desc";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
+
     }
 
     public <T> ResponseEntity<T> getOldMessages(long messageId, ParameterizedTypeReference<T> responseType) {
@@ -847,18 +975,19 @@ public class MessageControllerTest {
         return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
     }
 
-    public <T> ResponseEntity<T> getOldMessagesOfUser(long messageId, String username, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getOldMessagesOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = "/api/1.0/users/" + username + "/messages/" + messageId + "?direction=before&page=0&size=5&sort=id,desc";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
     }
 
-    public <T> ResponseEntity<T> getMessagesOfUser(String username, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getMessagesOfUser(String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = "/api/1.0/users/" + username + "/messages";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
+
     }
 
-    public <T> ResponseEntity<T> getMessages(ParameterizedTypeReference<T> responseType) {
-        return testRestTemplate.exchange(API_1_0_MESSAGES, HttpMethod.GET, null, responseType);
+    public <T> ResponseEntity<T> getMessages(HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
+        return testRestTemplate.exchange(RequestEntity.get(new URI(API_1_0_MESSAGES)).headers(headers).build(), responseType);
     }
 
     private <T> ResponseEntity<T> postMessage(Message message, Class<T> responseType) {
@@ -868,5 +997,10 @@ public class MessageControllerTest {
     private void authenticate(String username) {
         testRestTemplate.getRestTemplate()
                 .getInterceptors().add(new BasicAuthenticationInterceptor(username, "P4ssword"));
+    }
+
+    private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {
+        ResponseEntity<UserPrincipal> userPrincipalResponseEntity = testRestTemplate.postForEntity("/api/1.0/auth/login", loggingUser, UserPrincipal.class);
+        return userPrincipalResponseEntity;
     }
 }

@@ -28,18 +28,16 @@ public class UserFollowController {
     UserRepository userRepository;
 
     @PutMapping("/users/{id:[0-9]+}/follow")
-    GenericResponse handleFollow(@PathVariable long id, HttpServletRequest request, @CurrentUser UserPrincipal userPrincipal) {
+    @PreAuthorize("#id != principal.id")
+    GenericResponse handleFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
         userService.follow(id, userPrincipal.getId());
         return new GenericResponse("You followed this user.");
     }
 
     @PutMapping("/users/{id:[0-9]+}/unfollow")
+    @PreAuthorize("#id != principal.id")
     GenericResponse handleUnFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
-
-        System.out.println(userPrincipal.getUsername());
         User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
-
-//        userService.follow(id, currentUser);
         userService.unfollow(id, currentUser.getId());
         return new GenericResponse("You unfollowed this user.");
     }

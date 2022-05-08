@@ -3,6 +3,8 @@ package com.project.fitclub;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.error.ApiError;
 import com.project.fitclub.model.User;
+import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.LoginRequest;
 import com.project.fitclub.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
@@ -22,9 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@ContextConfiguration
 public class LoginControllerTest {
 
-    private static final String API_1_0_LOGIN = "/api/1.0/login";
+    private static final String API_1_0_LOGIN = "/api/1.0/auth/login";
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -42,101 +46,102 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void postLogin_withoutUserCredentials_receiveUnauthorized() {
-        ResponseEntity<Object> response = login(Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    public void postLogin_withoutUserCredentials_receiveBadRequest() {
+        ResponseEntity<UserPrincipal> response = authenticateUser(null);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void postLogin_withIncorrectCredentials_receiveUnauthorized() {
-        authenticate();
-        ResponseEntity<Object> response = login(Object.class);
+        ResponseEntity<UserPrincipal> response = authenticateUser(new LoginRequest("test-invalid-user", "P4ssword"));
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void postLogin_withoutUserCredentials_receiveApiErrorWithoutValidationErrors() {
-        ResponseEntity<String> response = login(String.class);
-        assertThat(response.getBody().contains("validationErrors")).isFalse();
-    }
-
-    @Test
-    public void postLogin_withIncorrectCredentials_receiveUnauthorizedWithoutWWWAuthenticationHeader() {
-        authenticate();
-        ResponseEntity<Object> response = login(Object.class);
-        assertThat(response.getHeaders().containsKey("WWW-Authenticate")).isFalse();
-    }
-
-    @Test
     public void postLogin_withValidCredentials_receiveOk() {
-        userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Object> response = login(Object.class);
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUserId() {
-        User inDB = userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Map<String, Object>> response = login(new ParameterizedTypeReference<Map<String, Object>>() {
-        });
+        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        Map<String, Object> body = response.getBody();
-        Integer id = (Integer) body.get("id");
+        UserPrincipal body = response.getBody();
+        assert body != null;
+        Long id = body.getId();
         assertThat(id).isEqualTo(inDB.getId());
     }
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersImage() {
-        User inDB = userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Map<String, Object>> response = login(new ParameterizedTypeReference<Map<String, Object>>() {
-        });
+        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        Map<String, Object> body = response.getBody();
-        String image = (String) body.get("image");
+        UserPrincipal body = response.getBody();
+        assert body != null;
+        String image = body.getImage();
         assertThat(image).isEqualTo(inDB.getImage());
     }
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersDisplayName() {
-        User inDB = userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Map<String, Object>> response = login(new ParameterizedTypeReference<Map<String, Object>>() {
-        });
+        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        Map<String, Object> body = response.getBody();
-        String displayName = (String) body.get("displayName");
+        UserPrincipal body = response.getBody();
+        assert body != null;
+        String displayName = body.getDisplayName();
         assertThat(displayName).isEqualTo(inDB.getDisplayName());
     }
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersUsername() {
-        User inDB = userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Map<String, Object>> response = login(new ParameterizedTypeReference<Map<String, Object>>() {
-        });
+        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        Map<String, Object> body = response.getBody();
-        String username = (String) body.get("username");
+        UserPrincipal body = response.getBody();
+        assert body != null;
+        String username = body.getUsername();
         assertThat(username).isEqualTo(inDB.getUsername());
     }
 
     @Test
     public void postLogin_withValidCredentials_notReceiveLoggedInUsersPassword() {
-        userService.save(TestUtil.createValidUser());
-        authenticate();
-        ResponseEntity<Map<String, Object>> response = login(new ParameterizedTypeReference<Map<String, Object>>() {
-        });
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        Map<String, Object> body = response.getBody();
-        assertThat(body.containsKey("password")).isFalse();
+        UserPrincipal body = response.getBody();
+        assertThat(body).hasFieldOrProperty("password");
     }
 
-    private void authenticate() {
-        testRestTemplate.getRestTemplate()
-                .getInterceptors().add(new BasicAuthenticationInterceptor("test-user", "P4ssword"));
+    private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {
+//        String jwtToken = null;
+//
+        ResponseEntity<UserPrincipal> userPrincipalResponseEntity = testRestTemplate.postForEntity("/api/1.0/auth/login", loggingUser, UserPrincipal.class);
+
+        return userPrincipalResponseEntity;
+//
+//        // or Option 2: Creating jwt token by using the jwtUtil.
+//        jwtToken = jwtToken.generateToken(/* pass the required object*/);
+//
+//        // if(jwtToken == null) return;
+//
+//        // then add the token to testRestTemplate's Authorization header like this
+//        testRestTemplate.getRestTemplate().getInterceptors()
+//                .add((request, body, execution) -> {
+//                    request.getHeaders().add("Authorization", "Bearer " + jwtToken);
+//                    return execution.execute(request, body);
+//                });
     }
 
     @Test
@@ -147,9 +152,5 @@ public class LoginControllerTest {
 
     public <T> ResponseEntity<T> login(Class<T> responseType) {
         return testRestTemplate.postForEntity(API_1_0_LOGIN, null, responseType);
-    }
-
-    public <T> ResponseEntity<T> login(ParameterizedTypeReference<T> responseType) {
-        return testRestTemplate.exchange(API_1_0_LOGIN, HttpMethod.POST, null, responseType);
     }
 }
