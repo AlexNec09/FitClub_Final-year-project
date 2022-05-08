@@ -2,9 +2,12 @@ package com.project.fitclub.model.vm;
 
 import com.project.fitclub.model.MessageReaction;
 import com.project.fitclub.model.Reaction;
+import com.project.fitclub.security.UserPrincipal;
 import com.project.fitclub.shared.UserSecurityUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 import java.util.Set;
@@ -31,9 +34,14 @@ public class ReactionVM {
     }
 
     private void currentUserReaction(MessageReaction messageReaction) {
-        if (this.loggedUserReaction == null && messageReaction.getUser().equals(UserSecurityUtil.getLoggedInUser())) {
+        String principalUsername = null;
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            principalUsername = ((UserDetails) principal).getUsername();
+        }
+        if (this.loggedUserReaction == null && messageReaction.getUser().getUsername().equals(principalUsername)) {
             setLoggedUserReaction(messageReaction.getReaction());
         }
     }
-
 }

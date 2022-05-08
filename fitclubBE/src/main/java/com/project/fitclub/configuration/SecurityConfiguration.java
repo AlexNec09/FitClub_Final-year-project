@@ -42,14 +42,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors()
-                .and()
-                .csrf()
-                .disable().authorizeRequests().and()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .headers().frameOptions().disable().and()
+        http.csrf().disable();
+
+        http.httpBasic().authenticationEntryPoint(new BasicAuthenticationEntryPoint());
+
+        http.
+                authorizeRequests().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
@@ -57,28 +55,45 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/**", "/api/1.0/users/{id:[0-9]+}/**").permitAll()
-                .and()
-
-                .authorizeRequests()
+                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").permitAll()
 
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").permitAll()
-                .anyRequest()
-                .authenticated();
+                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/1.0/login").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").authenticated()
+                .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/1.0/messages/{id:[0-9]+}").authenticated()
+                .and().
+                authorizeRequests().anyRequest().permitAll();
+//                .authorizeRequests()
+//                .antMatchers("/",
+//                        "/favicon.ico",
+//                        "/**/*.png",
+//                        "/**/*.gif",
+//                        "/**/*.svg",
+//                        "/**/*.jpg",
+//                        "/**/*.html",
+//                        "/**/*.css",
+//                        "/**/*.js")
+//                .permitAll()
+////                .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
+//                .antMatchers("/images/**", "/api/1.0/messages/upload", "/api/1.0/login", "/api/1.0/auth/**", "/api/1.0/users/**").permitAll()
+//                .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").permitAll()
+//
+//                .and()
+//
+//                .authorizeRequests()
+//
+////                .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
+//                .antMatchers(HttpMethod.POST, "/api/1.0/messages/**").permitAll()
+//                .antMatchers(HttpMethod.DELETE, "/api/1.0/messages/{id:[0-9]+}").permitAll()
+//                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/like").permitAll()
+//                .antMatchers(HttpMethod.PUT, "/api/1.0/messages/{id:[0-9]+}/dislike").permitAll()
+//                .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}/follow").permitAll()
+//                .anyRequest()
+//                .authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

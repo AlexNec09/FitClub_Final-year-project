@@ -591,7 +591,7 @@ public class UserControllerTest {
         User user = userService.save(TestUtil.createValidUser("user1"));
         User targetUser = userService.save(TestUtil.createValidUser("target-user"));
 
-        userService.follow(targetUser.getId(), user);
+        userService.follow(targetUser.getId(), user.getId());
         ResponseEntity<UserVM> result = getUser(user.getUsername(), UserVM.class);
         assertThat(result.getBody().getFollows()).isEqualTo(1);
     }
@@ -601,7 +601,7 @@ public class UserControllerTest {
         User user = userService.save(TestUtil.createValidUser("user1"));
         User targetUser = userService.save(TestUtil.createValidUser("target-user"));
 
-        userService.follow(targetUser.getId(), user);
+        userService.follow(targetUser.getId(), user.getId());
         ResponseEntity<UserVM> result = getUser(targetUser.getUsername(), UserVM.class);
         assertThat(result.getBody().getFollowedBy()).isEqualTo(1);
     }
@@ -611,7 +611,7 @@ public class UserControllerTest {
         User user = userService.save(TestUtil.createValidUser("user1"));
         User targetUser = userService.save(TestUtil.createValidUser("target-user"));
 
-        userService.follow(targetUser.getId(), user);
+        userService.follow(targetUser.getId(), user.getId());
 
         authenticate("user1");
 
@@ -624,7 +624,7 @@ public class UserControllerTest {
         User user = userService.save(TestUtil.createValidUser("user1"));
         User targetUser = userService.save(TestUtil.createValidUser("target-user"));
 
-        userService.follow(targetUser.getId(), user);
+        userService.follow(targetUser.getId(), user.getId());
 
         ResponseEntity<UserVM> result = getUser(targetUser.getUsername(), UserVM.class);
         assertThat(result.getBody().isFollowed()).isFalse();

@@ -76,9 +76,9 @@ public class UserService {
     }
 
     @Transactional
-    public void follow(long id, User currentUser) {
+    public void follow(long id, Long currentUserId) {
         User targetUser = getById(id);
-        User currentUserInDB = getById(currentUser.getId());
+        User currentUserInDB = getById(currentUserId);
 
         targetUser.getFollowedBy().add(currentUserInDB);
         userRepository.save(targetUser);
@@ -88,9 +88,9 @@ public class UserService {
     }
 
     @Transactional
-    public void unfollow(long id, User currentUser) {
+    public void unfollow(long id, Long currentUserId) {
         User targetUser = getById(id);
-        User currentUserInDB = getById(currentUser.getId());
+        User currentUserInDB = getById(currentUserId);
 
         targetUser.getFollowedBy().remove(currentUserInDB);
         userRepository.save(targetUser);

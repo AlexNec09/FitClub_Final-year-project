@@ -3,6 +3,7 @@ package com.project.fitclub.controller;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.model.vm.UserVM;
+import com.project.fitclub.security.UserPrincipal;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.CurrentUser;
 import com.project.fitclub.shared.GenericResponse;
@@ -31,9 +32,10 @@ public class UserController {
     }
 
     @GetMapping("/users/{username}")
-    UserVM getUserByName(@PathVariable String username, @CurrentUser User currentUser) {
+    UserVM getUserByName(@PathVariable String username, @CurrentUser UserPrincipal currentUser) {
         User user = userService.getByUsername(username);
-        return new UserVM(user, currentUser);
+        User myUser = userService.getByUsername(currentUser.getUsername());
+        return new UserVM(user, myUser);
     }
 
     @PutMapping("/users/{id:[0-9]+}")

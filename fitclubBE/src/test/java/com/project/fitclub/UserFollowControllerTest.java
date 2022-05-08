@@ -105,7 +105,7 @@ public class UserFollowControllerTest {
     @Test
     @Transactional
     public void putFollow_whenAuthorizedUserFollowsTheUserAlreadyFollowed_relationNotDuplicated() {
-        userService.follow(userToBeFollowed.getId(), currentUser);
+        userService.follow(userToBeFollowed.getId(), currentUser.getId());
 
         authenticate("user1");
 
@@ -173,7 +173,7 @@ public class UserFollowControllerTest {
     @Test
     @Transactional
     public void putUnfollow_whenAuthorizedUserUnFollowsTheUserHeFollows_returns200() {
-        userService.follow(userToBeFollowed.getId(), currentUser);
+        userService.follow(userToBeFollowed.getId(), currentUser.getId());
 
         authenticate("user1");
 
