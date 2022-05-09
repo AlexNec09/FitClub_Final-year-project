@@ -10,6 +10,7 @@ import { createStore } from "redux";
 import authReducer from "../redux/authReducer";
 import MessageSubmit from "./MessageSubmit";
 import * as apiCalls from "../api/apiCalls";
+import createJWKSMock from "mock-jwks";
 
 const defaultState = {
   id: 1,
@@ -32,6 +33,16 @@ const setup = (state = defaultState) => {
 };
 
 describe("MessageSubmit", () => {
+  const jwks = createJWKSMock("http://localhost:3000/");
+
+  beforeEach(() => {
+    jwks.start();
+  });
+
+  afterEach(() => {
+    jwks.stop();
+  });
+
   describe("Layout", () => {
     it("has textarea", () => {
       const { container } = setup();
@@ -59,8 +70,8 @@ describe("MessageSubmit", () => {
   });
   describe("Interactions", () => {
     let textArea;
-    const setupFocused = () => {
-      const rendered = setup();
+    const setupFocused = (state = defaultState) => {
+      const rendered = setup(state);
       textArea = rendered.container.querySelector("textarea");
       fireEvent.focus(textArea);
       return rendered;
@@ -103,7 +114,10 @@ describe("MessageSubmit", () => {
     });
 
     it("calls postMessage with message request object when clicking Send", () => {
-      const { queryByText } = setupFocused();
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
+
+      const { queryByText } = setupFocused(stateWithMockJwt);
       fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
@@ -113,7 +127,7 @@ describe("MessageSubmit", () => {
 
       expect(apiCalls.postMessage).toHaveBeenCalledWith({
         content: "Test message content",
-      });
+      }, token);
     });
 
     it("returns back to unfocused state after successful postMessage action", async () => {
@@ -499,13 +513,16 @@ describe("MessageSubmit", () => {
     });
 
     it("calls postMessage with message with file attachment object when clicking Send", async () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
+
       apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
         },
       });
-      const { queryByText, container } = setupFocused();
+      const { queryByText, container } = setupFocused(stateWithMockJwt);
       fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const uploadInput = container.querySelector("input");
@@ -532,7 +549,7 @@ describe("MessageSubmit", () => {
           name: "random-name.png",
         },
         content: "Test message content",
-      });
+      }, token);
     });
 
     it("clears image after postMessage success", async () => {
@@ -571,13 +588,16 @@ describe("MessageSubmit", () => {
     });
 
     it("calls postMessage without file attachment after cancelling previous file selection", async () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
+
       apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
         },
       });
-      const { queryByText, container } = setupFocused();
+      const { queryByText, container } = setupFocused(stateWithMockJwt);
       fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const uploadInput = container.querySelector("input");
@@ -603,9 +623,9 @@ describe("MessageSubmit", () => {
 
       expect(apiCalls.postMessage).toHaveBeenCalledWith({
         content: "Test message content",
-      });
+      }, token);
     });
   });
 });
 
-console.error = () => {};
+console.error = () => { };

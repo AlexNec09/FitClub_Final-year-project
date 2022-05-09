@@ -33,10 +33,7 @@ const MessageFeed = (props) => {
   }, [props.user, props.loggedInUser.jwt]);
 
   useEffect(() => {
-    console.log("@@@@@@@@@@@@: " + props.loggedInUser.jwt);
-
     const checkCount = () => {
-      console.log("@@@@@@@@@@@@: " + props.loggedInUser.jwt);
       const messages = page.content;
       let topMessageId = 0;
       if (messages.length > 0) {

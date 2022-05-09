@@ -4,7 +4,6 @@ import {
   fireEvent,
   waitFor,
   waitForElementToBeRemoved,
-  waitForDomChange,
 } from "@testing-library/react";
 import MessageFeed from "./MessageFeed";
 import * as apiCalls from "../api/apiCalls";
@@ -12,6 +11,8 @@ import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import authReducer from "../redux/authReducer";
+import createJWKSMock from "mock-jwks";
+
 
 const loggedInStateUser1 = {
   id: 1,
@@ -215,6 +216,16 @@ const mockSuccessGetMessagesLastOfMultiPage = {
   },
 };
 describe("MessageFeed", () => {
+  const jwks = createJWKSMock("http://localhost:3000/");
+
+  beforeEach(() => {
+    jwks.start();
+  });
+
+  afterEach(() => {
+    jwks.stop();
+  });
+
   describe("Lifecycle", () => {
     it("calls loadMessages when it is rendered", () => {
       apiCalls.loadMessages = jest.fn().mockResolvedValue(mockEmptyResponse);
@@ -223,9 +234,12 @@ describe("MessageFeed", () => {
     });
 
     it("calls loadMessages with user parameter when it is rendered with user property", () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest.fn().mockResolvedValue(mockEmptyResponse);
-      setup({ user: "user1" });
-      expect(apiCalls.loadMessages).toHaveBeenCalledWith("user1");
+      setup({ user: 'user1' }, stateWithMockJwt);
+      expect(apiCalls.loadMessages).toHaveBeenCalledWith("user1", token);
     });
 
     it("calls loadMessages without user parameter when it is rendered without user property", () => {
@@ -254,17 +268,20 @@ describe("MessageFeed", () => {
 
     it("calls loadNewMessagesCount with topMessageId and username when rendered with user property", async () => {
       jest.useFakeTimers();
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetMessagesFirstOfMultiPage);
       apiCalls.loadNewMessagesCount = jest
         .fn()
         .mockResolvedValue({ data: { count: 1 } });
-      const { findByText } = setup({ user: "user1" });
+      const { findByText } = setup({ user: "user1" }, stateWithMockJwt);
       await findByText("This is the latest message");
       jest.runOnlyPendingTimers();
       await findByText("There is 1 new message");
-      expect(apiCalls.loadNewMessagesCount).toBeCalledWith(10, "user1");
+      expect(apiCalls.loadNewMessagesCount).toBeCalledWith(10, "user1", token);
       jest.useRealTimers();
     });
 
@@ -404,16 +421,19 @@ describe("MessageFeed", () => {
     });
 
     it("calls loadOldMessages with messageId and username when clicking View More Posts when rendered with user property", async () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetMessagesFirstOfMultiPage);
       apiCalls.loadOldMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetMessagesLastOfMultiPage);
-      const { findByText } = setup({ user: "user1" });
+      const { findByText } = setup({ user: "user1" }, stateWithMockJwt);
       const loadMore = await findByText("View More Posts");
       fireEvent.click(loadMore);
-      expect(apiCalls.loadOldMessages).toHaveBeenCalledWith(9, "user1");
+      expect(apiCalls.loadOldMessages).toHaveBeenCalledWith(9, "user1", token);
     });
 
     it("displays loaded old message when loadOldMessages api call success", async () => {
@@ -468,6 +488,10 @@ describe("MessageFeed", () => {
 
     it("calls loadNewMessages with messageId and username when clicking new messages count Card", async () => {
       useFakeIntervals();
+
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetMessagesFirstOfMultiPage);
@@ -477,12 +501,12 @@ describe("MessageFeed", () => {
       apiCalls.loadNewMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetNewMessagesList);
-      const { findByText } = setup({ user: "user1" });
+      const { findByText } = setup({ user: "user1" }, stateWithMockJwt);
       await findByText("This is the latest message");
       runTimer();
       const newMessagesCount = await findByText("There is 1 new message");
       fireEvent.click(newMessagesCount);
-      expect(apiCalls.loadNewMessages).toHaveBeenCalledWith(10, "user1");
+      expect(apiCalls.loadNewMessages).toHaveBeenCalledWith(10, "user1", token);
       useRealIntervals();
     });
 
@@ -725,6 +749,9 @@ describe("MessageFeed", () => {
     });
 
     it("calls deleteMessage api with messageId when delete button is clicked on modal", async () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest
         .fn()
         .mockResolvedValue(mockSuccessGetMessagesFirstOfMultiPage);
@@ -733,13 +760,13 @@ describe("MessageFeed", () => {
         .mockResolvedValue({ data: { count: 1 } });
 
       apiCalls.deleteMessage = jest.fn().mockResolvedValue({});
-      const { container, queryByText, findByText } = setup();
+      const { container, queryByText, findByText } = setup(stateWithMockJwt);
       await findByText("This is the latest message");
       const deleteButton = container.querySelectorAll("button")[0];
       fireEvent.click(deleteButton);
       const deleteMessageButton = queryByText("Delete Post");
       fireEvent.click(deleteMessageButton);
-      expect(apiCalls.deleteMessage).toHaveBeenCalledWith(10);
+      expect(apiCalls.deleteMessage).toHaveBeenCalledWith(10, token);
     });
 
     it("removes the deleted message from document after successful deleteMessage api call", async () => {
@@ -845,19 +872,18 @@ describe("MessageFeed", () => {
       });
     });
 
-
-
-    //////////
-
     it('calls the messageReaction when clicked the like button', async () => {
+      const token = jwks.token({});
+      const stateWithMockJwt = Object.assign(loggedInStateUser1, { jwt: token });
+
       apiCalls.loadMessages = jest.fn().mockResolvedValueOnce(mockResponseWithLoadedMessagePage());
       apiCalls.messageReaction = jest.fn().mockResolvedValueOnce({});
-      const { queryByTestId, queryByText } = setup();
+      const { queryByTestId, queryByText } = setup(stateWithMockJwt);
       await waitFor(() => queryByText('This is the loaded message'));
 
       const like = queryByTestId('like-reaction');
       fireEvent.click(like);
-      expect(apiCalls.messageReaction).toBeCalledWith(15, 'like');
+      expect(apiCalls.messageReaction).toBeCalledWith(15, 'like', token);
     });
 
     it('updates the loggedUserReaction to like and count after the successfull messageReaction when clicked the like button', async () => {

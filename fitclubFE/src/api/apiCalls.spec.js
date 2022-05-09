@@ -1,13 +1,15 @@
 import axios from "axios";
 import * as apiCalls from "./apiCalls";
+
 describe("apiCalls", () => {
+
   describe("signup", () => {
     it("calls /api/1.0/users", () => {
       const mockSignup = jest.fn();
       axios.post = mockSignup;
       apiCalls.signup();
       const path = mockSignup.mock.calls[0][0];
-      expect(path).toBe("/api/1.0/users");
+      expect(path).toBe("/api/1.0/auth/signup");
     });
   });
 
@@ -17,7 +19,7 @@ describe("apiCalls", () => {
       axios.post = mockLogin;
       apiCalls.login({ username: "test-user", password: "P4ssword" });
       const path = mockLogin.mock.calls[0][0]; // history of first call and first parameter of that call
-      expect(path).toBe("/api/1.0/login");
+      expect(path).toBe("/api/1.0/auth/login");
     });
   });
   describe("listUser", () => {
@@ -141,26 +143,6 @@ describe("apiCalls", () => {
       apiCalls.loadNewMessages(5, "user1");
       expect(mockGetMessages).toBeCalledWith(
         "/api/1.0/users/user1/messages/5?direction=after&sort=id,desc"
-      );
-    });
-  });
-
-  describe("loadNewMessagesCount", () => {
-    it("calls /api/1.0/messages/5?direction=after&count=true when messageId param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadNewMessagesCount(5);
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/messages/5?direction=after&count=true"
-      );
-    });
-
-    it("calls /api/1.0/users/user1/messages/5?direction=after&count=true when messageId and username param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadNewMessagesCount(5, "user1");
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/users/user1/messages/5?direction=after&count=true"
       );
     });
   });
