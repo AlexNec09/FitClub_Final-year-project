@@ -13,6 +13,7 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.MessageVM;
 import com.project.fitclub.security.UserPrincipal;
 import com.project.fitclub.security.payload.LoginRequest;
+import com.project.fitclub.security.payload.MessageRequest;
 import com.project.fitclub.service.FileService;
 import com.project.fitclub.service.MessageReactionService;
 import com.project.fitclub.service.MessageService;
@@ -107,44 +108,63 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveOk() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        ResponseEntity<Object> response = postMessage(message, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveOk() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+        ResponseEntity<Object> result = postMessage(message, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsUnauthorized_receiveUnauthorized() {
-        Message message = TestUtil.createValidMessage();
-        ResponseEntity<Object> response = postMessage(message, Object.class);
+    public void postMessage_whenMessageIsValidAndUserIsUnauthorized_receiveUnauthorized() throws URISyntaxException {
+        MessageRequest message = TestUtil.createMessageRequest();
+        ResponseEntity<Object> response = postMessage(message, null, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsUnauthorized_receiveApiError() {
-        Message message = TestUtil.createValidMessage();
-        ResponseEntity<ApiError> response = postMessage(message, ApiError.class);
+    public void postMessage_whenMessageIsValidAndUserIsUnauthorized_receiveApiError() throws URISyntaxException {
+        MessageRequest message = TestUtil.createMessageRequest();
+        ResponseEntity<ApiError> response = postMessage(message, null, ApiError.class);
         assertThat(response.getBody().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabase() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        postMessage(message, Object.class);
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabase() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+        postMessage(message, headers, Object.class);
 
         assertThat(messageRepository.count()).isEqualTo(1);
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabaseWithTimestamp() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        postMessage(message, Object.class);
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabaseWithTimestamp() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+
+        postMessage(message, headers, Object.class);
 
         Message inDB = messageRepository.findAll().get(0);
 
@@ -152,75 +172,119 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveBadRequest() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = new Message();
-        ResponseEntity<Object> response = postMessage(message, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = new MessageRequest();
+        ResponseEntity<Object> result = postMessage(message, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void postMessage_whenMessageContentLessThan10CharactersAndUserIsAuthorized_receiveBadRequest() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = new Message();
+    public void postMessage_whenMessageContentLessThan10CharactersAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = new MessageRequest();
         message.setContent("123456789");
-        ResponseEntity<Object> response = postMessage(message, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        ResponseEntity<Object> result = postMessage(message, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void postMessage_whenMessageContentIs5000CharactersAndUserIsAuthorized_receiveOk() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = new Message();
+    public void postMessage_whenMessageContentIs5000CharactersAndUserIsAuthorized_receiveOk() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = new MessageRequest();
         String veryLongString = IntStream.rangeClosed(1, 5000).mapToObj(i -> "x").collect(Collectors.joining());
         message.setContent(veryLongString);
-        ResponseEntity<Object> response = postMessage(message, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Object> result = postMessage(message, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void postMessage_whenMessageContentMoreThan5000CharactersAndUserIsAuthorized_receiveBadRequest() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = new Message();
+    public void postMessage_whenMessageContentMoreThan5000CharactersAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = new MessageRequest();
+
         String veryLongString = IntStream.rangeClosed(1, 5001).mapToObj(i -> "x").collect(Collectors.joining());
         message.setContent(veryLongString);
-        ResponseEntity<Object> response = postMessage(message, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        ResponseEntity<Object> result = postMessage(message, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveApiErrorWithValidationErrors() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = new Message();
-        ResponseEntity<ApiError> response = postMessage(message, ApiError.class);
-        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+    public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveApiErrorWithValidationErrors() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = new MessageRequest();
+
+        ResponseEntity<ApiError> result = postMessage(message, headers, ApiError.class);
+        Map<String, String> validationErrors = result.getBody().getValidationErrors();
 
         assertThat(validationErrors.get("content")).isNotNull();
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedWithAuthenticatedUserInfo() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        postMessage(message, Object.class);
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedWithAuthenticatedUserInfo() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+        postMessage(message, headers, Object.class);
 
         Message inDB = messageRepository.findAll().get(0);
 
-        assertThat(inDB.getUser().getUsername()).isEqualTo("user1");
+        assertThat(inDB.getUser().getUsername()).isEqualTo("test-user");
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageCanBeAccessedFromUserEntity() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        postMessage(message, Object.class);
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageCanBeAccessedFromUserEntity() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+        postMessage(message, headers, Object.class);
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -229,62 +293,84 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveMessageVM() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
-        Message message = TestUtil.createValidMessage();
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
-        assertThat(response.getBody().getUser().getUsername()).isEqualTo("user1");
+    public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveMessageVM() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        MessageRequest message = TestUtil.createMessageRequest();
+
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
+        assertThat(result.getBody().getUser().getUsername()).isEqualTo("test-user");
     }
 
     @Test
-    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentMessageRelationIsUpdatedInDatabase() throws IOException {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentMessageRelationIsUpdatedInDatabase() throws IOException, URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         MultipartFile file = createFile();
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        Message message = TestUtil.createValidMessage();
+        MessageRequest message = TestUtil.createMessageRequest();
         message.setAttachment(savedFile);
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
 
         FileAttachment inDB = fileAttachmentRepository.findAll().get(0);
-        assertThat(inDB.getMessage().getId()).isEqualTo(response.getBody().getId());
+        assertThat(inDB.getMessage().getId()).isEqualTo(result.getBody().getId());
     }
 
     @Test
-    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentRelationIsUpdatedInDatabase() throws IOException {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentRelationIsUpdatedInDatabase() throws IOException, URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         MultipartFile file = createFile();
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        Message message = TestUtil.createValidMessage();
+        MessageRequest message = TestUtil.createMessageRequest();
         message.setAttachment(savedFile);
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
 
-        Message inDB = messageRepository.findById(response.getBody().getId()).get();
+        Message inDB = messageRepository.findById(result.getBody().getId()).get();
         assertThat(inDB.getAttachment().getId()).isEqualTo(savedFile.getId());
     }
 
     @Test
-    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_receiveMessageVMWithAttachment() throws IOException {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_receiveMessageVMWithAttachment() throws IOException, URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         MultipartFile file = createFile();
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        Message message = TestUtil.createValidMessage();
+        MessageRequest message = TestUtil.createMessageRequest();
         message.setAttachment(savedFile);
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
 
-        assertThat(response.getBody().getAttachment().getName()).isEqualTo(savedFile.getName());
+        assertThat(result.getBody().getAttachment().getName()).isEqualTo(savedFile.getName());
     }
 
     private MultipartFile createFile() throws IOException {
@@ -473,38 +559,43 @@ public class MessageControllerTest {
 
         Message lastMessage = messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
-        follow(user2.getId(), Object.class);
+        follow(user2.getId(), headers, Object.class);
 
-        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<>() {
         });
         assertThat(result.getBody().getTotalElements()).isEqualTo(2);
     }
 
     @Test
-    public void getOldMessages_whenThereAreNoMessagesButUserNotLoggedIn_receiveOk() {
-        ResponseEntity<Object> response = getOldMessages(5, new ParameterizedTypeReference<Object>() {
+    public void getOldMessages_whenThereAreNoMessagesButUserNotLoggedIn_receiveUnauthorized() throws URISyntaxException {
+        ResponseEntity<Object> response = getOldMessages(5, null, new ParameterizedTypeReference<Object>() {
         });
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void getOldMessages_whenThereAreMessagesOfUnfollowedUsers_receivePageWithItemsProvidedId() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+    public void getOldMessages_whenThereAreMessagesOfUnfollowedUsers_receivePageWithItemsProvidedId() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<TestPage<Object>> response = getOldMessages(fourthMessage.getId(), new ParameterizedTypeReference<TestPage<Object>>() {
+        ResponseEntity<TestPage<Object>> result = getOldMessages(fourthMessage.getId(), null, new ParameterizedTypeReference<TestPage<Object>>() {
         });
-        assertThat(response.getBody().getTotalElements()).isEqualTo(0);
+        assertThat(result.getBody().getTotalElements()).isEqualTo(0);
     }
 
     @Test
-    public void getOldMessages_whenThereAreMessages_receivePageWithMessageVMBeforeProvidedId() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getOldMessages_whenThereAreMessages_receivePageWithMessageVMBeforeProvidedId() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -512,9 +603,9 @@ public class MessageControllerTest {
 
         Message lastMessage = messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
-        follow(user2.getId(), Object.class);
+        follow(user2.getId(), headers, Object.class);
 
-        ResponseEntity<TestPage<MessageVM>> result = getOldMessages(lastMessage.getId(), new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getOldMessages(lastMessage.getId(), headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
         assertThat(result.getBody().getTotalElements()).isEqualTo(1);
     }
@@ -600,9 +691,14 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getNewMessages_whenThereAreMessages_receiveListOfItemsAfterProvidedId() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getNewMessages_whenThereAreMessages_receiveListOfItemsAfterProvidedId() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -610,18 +706,23 @@ public class MessageControllerTest {
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
 
-        follow(user2.getId(), Object.class);
+        follow(user2.getId(), headers, Object.class);
 
-        ResponseEntity<List<Object>> response = getNewMessages(firstMessage.getId(), new ParameterizedTypeReference<>() {
+        ResponseEntity<List<Object>> result = getNewMessages(firstMessage.getId(), headers, new ParameterizedTypeReference<>() {
         });
 
-        assertThat(response.getBody().size()).isEqualTo(1);
+        assertThat(result.getBody().size()).isEqualTo(1);
     }
 
     @Test
-    public void getNewMessages_whenThereAreMessages_receiveListOfMessageVMAfterProvidedId() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getNewMessages_whenThereAreMessages_receiveListOfMessageVMAfterProvidedId() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -629,11 +730,11 @@ public class MessageControllerTest {
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
 
-        follow(user2.getId(), Object.class);
+        follow(user2.getId(), headers, Object.class);
 
-        ResponseEntity<List<MessageVM>> response = getNewMessages(firstMessage.getId(), new ParameterizedTypeReference<List<MessageVM>>() {
+        ResponseEntity<List<MessageVM>> result = getNewMessages(firstMessage.getId(), headers, new ParameterizedTypeReference<List<MessageVM>>() {
         });
-        assertThat(response.getBody().get(0).getDate()).isGreaterThan(0);
+        assertThat(result.getBody().get(0).getDate()).isGreaterThan(0);
     }
 
     @Test
@@ -718,9 +819,14 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getNewMessagesCount_whenThereAreMessages_receiveCountAfterProvidedId() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getNewMessagesCount_whenThereAreMessages_receiveCountAfterProvidedId() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -728,12 +834,12 @@ public class MessageControllerTest {
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
 
-        follow(user2.getId(), Object.class);
+        follow(user2.getId(), headers, Object.class);
 
-        ResponseEntity<Map<String, Object>> response = getNewMessagesCount(firstMessage.getId(), new ParameterizedTypeReference<Map<String, Object>>() {
+        ResponseEntity<Map<String, Object>> result = getNewMessagesCount(firstMessage.getId(), headers, new ParameterizedTypeReference<Map<String, Object>>() {
         });
 
-        assertThat(response.getBody().get("count")).isEqualTo(1);
+        assertThat(result.getBody().get("count")).isEqualTo(1);
     }
 
     @Test
@@ -758,9 +864,14 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionLikeCount() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionLikeCount() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -771,16 +882,21 @@ public class MessageControllerTest {
 
         messageReactionService.dislike(message.getId(), user3);
 
-        ResponseEntity<TestPage<MessageVM>> result = testRestTemplate.exchange(API_1_0_MESSAGES, HttpMethod.GET, null, new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<>() {
         });
-        MessageVM messageWithReaction = result.getBody().getContent().get(0);
-        assertThat(messageWithReaction.getReactions().getLikeCount()).isEqualTo(2);
+
+        assertThat(result.getBody().getContent().get(0).getReactions().getLikeCount()).isEqualTo(2);
     }
 
     @Test
-    public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionDislikeCount() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionDislikeCount() throws URISyntaxException {
+        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         User user2 = userService.save(TestUtil.createValidUser("user2"));
         User user3 = userService.save(TestUtil.createValidUser("user3"));
@@ -791,10 +907,10 @@ public class MessageControllerTest {
 
         messageReactionService.dislike(message.getId(), user3);
 
-        ResponseEntity<TestPage<MessageVM>> result = testRestTemplate.exchange(API_1_0_MESSAGES, HttpMethod.GET, null, new ParameterizedTypeReference<TestPage<MessageVM>>() {
+        ResponseEntity<TestPage<MessageVM>> result = getMessages(headers, new ParameterizedTypeReference<>() {
         });
-        MessageVM messageWithReaction = result.getBody().getContent().get(0);
-        assertThat(messageWithReaction.getReactions().getDislikeCount()).isEqualTo(1);
+
+        assertThat(result.getBody().getContent().get(0).getReactions().getDislikeCount()).isEqualTo(1);
     }
 
     @Test
@@ -841,78 +957,112 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void deleteMessage_whenUserIsUnauthorized_receiveUnauthorized() {
-        ResponseEntity<Object> response = deleteMessage(555, Object.class);
+    public void deleteMessage_whenUserIsUnauthorized_receiveUnauthorized() throws URISyntaxException {
+        ResponseEntity<Object> response = deleteMessage(555, null, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void deleteMessage_whenUserIsAuthorized_receiveOk() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenUserIsAuthorized_receiveOk() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<Object> response = deleteMessage(message.getId(), Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Object> result = deleteMessage(message.getId(), headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void deleteMessage_whenUserIsAuthorized_receiveGenericResponse() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenUserIsAuthorized_receiveGenericResponse() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        ResponseEntity<GenericResponse> response = deleteMessage(message.getId(), GenericResponse.class);
-        assertThat(response.getBody().getMessage()).isNotNull();
+        ResponseEntity<GenericResponse> result = deleteMessage(message.getId(), headers, GenericResponse.class);
+        assertThat(result.getBody().getMessage()).isNotNull();
     }
 
     @Test
-    public void deleteMessage_whenUserIsAuthorized_messageRemovedFromDatabase() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenUserIsAuthorized_messageRemovedFromDatabase() throws URISyntaxException {
+        User user = userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        deleteMessage(message.getId(), Object.class);
+        deleteMessage(message.getId(), headers, Object.class);
         Optional<Message> inDB = messageRepository.findById(message.getId());
         assertThat(inDB.isPresent()).isFalse();
     }
 
     @Test
-    public void deleteMessage_whenMessageIsOwnedByAnotherUser_receiveForbidden() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenMessageIsOwnedByAnotherUser_receiveForbidden() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
         User messageOwner = userService.save(TestUtil.createValidUser("message-owner"));
         Message message = messageService.save(messageOwner, TestUtil.createValidMessage());
 
-        ResponseEntity<Object> response = deleteMessage(message.getId(), Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        ResponseEntity<Object> result = deleteMessage(message.getId(), headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     @Test
-    public void deleteMessage_whenMessageDoesNotExist_receiveForbidden() {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenMessageDoesNotExist_receiveForbidden() throws URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
-        ResponseEntity<Object> response = deleteMessage(555, Object.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        ResponseEntity<Object> result = deleteMessage(555, headers, Object.class);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     @Test
-    public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromDatabase() throws IOException {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromDatabase() throws IOException, URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         MultipartFile file = createFile();
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        Message message = TestUtil.createValidMessage();
+        MessageRequest message = TestUtil.createMessageRequest();
         message.setAttachment(savedFile);
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
 
-        long messageId = response.getBody().getId();
+        long messageId = result.getBody().getId();
 
-        deleteMessage(messageId, Object.class);
+        deleteMessage(messageId, headers, Object.class);
 
         Optional<FileAttachment> optionalAttachment = fileAttachmentRepository.findById(savedFile.getId());
 
@@ -920,38 +1070,47 @@ public class MessageControllerTest {
     }
 
     @Test
-    public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromStorage() throws IOException {
-        userService.save(TestUtil.createValidUser("user1"));
-        authenticate("user1");
+    public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromStorage() throws IOException, URISyntaxException {
+        userService.save(TestUtil.createValidUser("test-user"));
+        LoginRequest loggingUser = TestUtil.createLoginUser();
+        ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
+
+        String token = response.getBody().getJwt();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
         MultipartFile file = createFile();
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        Message message = TestUtil.createValidMessage();
+        MessageRequest message = TestUtil.createMessageRequest();
         message.setAttachment(savedFile);
-        ResponseEntity<MessageVM> response = postMessage(message, MessageVM.class);
+        ResponseEntity<MessageVM> result = postMessage(message, headers, MessageVM.class);
 
-        long messageId = response.getBody().getId();
+        long messageId = result.getBody().getId();
 
-        deleteMessage(messageId, Object.class);
+        deleteMessage(messageId, headers, Object.class);
         String attachmentFolderPath = appConfiguration.getFullAttachmentsPath() + "/" + savedFile.getName();
         File storedImage = new File(attachmentFolderPath);
         assertThat(storedImage.exists()).isFalse();
     }
 
-    public <T> ResponseEntity<T> deleteMessage(long messageId, Class<T> responseType) {
-        return testRestTemplate.exchange(API_1_0_MESSAGES + "/" + messageId, HttpMethod.DELETE, null, responseType);
+    public <T> ResponseEntity<T> deleteMessage(long messageId, HttpHeaders headers, Class<T> responseType) throws URISyntaxException {
+        String path = API_1_0_MESSAGES + "/" + messageId;
+        return testRestTemplate.exchange(RequestEntity.delete(new URI(path)).headers(headers).build(), responseType);
+
     }
 
-    public <T> ResponseEntity<T> getNewMessagesCount(long messageId, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getNewMessagesCount(long messageId, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = API_1_0_MESSAGES + "/" + messageId + "?direction=after&count=true";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
+
     }
 
-    public <T> ResponseEntity<T> follow(long userId, Class<T> responseType) throws RestClientException {
+    public <T> ResponseEntity<T> follow(long userId, HttpHeaders headers, Class<T> responseType) throws RestClientException, URISyntaxException {
         String path = "/api/1.0/users/" + userId + "/follow";
-        return testRestTemplate.exchange(path, HttpMethod.PUT, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), responseType);
+
     }
 
     public <T> ResponseEntity<T> getNewMessagesCountOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
@@ -959,9 +1118,9 @@ public class MessageControllerTest {
         return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
     }
 
-    public <T> ResponseEntity<T> getNewMessages(long messageId, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getNewMessages(long messageId, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = API_1_0_MESSAGES + "/" + messageId + "?direction=after&sort=id,desc";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
     }
 
     public <T> ResponseEntity<T> getNewMessagesOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
@@ -970,9 +1129,9 @@ public class MessageControllerTest {
 
     }
 
-    public <T> ResponseEntity<T> getOldMessages(long messageId, ParameterizedTypeReference<T> responseType) {
+    public <T> ResponseEntity<T> getOldMessages(long messageId, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
         String path = API_1_0_MESSAGES + "/" + messageId + "?direction=before&page=0&size=5&sort=id,desc";
-        return testRestTemplate.exchange(path, HttpMethod.GET, null, responseType);
+        return testRestTemplate.exchange(RequestEntity.get(new URI(path)).headers(headers).build(), responseType);
     }
 
     public <T> ResponseEntity<T> getOldMessagesOfUser(long messageId, String username, HttpHeaders headers, ParameterizedTypeReference<T> responseType) throws URISyntaxException {
@@ -990,13 +1149,8 @@ public class MessageControllerTest {
         return testRestTemplate.exchange(RequestEntity.get(new URI(API_1_0_MESSAGES)).headers(headers).build(), responseType);
     }
 
-    private <T> ResponseEntity<T> postMessage(Message message, Class<T> responseType) {
-        return testRestTemplate.postForEntity(API_1_0_MESSAGES, message, responseType);
-    }
-
-    private void authenticate(String username) {
-        testRestTemplate.getRestTemplate()
-                .getInterceptors().add(new BasicAuthenticationInterceptor(username, "P4ssword"));
+    private <T> ResponseEntity<T> postMessage(MessageRequest message, HttpHeaders headers, Class<T> responseType) throws URISyntaxException {
+        return testRestTemplate.exchange(RequestEntity.post(new URI(API_1_0_MESSAGES)).headers(headers).body(message), responseType);
     }
 
     private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {

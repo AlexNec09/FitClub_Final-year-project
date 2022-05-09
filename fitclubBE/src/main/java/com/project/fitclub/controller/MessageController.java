@@ -34,7 +34,6 @@ public class MessageController {
 //    @PreAuthorize("hasRole('USER')")
     Page<?> getAllMessages(Pageable pageable, @CurrentUser UserPrincipal userPrincipal) {
         if (userPrincipal != null) {
-            System.out.println(userPrincipal.getUsername());
             return messageService.getMessagesForUser(pageable, userPrincipal.getId()).map(MessageVM::new);
         }
         return messageService.getAllMessages(pageable).map(MessageVM::new);
@@ -66,7 +65,7 @@ public class MessageController {
                                           @RequestParam(name = "direction", defaultValue = "after") String direction,
                                           @RequestParam(name = "count", defaultValue = "false", required = false) boolean count,
                                           Pageable pageable) {
-        if(userPrincipal == null){
+        if (userPrincipal == null) {
             return ResponseEntity.badRequest().body("Full authentication is required!");
         }
         User user = userRepository.findByUsername(userPrincipal.getUsername());

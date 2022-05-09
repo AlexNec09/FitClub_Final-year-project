@@ -22,13 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        // Let people login with either username or email
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username or email : " + username);
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
-
-        System.out.println("Password on Custom User Details Service: " + user.getPassword());
         return UserPrincipal.create(user);
     }
 

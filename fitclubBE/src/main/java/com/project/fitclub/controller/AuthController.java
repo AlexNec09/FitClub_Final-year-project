@@ -51,13 +51,11 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = tokenProvider.generateToken(authentication);
 
         User user = userRepository.findByUsername(loginRequest.getUsername());
         UserPrincipal userPrincipal = UserPrincipal.create(user);
         userPrincipal.setJwt(jwt);
-        System.out.println(userPrincipal.getJwt());
         return ResponseEntity.ok(userPrincipal);
 
     }
@@ -65,12 +63,11 @@ public class AuthController {
     @PostMapping("/signup")
     ResponseEntity<GenericResponse> createUser(@Valid @RequestBody User user) {
         User result = userService.save(user);
-//        return new GenericResponse("User saved!");
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new GenericResponse("User registered successfully"));
+        return ResponseEntity.created(location).body(new GenericResponse("User registered successfully!"));
     }
 }

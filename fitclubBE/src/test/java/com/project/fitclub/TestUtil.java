@@ -3,6 +3,7 @@ package com.project.fitclub;
 import com.project.fitclub.model.Message;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.payload.LoginRequest;
+import com.project.fitclub.security.payload.MessageRequest;
 
 public class TestUtil {
 
@@ -32,5 +33,11 @@ public class TestUtil {
         Message message = new Message();
         message.setContent("test content for the test message");
         return message;
+    }
+
+    public static MessageRequest createMessageRequest() {
+        MessageRequest messageRequest = new MessageRequest();
+        messageRequest.setContent("test content for the test message");
+        return messageRequest;
     }
 }

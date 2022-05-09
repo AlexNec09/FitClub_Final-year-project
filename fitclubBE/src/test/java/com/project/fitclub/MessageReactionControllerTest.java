@@ -20,8 +20,10 @@ import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -165,9 +167,7 @@ public class MessageReactionControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        ResponseEntity<GenericResponse> result = testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), GenericResponse.class);
-
-        System.out.println(result.getBody().getMessage());
+        testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), GenericResponse.class);
 
         MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, inDB);
         assertThat(reaction).isNotNull();
