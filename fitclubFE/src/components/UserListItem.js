@@ -4,13 +4,32 @@ import { Link } from "react-router-dom";
 
 const UserListItem = (props) => {
     return (
-        <Link to={`/${props.user.username}`}
-            className="list-group-item list-group-item-action">
-            <ProfileImageWithDefault className="rounded-circle" alt="profile" width="32" height="32" image={props.user.image} />
-            <span className="px-2">
-                {`${props.user.displayName}@${props.user.username}`}
-            </span>
+
+        <Link to={`/${props.user.username}`} className="list-group-item list-group-item-action">
+            <div className="d-flex">
+                <ProfileImageWithDefault
+                    className="rounded-circle m-1"
+                    width="48"
+                    height="48"
+                    image={props.user.image}
+                />
+                <div className="flex-fill m-auto ps-2">
+                    <div>
+                        <h6 className="d-inline display-name">
+                            {props.user.displayName}
+                        </h6>
+
+                        <br />
+                        <span className="text-black-50 fs-6">{props.user.username}</span>
+                    </div>
+                </div>
+            </div>
+
         </Link>
+
+
+
+
     );
 };
 

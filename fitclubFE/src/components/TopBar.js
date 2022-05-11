@@ -69,7 +69,7 @@ const TopBar = (props) => {
     );
   }
   return (
-    <div className="bg-white shadow-sm mb-2">
+    <div className="bg-white shadow-sm mb-2 sticky-header">
       <div className="container">
         <nav className="navbar navbar-light navbar-expand">
           <Link to="/" className="navbar-brand">

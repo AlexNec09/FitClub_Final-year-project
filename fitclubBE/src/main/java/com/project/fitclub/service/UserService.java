@@ -107,4 +107,8 @@ public class UserService {
             throw new NotFoundHandler("User not found");
         return inDB.get();
     }
+
+    public Page<User> findAll(String searchText, Pageable page) {
+        return userRepository.findAllUsers(searchText, page);
+    }
 }

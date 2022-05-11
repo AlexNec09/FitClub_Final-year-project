@@ -18,8 +18,13 @@ export const setAuthorizationHeader = ({ username, password, isLoggedIn }) => {
   }
 };
 
-export const listUsers = (param = { page: 0, size: 3 }) => {
-  const path = `/api/1.0/users?page=${param.page || 0}&size=${param.size || 3}`;
+export const listUsers = (param = { page: 0, size: 10 }) => {
+  const path = `/api/1.0/users?page=${param.page || 0}&size=${param.size || 10}`;
+  return axios.get(path);
+};
+
+export const searchUsers = (searchText, param = { page: 0, size: 10 }) => {
+  const path = `/api/1.0/users/find/${searchText}?page=${param.page || 0}&size=${param.size || 10}`;
   return axios.get(path);
 };
 

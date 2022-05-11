@@ -5,6 +5,8 @@ import LoginPage from "../pages/LoginPage";
 import UserPage from "../pages/UserPage";
 import UserSignupPage from "../pages/UserSignupPage";
 import TopBar from "../components/TopBar";
+import './App.css';
+
 
 
 function App() {

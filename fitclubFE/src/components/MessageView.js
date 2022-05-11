@@ -30,8 +30,8 @@ const MessageView = (props) => {
       <div className="d-flex">
         <ProfileImageWithDefault
           className="rounded-circle m-1"
-          width="32"
-          height="32"
+          width="40"
+          height="40"
           image={image}
         />
         <div className="flex-fill m-auto ps-2">
@@ -81,10 +81,10 @@ const MessageView = (props) => {
       )}
       <div className="ps-5 pt-3 d-flex">
         <div className={reactions && reactions.loggedUserReaction === "LIKE" ? "text-success w-25" : "text-muted w-25"} data-testid="like-reaction" style={{ cursor: 'pointer' }} onClick={onClickLike}>
-          <i className="far fa-thumbs-up"></i><span className="ps-1">{reactions && reactions.likeCount}</span>
+          <i className="fas fa-thumbs-up"></i><span className="ps-1">{reactions && reactions.likeCount}</span>
         </div>
         <div className={reactions && reactions.loggedUserReaction === "DISLIKE" ? "text-danger w-25" : "text-muted w-25"} data-testid="dislike-reaction" style={{ cursor: 'pointer' }} onClick={onClickDislike}>
-          <i className="far fa-thumbs-down"></i><span className="ps-1">{reactions && reactions.dislikeCount}</span>
+          <i className="fas fa-thumbs-down"></i><span className="ps-1">{reactions && reactions.dislikeCount}</span>
         </div>
       </div>
     </div>

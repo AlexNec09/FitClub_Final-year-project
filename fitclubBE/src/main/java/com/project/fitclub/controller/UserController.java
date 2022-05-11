@@ -49,4 +49,9 @@ public class UserController {
         return new UserVM(updated);
     }
 
+    @GetMapping("/users/find/{searchText}")
+    Page<UserVM> getUsers(@PathVariable String searchText, Pageable page) {
+        return userService.findAll(searchText, page).map(UserVM::new);
+    }
+
 }
