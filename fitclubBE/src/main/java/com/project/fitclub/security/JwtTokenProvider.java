@@ -46,6 +46,16 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
+    public String generateEmailVerificationToken(String publicUserId) {
+        String token = Jwts.builder()
+                .setSubject(publicUserId)
+                .setExpiration(new Date(System.currentTimeMillis()+ jwtExpirationInMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+        return token;
+    }
+
+
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

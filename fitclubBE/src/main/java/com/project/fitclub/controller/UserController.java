@@ -10,6 +10,7 @@ import com.project.fitclub.shared.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/1.0")
@@ -52,6 +54,39 @@ public class UserController {
     @GetMapping("/users/find/{searchText}")
     Page<UserVM> getUsers(@PathVariable String searchText, Pageable page) {
         return userService.findAll(searchText, page).map(UserVM::new);
+    }
+
+    @PostMapping(path = "/users/email-verification/confirmation/{id:[0-9]+}")
+    @PreAuthorize("#id == principal.id")
+    public ResponseEntity<?> renewAndResendEmailConfirmation(@PathVariable long id) {
+        try {
+            boolean isSaveToDBAndSentWithSuccess = userService.resendEmailById(id);
+
+            if (isSaveToDBAndSentWithSuccess) {
+                System.out.println("Email Resending was successfully!");
+                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            }
+        } catch (Exception e) {
+            System.out.println("An error has occurred on the process of sending email!");
+            return ResponseEntity.ok(Collections.singletonMap("value", "FAILING"));
+        }
+        return null;
+    }
+    // validated email page send token from #1 to this endpoint
+    @GetMapping(path = "/users/email-verification/confirmationToken/{token}")
+    public ResponseEntity verifyEmailTokenForEmailVerification(@PathVariable String token) {
+        try {
+            boolean isVerified = userService.verifyEmailToken(token);
+
+            if (isVerified) {
+                System.out.println("SUCCESS");
+                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            }
+        } catch (Exception e) {
+            System.out.println("FAILING");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(Collections.singletonMap("value", "UNDEFINED"));
     }
 
 }

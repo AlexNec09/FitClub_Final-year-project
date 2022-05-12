@@ -13,6 +13,19 @@ spring:
       pageable:
         default-page-size: 10
         max-page-size: 100
+
+  mail:
+    host: smtp.gmail.com
+    username: fitclub.by.alexnec@gmail.com
+    password: kwwierdeowlqmjjf
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
 ---
 spring:
   config:

@@ -51,6 +51,11 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    private String emailVerificationToken = "";
+
+    @NotNull
+    private Boolean emailVerificationStatus = false;
+
     @OneToMany(mappedBy = "user")
     List<Message> messages = new ArrayList<>();
 

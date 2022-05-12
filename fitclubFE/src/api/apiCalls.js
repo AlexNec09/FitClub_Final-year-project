@@ -135,3 +135,16 @@ export const messageReaction = (id, reaction, jwt) => {
   };
   return axios.put(`/api/1.0/messages/${id}/${reaction === 'dislike' ? 'dislike' : 'like'}`, config);
 }
+
+
+export const resendEmailVerification = (id, jwt) => {
+  const config = {
+    headers: { Authorization: `Bearer ${jwt}` }
+  };
+  return axios.post(`/api/1.0/users/email-verification/confirmation/${id}`, config);
+};
+
+// confirm token
+export const confirmationToken = (token) => {
+  return axios.get(`/api/1.0/users/email-verification/confirmationToken/${token}`);
+};

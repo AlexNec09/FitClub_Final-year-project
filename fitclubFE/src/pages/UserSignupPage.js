@@ -44,7 +44,7 @@ export const UserSignupPage = (props) => {
         .postSignup(user)
         .then((response) => {
           setPendingApiCall(false);
-          props.history.push("/");
+          props.history.push("/verification/confirmationEmail");
         })
         .catch((apiError) => {
           if (apiError.response.data && apiError.response.data.validationErrors) {
@@ -131,7 +131,7 @@ UserSignupPage.defaultProps = {
       }),
   },
   history: {
-    push: () => {},
+    push: () => { },
   },
 };
 

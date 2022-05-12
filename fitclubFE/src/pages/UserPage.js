@@ -4,6 +4,12 @@ import ProfileCard from "../components/ProfileCard";
 import { connect } from "react-redux";
 import MessageFeed from "../components/MessageFeed";
 import Spinner from "../components/Spinner";
+import Tab from 'react-bootstrap/Tab';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Nav from 'react-bootstrap/Nav';
+import Security from '../components/Security';
+
 
 const reducer = (state, action) => {
   if (action.type === "loading-user") {
@@ -128,6 +134,7 @@ const UserPage = (props) => {
     errors: {},
   });
 
+
   useEffect(() => {
     const loadUser = () => {
       const username = props.match.params.username;
@@ -232,34 +239,142 @@ const UserPage = (props) => {
     const isEditable =
       props.loggedInUser.username === props.match.params.username;
     pageContent = state.user && (
-      <div className="row">
-        <div className="col">
-          <ProfileCard
-            user={state.user}
-            isEditable={isEditable}
-            inEditMode={state.inEditMode}
-            onClickEdit={() => dispatch({ type: "edit-mode" })}
-            onClickCancel={() => dispatch({ type: "cancel" })} // inline function
-            onClickSave={onClickSave}
-            onChangeDisplayName={(event) =>
-              dispatch({
-                type: "update-displayName",
-                payload: event.target.value,
-              })
-            }
-            pendingUpdateCall={state.pendingUpdateCall}
-            loadedImage={state.image}
-            onFileSelect={onFileSelect}
-            isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
-            onToggleFollow={onToggleFollow}
-            pendingFollowToggleCall={state.pendingFollowToggleCall}
-            errors={state.errors}
-          />
-        </div>
-        <div className="col">
-          <MessageFeed user={props.match.params.username} />
-        </div>
+
+
+
+      <div className="container pt-2">
+
+        <Tab.Container
+          id="left-tabs-example"
+          defaultActiveKey="first">
+          <Row className="pt-2 ">
+
+            <Col className="" md={3} >
+
+              <Nav variant="pills" className="flex-column sticky-menu">
+
+                <Nav.Item >
+                  <Nav.Link eventKey="first" >
+                    {/* <i className="fas fa-user text-secondary pr-2"></i> */}
+                    Edit Profile
+                  </Nav.Link>
+                </Nav.Item>
+
+                <Nav.Item>
+                  <Nav.Link eventKey="second">
+                    {/* <i className="fas fa-unlock-alt text-secondary pr-2"></i> */}
+                    Security
+                  </Nav.Link>
+                </Nav.Item>
+
+                <Nav.Item>
+                  <Nav.Link eventKey="third">
+                    {/* <i className="fas fa-history text-secondary pr-2"></i> */}
+                    User Feeds
+                  </Nav.Link>
+                </Nav.Item>
+
+              </Nav>
+
+            </Col>
+
+            <Col md={9}>
+              <Tab.Content className="" >
+
+                <Tab.Pane eventKey="first">
+                  <ProfileCard
+                    user={state.user}
+                    isEditable={isEditable}
+                    inEditMode={state.inEditMode}
+                    onClickEdit={() => dispatch({ type: "edit-mode" })}
+                    onClickCancel={() => dispatch({ type: "cancel" })} // inline function
+                    onClickSave={onClickSave}
+                    onChangeDisplayName={(event) =>
+                      dispatch({
+                        type: "update-displayName",
+                        payload: event.target.value,
+                      })
+                    }
+                    pendingUpdateCall={state.pendingUpdateCall}
+                    loadedImage={state.image}
+                    onFileSelect={onFileSelect}
+                    isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
+                    onToggleFollow={onToggleFollow}
+                    pendingFollowToggleCall={state.pendingFollowToggleCall}
+                    errors={state.errors}
+                  />
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="second">
+                  <Security
+                    user={state.user}
+                    emailVerificationStatus={props.loggedInUser.emailVerificationStatus}
+                  />
+                </Tab.Pane>
+
+                <Tab.Pane eventKey="third">
+                  <div className="row">
+
+                    <div className="col">
+                      <MessageFeed user={props.match.params.username} />
+
+                    </div>
+
+                  </div>
+                </Tab.Pane>
+
+              </Tab.Content>
+
+            </Col>
+          </Row>
+        </Tab.Container>
       </div>
+
+
+
+
+
+
+
+
+      //////////////////////////////////////
+
+
+
+
+
+
+
+
+
+      // <div className="row">
+      //   <div className="col">
+      //     <ProfileCard
+      //       user={state.user}
+      //       isEditable={isEditable}
+      //       inEditMode={state.inEditMode}
+      //       onClickEdit={() => dispatch({ type: "edit-mode" })}
+      //       onClickCancel={() => dispatch({ type: "cancel" })} // inline function
+      //       onClickSave={onClickSave}
+      //       onChangeDisplayName={(event) =>
+      //         dispatch({
+      //           type: "update-displayName",
+      //           payload: event.target.value,
+      //         })
+      //       }
+      //       pendingUpdateCall={state.pendingUpdateCall}
+      //       loadedImage={state.image}
+      //       onFileSelect={onFileSelect}
+      //       isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
+      //       onToggleFollow={onToggleFollow}
+      //       pendingFollowToggleCall={state.pendingFollowToggleCall}
+      //       errors={state.errors}
+      //     />
+      //   </div>
+      //   <div className="col">
+      //     <MessageFeed user={props.match.params.username} />
+      //   </div>
+      // </div>
     );
   }
   return (
