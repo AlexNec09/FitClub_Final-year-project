@@ -22,14 +22,14 @@ const Input = (props) => {
         onChange={props.onChange}
       />
       {props.hasError && (
-        <span className="invalid-feedback">{props.error}</span>
+        <span className="invalid-feedback-forprofileCard">{props.error}</span>
       )}
     </div>
   );
 };
 
 Input.defaultProps = {
-  onChange: () => {},
+  onChange: () => { },
 };
 
 export default Input;

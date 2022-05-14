@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import image from '../assets/confirmationEmail.png';
 import ButtonWithProgressEmailConfirmation from '../components/ButtonWithProgressEmailConfirmation';
 import * as apiCalls from '../api/apiCalls';
+import ButtonMailto from '../components/ButtonMailto';
 
 class ResendConfirmationEmail extends Component {
     state = {
@@ -46,11 +47,11 @@ class ResendConfirmationEmail extends Component {
 
                         <div>
                             <i className="fas fa-envelope-open-text mail-icon"></i>
-                            <span className="text-span font-weight-bold"> &nbsp;You've got mail!</span>
+                            <span className="text-span font-weight-bold"> &nbsp;Confirm your email</span>
                         </div>
 
                         <h4 className="pt-2 confirmation-header">
-                            Check Your Email
+                            Check Your Inbox!
                         </h4>
 
                         <p className="text-secondary pt-2 textConfirmation">
@@ -58,7 +59,6 @@ class ResendConfirmationEmail extends Component {
                             the application. A confirmation email has been sent to&nbsp;
                             <span className="font-weight-bold">{this.props.loggedInUser.username}</span>
                             &nbsp;at account creation. Please access the link inside it to confirm the email address.
-                            If you cannot find the email in Inbox, please check in Spam/Promotion.
                             To submit a new one, click the button below.
                         </p>
 
@@ -66,7 +66,7 @@ class ResendConfirmationEmail extends Component {
 
                             <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
                                 <span className="far fa-check-circle fa-lg fa-2x"></span>
-                                <span className="">&nbsp;Email was successfully sending!</span>
+                                <span className="">&nbsp;Email was successfully sent!</span>
                             </h5>
                         )}
 
@@ -80,14 +80,11 @@ class ResendConfirmationEmail extends Component {
                             />
                         </div>
 
-                        <p className="text-center display-5 text-secondary text-login-card-buttom pt-5">
-                            Have trouble or confused? Please contact the support at: &nbsp;
-                            <a href="/" className="text-secondary font-weight-bold">
-                                support@hoaxify.com
-                            </a>
-                            .
+                        <p className="text-center display-6 text-secondary text-login-card-bottom pt-5">
+                            For assistance, contact FitClub support at:
+                            <br></br>
+                            <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
                         </p>
-
                     </div>
 
                 </div>

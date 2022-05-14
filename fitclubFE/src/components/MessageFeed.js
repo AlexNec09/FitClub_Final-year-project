@@ -4,6 +4,8 @@ import Spinner from "./Spinner";
 import MessageView from "./MessageView";
 import ModalView from "./ModalView";
 import { connect } from "react-redux";
+import AuthNeeded from "./AuthNeeded";
+import SessionExpired from "./SessionExpired";
 
 const MessageFeed = (props) => {
   const [page, setPage] = useState({ content: [] });
@@ -14,23 +16,26 @@ const MessageFeed = (props) => {
   const [isDeletingMessage, setDeletingMessage] = useState(false);
   const [newMessageCount, setNewMessagesCount] = useState(0);
   const [messageToBeDeleted, setMessageToBeDeleted] = useState();
+  const [hasFullAccess, setHasFullAccess] = useState(true);
   const intervalRef = useRef(null);
 
   useEffect(() => {
     const loadMessages = () => {
-      setLoadingMessages(true);
-      apiCalls
-        .loadMessages(props.user, props.loggedInUser.jwt)
-        .then((response) => {
-          setLoadingMessages(false);
-          setPage(response.data);
-        })
-        .catch((error) => {
-          setLoadingMessages(false);
-        });
+      if (hasFullAccess) {
+        setLoadingMessages(true);
+        apiCalls
+          .loadMessages(props.user, props.loggedInUser.jwt)
+          .then((response) => {
+            setLoadingMessages(false);
+            setPage(response.data);
+          })
+          .catch((error) => {
+            setLoadingMessages(false);
+          });
+      }
     };
     loadMessages();
-  }, [props.user, props.loggedInUser.jwt]);
+  }, [props.user, props.loggedInUser.jwt, hasFullAccess]);
 
   useEffect(() => {
     const checkCount = () => {
@@ -39,23 +44,33 @@ const MessageFeed = (props) => {
       if (messages.length > 0) {
         topMessageId = messages[0].id;
       }
-      apiCalls
-        .loadNewMessagesCount(topMessageId, props.user, props.loggedInUser.jwt)
-        .then((response) => {
-          setNewMessagesCount(response.data.count);
-        });
-    };
-    intervalRef.current = setInterval(checkCount, 2500);
-    // intervalRef.current = setInterval(checkCount, 50000);
-
-    return function cleanup() {
-      if (isLoadingNewMessages) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = setInterval(checkCount, 50);
+      if (hasFullAccess) {
+        apiCalls
+          .loadNewMessagesCount(topMessageId, props.user, props.loggedInUser.jwt)
+          .then((response) => {
+            setNewMessagesCount(response.data.count);
+          })
+          .catch((error) => {
+            setHasFullAccess(false);
+            console.log(error);
+          });;
       }
-      clearInterval(intervalRef.current);
     };
-  }, [props.user, page.content, isLoadingNewMessages, props.loggedInUser.jwt]);
+
+    if (hasFullAccess) {
+      intervalRef.current = setInterval(checkCount, 2500);
+      // intervalRef.current = setInterval(checkCount, 50000);
+
+      return function cleanup() {
+        if (isLoadingNewMessages) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = setInterval(checkCount, 50);
+        }
+        clearInterval(intervalRef.current);
+      };
+    }
+
+  }, [props.user, page.content, isLoadingNewMessages, props.loggedInUser.jwt, hasFullAccess]);
 
   const onClickLoadMore = () => {
     if (isLoadingOldMessages) {
@@ -167,6 +182,15 @@ const MessageFeed = (props) => {
   if (isLoadingMessages) {
     return <Spinner />;
   }
+
+
+  if (!hasFullAccess && !props.loggedInUser.isLoggedIn) {
+    return <AuthNeeded />;
+  }
+  else if (!hasFullAccess && props.loggedInUser.isLoggedIn) {
+    return <SessionExpired />;
+  }
+
   if (page.content.length === 0 && newMessageCount === 0) {
     return (
       <div className="card card-header text-center">There are no messages</div>

@@ -30,7 +30,8 @@ class App extends Component {
             <Route exact path="/" component={ResendConfirmationEmail} />
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/login" component={LoginPage} /> : <Redirect to="/" />}
             <Route exact path="/signup" component={UserSignupPage} />
-            {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route path="/:username" component={UserPage} /> : <Redirect to="/" />}
+            {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/:username" component={UserPage} /> : <Redirect to="/" />}
+            <Route component={UserSignupPage} />
 
           </Switch>
         </div>

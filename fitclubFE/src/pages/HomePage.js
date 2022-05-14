@@ -42,18 +42,20 @@ class HomePage extends React.Component {
                     </Nav.Link>
                   </Nav.Item>
 
-                  <hr width="98%"></hr>
+                  {this.props.loggedInUser.isLoggedIn && (<div>
+                    <hr width="98%"></hr>
 
-                  <Link to={{
-                    pathname: `/${this.props.loggedInUser.username}`,
-                    tabValue: '1',
-                  }}
-                    className="my-nav-item"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <img src={MyProfile} width="40" alt="MyProfile" />
-                    <span className="pl-2">My Profile</span>
-                  </Link>
+                    <Link to={{
+                      pathname: `/${this.props.loggedInUser.username}`,
+                      tabValue: '1',
+                    }}
+                      className="my-nav-item"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <img src={MyProfile} width="39" alt="MyProfile" />
+                      <span className="pl-2"> My Profile</span>
+                    </Link>
+                  </div>)}
                 </Nav>
 
 

@@ -4,6 +4,8 @@ import com.project.fitclub.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZoneId;
+
 @Data
 @NoArgsConstructor
 public class UserVM {
@@ -22,6 +24,10 @@ public class UserVM {
 
     boolean followed;
 
+    private Boolean emailVerificationStatus;
+
+    private long date;
+
     public UserVM(User user) {
         this.setId(user.getId());
         this.setUsername(user.getUsername());
@@ -29,6 +35,8 @@ public class UserVM {
         this.setImage(user.getImage());
         this.setFollows(user.getFollows().size());
         this.setFollowedBy(user.getFollowedBy().size());
+        this.setEmailVerificationStatus(user.getEmailVerificationStatus());
+        this.setDate(user.getCreatedAt().toEpochMilli());
     }
 
     public UserVM(User user, User loggedInUser) {

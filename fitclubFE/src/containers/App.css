@@ -102,7 +102,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
 .sticky-menu {
   position: -webkit-sticky;
   position: sticky !important;
-  top: 20px !important;
+  top: 60px !important;
   z-index: 1;
   cursor: pointer;
 }
@@ -131,7 +131,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   padding-top: 1rem;
 }
 
-/* .card-body {
+.card-body {
   flex: 1 1 auto;
   min-height: 1px;
   padding: 0.75rem !important;
@@ -139,7 +139,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
 
 .card-home {
   border: 0px !important;
-} */
+}
 
 .display-name {
   font-size: 1.1rem;
@@ -244,4 +244,104 @@ a#left-tabs-example-tab-fifth.nav-link.active {
 
 .textConfirmation {
   font-size: 19px;
+}
+
+.editProfileButton {
+  color: rgb(0, 0, 0) !important;
+  border-color: transparent !important;
+  background-color: #FFD92F !important;
+
+  font-weight: 200 !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+.editProfileButton:hover {
+  background-color: #fde475 !important;
+  transition: all .3s;
+}
+
+.invalid-feedback-forprofileCard {
+  font-size: 80%;
+  color: #dc3545;
+}
+
+.clickable-text {
+  font-size: 16px;
+  margin-bottom: 4px !important;
+
+}
+
+.notClickable-text {
+  font-size: 16px;
+  margin-bottom: 4px !important;
+}
+
+.personalInfo {
+  padding-top: 50px !important;
+}
+
+.personalInfo2 {
+  padding-top: 30px !important;
+
+}
+
+.editProfile {
+  background-color: #FFD92F !important;
+  width: 46% !important;
+  border-color: rgba(0, 0, 0, 0.041) !important;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.editProfile:hover {
+  background-color: #fde475 !important;
+  transition: all .3s;
+}
+
+.text-login-page {
+  font-size: 89%;
+}
+
+.text-button-confirmation {
+  font-size: 16px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-weight: lighter !important;
+}
+
+.success-text-resend {
+  animation: animateMovieinfo 1s !important;
+}
+
+
+.text-login-card-bottom {
+  font-size: 15px;
+}
+
+.text-unauthorized-access-header {
+  font-size: 12px;
+  /* font-weight: lighter; */
+  font-weight: initial;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+}
+
+.text-unauthorized-access-body {
+  font-size: 23px;
+}
+
+.verticalLineSecurity {
+  border-left: thick solid #FFD930 !important;
+  border-top: 1px solid #fde475 !important;
+  border-right: 1px solid #fde475 !important;
+  border-bottom: 1px solid #fde475 !important;
+}
+
+.securityMessageSubmit {
+  opacity: 0.23;
+  padding-top: 5px;
+  padding-right: 0px;
+  margin: 6px;
 }

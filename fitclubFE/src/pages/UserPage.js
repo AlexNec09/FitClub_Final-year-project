@@ -9,7 +9,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Security from '../components/Security';
-
+import ProfileCardForLoggedUser from "../components/ProfileCardForLoggedUser";
+import FeedPage from '../assets/FeedPage.png';
+import userProfileIcon from '../assets/userProfile.jpg';
+import securityIcon from '../assets/security.png';
 
 const reducer = (state, action) => {
   if (action.type === "loading-user") {
@@ -134,7 +137,6 @@ const UserPage = (props) => {
     errors: {},
   });
 
-
   useEffect(() => {
     const loadUser = () => {
       const username = props.match.params.username;
@@ -193,6 +195,11 @@ const UserPage = (props) => {
       dispatch({ type: "select-file", payload: reader.result });
     };
     reader.readAsDataURL(file);
+  };
+
+  const entering = (e) => {
+    // e.children[0].style.borderTopColor = 'green';
+    e.children[1].style.backgroundColor = 'rgba(0,0,0,0.4)';
   };
 
   const onToggleFollow = () => {
@@ -254,26 +261,32 @@ const UserPage = (props) => {
               <Nav variant="pills" className="flex-column sticky-menu">
 
                 <Nav.Item >
-                  <Nav.Link eventKey="first" >
+                  <Nav.Link eventKey="first" className="my-nav-item">
                     {/* <i className="fas fa-user text-secondary pr-2"></i> */}
-                    Edit Profile
+                    <img src={userProfileIcon} width="40" alt="UserProfile" />
+                    <span className="pl-2"> Profile</span>
+
+
                   </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
-                  <Nav.Link eventKey="second">
-                    {/* <i className="fas fa-unlock-alt text-secondary pr-2"></i> */}
-                    Security
-                  </Nav.Link>
+                  {(props.loggedInUser.isLoggedIn && props.loggedInUser.username === state.user.username) && (<div>
+                    <Nav.Link eventKey="second" className="my-nav-item">
+                      {/* <i className="fas fa-unlock-alt text-secondary pr-2"></i> */}
+                      <img src={securityIcon} width="40" alt="Security" />
+                      <span className="pl-2"> Security</span>
+                    </Nav.Link>
+                  </div>)}
                 </Nav.Item>
 
                 <Nav.Item>
-                  <Nav.Link eventKey="third">
+                  <Nav.Link eventKey="third" className="my-nav-item">
                     {/* <i className="fas fa-history text-secondary pr-2"></i> */}
-                    User Feeds
+                    <img src={FeedPage} width="40" alt="FeedPage" />
+                    <span className="pl-2"> Feeds</span>
                   </Nav.Link>
                 </Nav.Item>
-
               </Nav>
 
             </Col>
@@ -282,27 +295,58 @@ const UserPage = (props) => {
               <Tab.Content className="" >
 
                 <Tab.Pane eventKey="first">
-                  <ProfileCard
-                    user={state.user}
-                    isEditable={isEditable}
-                    inEditMode={state.inEditMode}
-                    onClickEdit={() => dispatch({ type: "edit-mode" })}
-                    onClickCancel={() => dispatch({ type: "cancel" })} // inline function
-                    onClickSave={onClickSave}
-                    onChangeDisplayName={(event) =>
-                      dispatch({
-                        type: "update-displayName",
-                        payload: event.target.value,
-                      })
-                    }
-                    pendingUpdateCall={state.pendingUpdateCall}
-                    loadedImage={state.image}
-                    onFileSelect={onFileSelect}
-                    isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
-                    onToggleFollow={onToggleFollow}
-                    pendingFollowToggleCall={state.pendingFollowToggleCall}
-                    errors={state.errors}
-                  />
+
+                  {props.loggedInUser.isLoggedIn ? (<div>
+
+                    <ProfileCardForLoggedUser
+                      user={state.user}
+                      isEditable={isEditable}
+                      inEditMode={state.inEditMode}
+                      onClickEdit={() => dispatch({ type: "edit-mode" })}
+                      onClickCancel={() => dispatch({ type: "cancel" })}
+                      onClickSave={onClickSave}
+                      onChangeDisplayName={(event) =>
+                        dispatch({
+                          type: "update-displayName",
+                          payload: event.target.value,
+                        })
+                      }
+                      pendingUpdateCall={state.loggedInUser}
+                      entering={entering}
+
+                      loadedImage={state.image}
+                      onFileSelect={onFileSelect}
+                      onToggleFollow={onToggleFollow}
+                      isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
+
+                      errors={state.errors}
+
+                      emailVerificationStatus={props.loggedInUser.emailVerificationStatus}
+                    />
+
+                  </div>) : (<div>
+                    <ProfileCard
+                      user={state.user}
+                      isEditable={isEditable}
+                      inEditMode={state.inEditMode}
+                      onClickEdit={() => dispatch({ type: "edit-mode" })}
+                      onClickCancel={() => dispatch({ type: "cancel" })} // inline function
+                      onClickSave={onClickSave}
+                      onChangeDisplayName={(event) =>
+                        dispatch({
+                          type: "update-displayName",
+                          payload: event.target.value,
+                        })
+                      }
+                      pendingUpdateCall={state.pendingUpdateCall}
+                      loadedImage={state.image}
+                      onFileSelect={onFileSelect}
+                      isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
+                      onToggleFollow={onToggleFollow}
+                      pendingFollowToggleCall={state.pendingFollowToggleCall}
+                      errors={state.errors}
+                    />
+                  </div>)}
                 </Tab.Pane>
 
                 <Tab.Pane eventKey="second">
@@ -322,7 +366,6 @@ const UserPage = (props) => {
 
                   </div>
                 </Tab.Pane>
-
               </Tab.Content>
 
             </Col>

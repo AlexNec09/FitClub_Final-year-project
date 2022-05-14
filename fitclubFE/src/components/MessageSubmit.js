@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import * as apiCalls from "../api/apiCalls";
 import ButtonWithProgress from "./ButtonWithProgress";
 import Input from "./Input";
+import securityAlert from '../assets/exclamationSecurity.png';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 class MessageSubmit extends Component {
   state = {
@@ -104,61 +107,80 @@ class MessageSubmit extends Component {
       textAreaClassName += " is-invalid";
     }
     return (
-      <div className="card d-flex flex-row p-1">
-        <ProfileImageWithDefault
-          className="rounded-circle m-1"
-          width="32"
-          height="32"
-          image={this.props.loggedInUser.image}
-        />
-        <div className="flex-fill">
-          <textarea
-            className={textAreaClassName}
-            rows={this.state.focused ? 3 : 1}
-            onFocus={this.onFocus}
-            value={this.state.content}
-            onChange={this.onChangeContent}
+      <div>
+        {this.props.loggedInUser.isLoggedIn ? (<div className="card d-flex flex-row p-1">
+          <ProfileImageWithDefault
+            className="rounded-circle m-1"
+            width="32"
+            height="32"
+            image={this.props.loggedInUser.image}
           />
+          <div className="flex-fill">
+            <textarea
+              className={textAreaClassName}
+              rows={this.state.focused ? 3 : 1}
+              onFocus={this.onFocus}
+              value={this.state.content}
+              onChange={this.onChangeContent}
+            />
 
-          {this.state.errors.content && (
-            <span className="invalid-feedback">
-              {this.state.errors.content}
-            </span>
-          )}
+            {this.state.errors.content && (
+              <span className="invalid-feedback">
+                {this.state.errors.content}
+              </span>
+            )}
 
-          {this.state.focused && (
-            <div>
-              <div className="pt-2">
-                <Input type="file" onChange={this.onFileSelect} />
-                {this.state.image && (
-                  <img
-                    className="mt-2 img-thumbnail"
-                    src={this.state.image}
-                    alt="uploadedImg"
-                    width="128"
-                    height="64"
+            {this.state.focused && (
+              <div>
+                <div className="pt-2">
+                  <Input type="file" onChange={this.onFileSelect} />
+                  {this.state.image && (
+                    <img
+                      className="mt-2 img-thumbnail"
+                      src={this.state.image}
+                      alt="uploadedImg"
+                      width="128"
+                      height="64"
+                    />
+                  )}
+                </div>
+                <div className="text-end mt-2">
+                  <ButtonWithProgress
+                    className="btn btn-success"
+                    disabled={this.state.pendingApiCall}
+                    onClick={this.onClickSend}
+                    pendingApiCall={this.state.pendingApiCall}
+                    text="Send"
                   />
-                )}
+                  <button
+                    className="btn btn-light ms-1"
+                    onClick={this.resetState}
+                    disabled={this.state.pendingApiCall}
+                  >
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                </div>
               </div>
-              <div className="text-end mt-2">
-                <ButtonWithProgress
-                  className="btn btn-success"
-                  disabled={this.state.pendingApiCall}
-                  onClick={this.onClickSend}
-                  pendingApiCall={this.state.pendingApiCall}
-                  text="Send"
-                />
-                <button
-                  className="btn btn-light ms-1"
-                  onClick={this.resetState}
-                  disabled={this.state.pendingApiCall}
-                >
-                  <i className="fas fa-times"></i> Cancel
-                </button>
+            )}
+          </div>
+        </div>) : (<div className="card mb-3 verticalLineSecurity">
+          <Row>
+            <Col xs={11} md={11} lg={11} xl={11}>
+              <div className="card-body d-flex flex-column ">
+                <p className="text-secondary mb-0">
+                  You need to be authenticated to access this resource!
+                </p>
               </div>
-            </div>
-          )}
-        </div>
+            </Col>
+
+            <Col xs={1} md={1} lg={1} xl={1}>
+              <div className="d-flex justify-content-center securityMessageSubmit">
+                <img className="m-auto" src={securityAlert} width="26" alt="SecurityAlert" />
+              </div>
+            </Col>
+
+          </Row>
+        </div>)}
       </div>
     );
   }

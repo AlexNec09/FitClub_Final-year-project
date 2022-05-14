@@ -7,6 +7,8 @@ import ButtonWithProgressEmailConfirmation from '../components/ButtonWithProgres
 import { Link } from 'react-router-dom';
 import yes_icon from '../assets/yes-icon.jpg';
 import exclamation_icon from '../assets/exclamation-icon.png';
+import ButtonMailto from '../components/ButtonMailto';
+
 
 class ConfirmationToken extends Component {
     state = {
@@ -110,15 +112,6 @@ class ConfirmationToken extends Component {
                                     />
                                 </Link>
                             </div>
-
-                            <p className="text-center display-5 text-secondary text-login-card-buttom pt-5">
-                                Have trouble or confused? Please contact the support at: &nbsp;
-                                <a href="/" className="text-secondary font-weight-bold">
-                                    support@hoaxify.com
-                                </a>
-                                .
-                            </p>
-
                         </div>
 
                     </div>
@@ -145,7 +138,7 @@ class ConfirmationToken extends Component {
                             </h4>
 
                             <p className="text-secondary pt-4 textConfirmation">
-                                The token is expired or the server is offline.
+                                The token is no longer available or the server is under maintenance.
                             </p>
 
                             {this.state.successfullyMessage && (
@@ -169,14 +162,11 @@ class ConfirmationToken extends Component {
                                 </Link>
                             </div>
 
-                            <p className="text-center display-5 text-secondary text-login-card-buttom pt-5">
-                                Have trouble or confused? Please contact the support at: &nbsp;
-                                <a href="/" className="text-secondary font-weight-bold">
-                                    support@hoaxify.com
-                                </a>
-                                .
+                            <p className="text-center display-6 text-secondary text-login-card-bottom pt-5">
+                                For assistance, contact FitClub support at:
+                                <br></br>
+                                <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
                             </p>
-
                         </div>
 
                     </div>
