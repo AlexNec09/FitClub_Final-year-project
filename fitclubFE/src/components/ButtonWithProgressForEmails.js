@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ButtonWithProgressEmailConfirmation = (props) => {
+const ButtonWithProgressForEmails = (props) => {
     return (
         <button
-            className="btn ButtonWithProgressEmailConfirmation p-3"
+            className="btn email-button p-2"
             onClick={props.onClick}
             disabled={props.disabled}
         >
@@ -17,11 +17,11 @@ const ButtonWithProgressEmailConfirmation = (props) => {
             )}
 
             {!props.pendingApiCall && (
-                <i className="fas fa-arrow-right fa-lg pb-1 arrowIcon-button"></i>
+                <i className="fas fa-arrow-right pb-1 arrowIcon-button"></i>
             )}
 
         </button>
     )
 }
 
-export default ButtonWithProgressEmailConfirmation;
+export default ButtonWithProgressForEmails;

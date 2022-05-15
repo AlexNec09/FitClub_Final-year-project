@@ -66,7 +66,7 @@ class HomePage extends React.Component {
 
                   {/* Feed Page */}
                   <Tab.Pane eventKey="first">
-                    {this.props.loggedInUser.isLoggedIn && <MessageSubmit />}
+                    {/*this.props.loggedInUser.isLoggedIn && <MessageSubmit />*/}
                     <MessageFeed />
                   </Tab.Pane>
 

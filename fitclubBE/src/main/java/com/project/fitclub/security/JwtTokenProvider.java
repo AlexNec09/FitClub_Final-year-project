@@ -48,7 +48,7 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public String generateEmailVerificationToken(String publicUserId) {
+    public String generateVerificationToken(String publicUserId) {
         String token = Jwts.builder()
                 .setSubject(publicUserId)
                 .setExpiration(new Date(System.currentTimeMillis()+ jwtExpirationInMs))

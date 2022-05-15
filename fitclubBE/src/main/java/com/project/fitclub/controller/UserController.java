@@ -4,9 +4,11 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.model.vm.UserVM;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.CurrentUser;
 import com.project.fitclub.shared.GenericResponse;
+import com.project.fitclub.validation.verificationToken.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    VerificationTokenService verificationTokenService;
 
     @GetMapping("/users")
     Page<UserVM> getUsers(@CurrentUser UserPrincipal loggedInUser, Pageable page) {
@@ -64,14 +69,16 @@ public class UserController {
 
             if (isSaveToDBAndSentWithSuccess) {
                 System.out.println("Email Resending was successfully!");
-                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+                return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
+            } else {
+                throw new Exception("Email already confirmed!");
             }
         } catch (Exception e) {
             System.out.println("An error has occurred on the process of sending email!");
-            return ResponseEntity.ok(Collections.singletonMap("value", "FAILING"));
+            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
         }
-        return null;
     }
+
     // validated email page send token from #1 to this endpoint
     @GetMapping(path = "/users/email-verification/confirmationToken/{token}")
     public ResponseEntity verifyEmailTokenForEmailVerification(@PathVariable String token) {
@@ -86,7 +93,58 @@ public class UserController {
             System.out.println("FAILING");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(Collections.singletonMap("value", "UNDEFINED"));
+        return null;
+    }
+
+    @PostMapping(path = "/users/email-verification/changeEmail/{id:[0-9]+}")
+//    @PreAuthorize("id == principal.id")
+    public ResponseEntity<?> changeEmailToken(@PathVariable long id) {
+        try {
+            boolean isSaveToDBAndSentWithSuccess = verificationTokenService.changeEmailById(id);
+            if (isSaveToDBAndSentWithSuccess) {
+                System.out.println("Email ChangeEmailToken was successfully!");
+                return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("An error has occurred on the process of sending email!");
+            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
+        }
+        return null;
+    }
+
+    @PostMapping(path = "/users/email-verification/changeEmailToken/{token}")
+    public ResponseEntity verifyEmailTokenForChangeEmail(@CurrentUser UserPrincipal loggedInUser,
+                                                         @PathVariable String token,
+                                                         @Valid @RequestBody(required = false) UpdateEmailRequest updateEmail) {
+        try {
+            String username = loggedInUser.getUsername();
+            boolean isVerifiedAndDeleted = verificationTokenService.verifyChangeEmailToken(token);
+            boolean isChangeEmail = userService.changeEmail(username, updateEmail);
+            if (isVerifiedAndDeleted && isChangeEmail) {
+                System.out.println("SUCCESS");
+                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            }
+        } catch (Exception e) {
+            System.out.println("FAILING");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return null;
+    }
+
+    @GetMapping(path = "/users/isValidToken/{token}")
+    public ResponseEntity isTokenValid(@PathVariable String token) {
+        try {
+            boolean isValid = userService.checkTokenValidity(token);
+
+            if (isValid) {
+                return ResponseEntity.ok(Collections.singletonMap("result", "VALID"));
+            } else {
+                throw new Exception("Token already used or expired!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(Collections.singletonMap("result", "INVALID"));
+        }
     }
 
 }

@@ -148,3 +148,17 @@ export const resendEmailVerification = (id, jwt) => {
 export const confirmationToken = (token) => {
   return axios.get(`/api/1.0/users/email-verification/confirmationToken/${token}`);
 };
+
+
+export const changeEmail = (id) => {
+  return axios.post(`/api/1.0/users/email-verification/changeEmail/${id}`);
+};
+
+// confirm token + body
+export const saveChangeEmail = (token, file) => {
+  return axios.post(`/api/1.0/users/email-verification/changeEmailToken/` + token, file);
+};
+
+export const checkValidToken = (token) => {
+  return axios.get(`/api/1.0/users/isValidToken/${token}`);
+};

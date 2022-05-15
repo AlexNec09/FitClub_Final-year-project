@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import * as apiCalls from "../api/apiCalls";
 import Spinner from "./Spinner";
 import MessageView from "./MessageView";
@@ -6,6 +7,11 @@ import ModalView from "./ModalView";
 import { connect } from "react-redux";
 import AuthNeeded from "./AuthNeeded";
 import SessionExpired from "./SessionExpired";
+import ButtonWithProgress from "./ButtonWithProgress";
+import Input from "./Input";
+import securityAlert from '../assets/exclamationSecurity.png';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 const MessageFeed = (props) => {
   const [page, setPage] = useState({ content: [] });
@@ -16,7 +22,16 @@ const MessageFeed = (props) => {
   const [isDeletingMessage, setDeletingMessage] = useState(false);
   const [newMessageCount, setNewMessagesCount] = useState(0);
   const [messageToBeDeleted, setMessageToBeDeleted] = useState();
-  const [hasFullAccess, setHasFullAccess] = useState(true);
+  // message submit
+  const [focused, setFocused] = useState(false);
+  const [content, setContent] = useState();
+  const [pendingApiCall, setPendingApiCall] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [file, setFile] = useState();
+  const [image, setImage] = useState();
+  const [attachment, setAttachment] = useState();
+
+  const [hasFullAccess, setHasFullAccess] = useState(props.loggedInUser.isLoggedIn ? true : false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -52,13 +67,12 @@ const MessageFeed = (props) => {
           })
           .catch((error) => {
             setHasFullAccess(false);
-            console.log(error);
           });;
       }
     };
 
     if (hasFullAccess) {
-      intervalRef.current = setInterval(checkCount, 2500);
+      intervalRef.current = setInterval(checkCount, 1500);
       // intervalRef.current = setInterval(checkCount, 50000);
 
       return function cleanup() {
@@ -179,6 +193,81 @@ const MessageFeed = (props) => {
     });
   }
 
+
+  // Message Submit
+
+
+  const onChangeContent = (event) => {
+    setContent(event.target.value);
+    setErrors({})
+  };
+
+  const onFileSelect = (event) => {
+    if (event.target.files.length === 0) {
+      return;
+    }
+
+    const file = event.target.files[0];
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+      setFile(file);
+      uploadFile();
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const uploadFile = () => {
+    const body = new FormData();
+    body.append("file", file);
+    apiCalls.postMessageFile(body, props.loggedInUser.jwt).then((response) => {
+      setAttachment(response.data);
+    });
+  };
+
+  const resetState = () => {
+    setPendingApiCall(false);
+    setFocused(false);
+    setContent("");
+    setErrors({});
+    setImage();
+    setFile();
+    setAttachment();
+  };
+
+  const onClickSend = () => {
+    const body = {
+      content: content,
+      attachment: attachment,
+    };
+
+    setPendingApiCall(true);
+
+    apiCalls
+      .postMessage(body, props.loggedInUser.jwt)
+      .then((response) => {
+        resetState();
+      })
+      .catch((error) => {
+        let errors = {};
+        if (error.response.data && error.response.data.validationErrors) {
+          errors = error.response.data.validationErrors;
+        }
+        setPendingApiCall(false);
+        setErrors(errors);
+      });
+  };
+
+  const onFocus = () => {
+    setFocused(true);
+  };
+
+
+  let textAreaClassName = "form-control w-100";
+  if (errors.content) {
+    textAreaClassName += " is-invalid";
+  }
+
   if (isLoadingMessages) {
     return <Spinner />;
   }
@@ -186,9 +275,6 @@ const MessageFeed = (props) => {
 
   if (!hasFullAccess && !props.loggedInUser.isLoggedIn) {
     return <AuthNeeded />;
-  }
-  else if (!hasFullAccess && props.loggedInUser.isLoggedIn) {
-    return <SessionExpired />;
   }
 
   if (page.content.length === 0 && newMessageCount === 0) {
@@ -201,7 +287,86 @@ const MessageFeed = (props) => {
       ? "There is 1 new message"
       : `There are ${newMessageCount} new messages`;
   return (
+
     <div>
+      <div>
+        {(!hasFullAccess && props.loggedInUser.isLoggedIn) ? (<div className="card mb-3 verticalLineSecurity">
+          <Row>
+            <Col xs={11} md={11} lg={11} xl={11}>
+              <div className="card-body d-flex flex-column ">
+                <p className="text-secondary mb-0">
+                  You need to be authenticated to access this resource!
+                </p>
+              </div>
+            </Col>
+
+            <Col xs={1} md={1} lg={1} xl={1}>
+              <div className="d-flex justify-content-center securityMessageSubmit">
+                <img className="m-auto" src={securityAlert} width="26" alt="SecurityAlert" />
+              </div>
+            </Col>
+
+          </Row>
+          <SessionExpired />
+        </div>
+        ) : (<div className="card d-flex flex-row p-1">
+          <ProfileImageWithDefault
+            className="rounded-circle m-1"
+            width="32"
+            height="32"
+            image={props.loggedInUser.image}
+          />
+          <div className="flex-fill">
+            <textarea
+              className={textAreaClassName}
+              rows={focused ? 3 : 1}
+              onFocus={onFocus}
+              value={content}
+              onChange={onChangeContent}
+            />
+
+            {errors.content && (
+              <span className="invalid-feedback">
+                {errors.content}
+              </span>
+            )}
+
+            {focused && (
+              <div>
+                <div className="pt-2">
+                  <Input type="file" onChange={onFileSelect} />
+                  {image && (
+                    <img
+                      className="mt-2 img-thumbnail"
+                      src={image}
+                      alt="uploadedImg"
+                      width="128"
+                      height="64"
+                    />
+                  )}
+                </div>
+                <div className="text-end mt-2">
+                  <ButtonWithProgress
+                    className="btn btn-success"
+                    disabled={pendingApiCall}
+                    onClick={onClickSend}
+                    pendingApiCall={pendingApiCall}
+                    text="Send"
+                  />
+                  <button
+                    className="btn btn-light ms-1"
+                    onClick={resetState}
+                    disabled={pendingApiCall}
+                  >
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        )}
+      </div>
       {newMessageCount > 0 && (
         <div
           className="card card-header text-center"

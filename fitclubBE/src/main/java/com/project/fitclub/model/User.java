@@ -1,6 +1,7 @@
 package com.project.fitclub.model;
 
 import com.project.fitclub.validation.UniqueUsername;
+import com.project.fitclub.validation.verificationToken.VerificationToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -51,7 +52,10 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    private String emailVerificationToken = "";
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private VerificationToken verificationToken;
+
+//    private String emailVerificationToken = "";
 
     @NotNull
     private Boolean emailVerificationStatus = false;

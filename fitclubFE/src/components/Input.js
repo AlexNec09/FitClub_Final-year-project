@@ -28,6 +28,32 @@ const Input = (props) => {
   );
 };
 
+// const Input = (props) => {
+//   let inputClassName = 'form-control-user-input form-group p-2 input';
+
+//   if (props.hasError !== undefined) {
+//     inputClassName += props.hasError ? ' is-invalid' : ' is-valid';
+//   }
+
+//   return (
+//     <div >
+//       <input
+//         className={inputClassName}
+//         type={props.type || 'text'}
+//         placeholder={props.placeholder}
+//         value={props.value}
+//         onChange={props.onChange}
+//       />
+//       <label className="label">
+//         {props.label}
+//       </label>
+//       {props.hasError && (
+//         <span className="invalid-feedback invalid-input">{props.error}</span>
+//       )}
+//     </div>
+//   );
+// };
+
 Input.defaultProps = {
   onChange: () => { },
 };

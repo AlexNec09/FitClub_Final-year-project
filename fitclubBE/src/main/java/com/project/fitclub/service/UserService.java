@@ -9,7 +9,10 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.shared.EmailSenderService;
+import com.project.fitclub.validation.verificationToken.VerificationToken;
+import com.project.fitclub.validation.verificationToken.VerificationTokenService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +39,10 @@ public class UserService {
 
     EmailSenderService emailSender;
 
+    VerificationTokenService verificationTokenService;
+
     public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                       FileService fileService, JwtTokenProvider jwtTokenProvider, EmailSenderService emailSender) {
+                       FileService fileService, JwtTokenProvider jwtTokenProvider, EmailSenderService emailSender, VerificationTokenService verificationTokenService) {
         super();
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -45,17 +50,27 @@ public class UserService {
         this.fileService = fileService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.emailSender = emailSender;
+        this.verificationTokenService = verificationTokenService;
     }
 
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEmailVerificationToken(jwtTokenProvider.generateEmailVerificationToken(user.getUsername()));
+//        user.setEmailVerificationToken(jwtTokenProvider.generateEmailVerificationToken(user.getUsername()));
         user.setEmailVerificationStatus(false);
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER);
         user.setRoles(Collections.singleton(userRole));
+//        user.setVerificationToken(newToken);
+        VerificationToken newToken = new VerificationToken(user);
+        newToken.setEmailToken(jwtTokenProvider.generateVerificationToken(user.getUsername()));
+        user.setVerificationToken(newToken);
         User savedUser = userRepository.save(user);
+        verificationTokenService.saveToken(newToken);
         emailSender.verifyEmail(savedUser);
         return savedUser;
+    }
+
+    public void updateUserWithVerificationToken(User user) {
+        userRepository.save(user);
     }
 
     public User update(long id, UserUpdateVM userUpdate) throws IOException {
@@ -126,36 +141,67 @@ public class UserService {
     }
 
     public boolean resendEmailById(long id) {
-        boolean returnValue = false;
         try {
             User userDB = userRepository.findById(id).get();
-            userDB.setEmailVerificationToken(new JwtTokenProvider().generateEmailVerificationToken(userDB.getUsername()));
-            userRepository.save(userDB);
+            if (userDB.getEmailVerificationStatus()) {
+                return false;
+            }
+            VerificationToken updatedToken = verificationTokenService.getTokenByUser(userDB);
+            if (updatedToken == null) {
+                VerificationToken newToken = new VerificationToken(userDB);
+                updatedToken = newToken;
+            }
+            updatedToken.setEmailToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            verificationTokenService.saveToken(updatedToken);
+
+//            userDB.setEmailVerificationToken(new JwtTokenProvider().generateEmailVerificationToken(userDB.getUsername()));
+//            userRepository.save(userDB);
 
             emailSender.verifyEmail(userDB);
-            returnValue = true;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return returnValue;
+        return false;
+    }
+
+    public boolean checkTokenValidity(String token) {
+        VerificationToken userToken = verificationTokenService.getTokenByEmailToken(token);
+        System.out.println(userToken.getEmailToken());
+        if (userToken == null) {
+            return false;
+        }
+        return jwtTokenProvider.validateToken(token);
     }
 
     public boolean verifyEmailToken(String token) {
-        boolean returnValue = false;
-        System.out.println("my token: " + token);
-        User userDB = userRepository.findUserByEmailVerificationToken(token);
-        System.out.println("userDB: " + userDB.getUsername());
-        // verify token expired date
+        VerificationToken userToken = verificationTokenService.getTokenByEmailToken(token);
+        User userDB = userToken.getUser();
         boolean isTokenValid = jwtTokenProvider.validateToken(token);
-        System.out.println("isTokenValid: " + isTokenValid);
         if (isTokenValid) {
-            System.out.println("HERE");
-            userDB.setEmailVerificationToken(null);
+            userToken.setEmailToken(null);
             userDB.setEmailVerificationStatus(Boolean.TRUE);
+            if (userToken.getPasswordToken() == null) {
+                verificationTokenService.deleteTokenById(userToken);
+                userDB.setVerificationToken(null);
+            } else {
+                verificationTokenService.saveToken(userToken);
+            }
             userRepository.save(userDB);
-            returnValue = true;
+            return true;
         }
+        return false;
+    }
 
-        return returnValue;
+    public boolean changeEmail(String username, UpdateEmailRequest updateEmail) {
+        try {
+            User inDb = userRepository.findByUsername(username);
+            inDb.setUsername(updateEmail.getNewEmail());
+            userRepository.save(inDb);
+            return true;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

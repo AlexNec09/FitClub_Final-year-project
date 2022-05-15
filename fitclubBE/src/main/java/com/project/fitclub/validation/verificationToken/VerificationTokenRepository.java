@@ -5,13 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long>  {
 
-    void deleteVerificationTokenByChangeEmailToken(String token);
+    VerificationToken findByEmailToken(String token);
 
-//    VerificationToken findVerificationTokenByChangeEmailToken(String token);
-    VerificationToken findByChangeEmailToken(String token);
-    VerificationToken findVerificationTokenByChangePasswordToken(String token);
+    VerificationToken findByPasswordToken(String token);
 
-//    VerificationToken findVerificationTokenByUserAndChangeEmailToken(User user, String changeEmailToken);
+    VerificationToken findByUser(User user);
 
-    VerificationToken findByUserAndChangeEmailTokenNotNull(User user);
+    void deleteById(long id);
 }

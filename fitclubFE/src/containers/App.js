@@ -9,6 +9,7 @@ import './App.css';
 import { connect } from 'react-redux';
 import ResendConfirmationEmail from '../pages/ResendConfirmationEmail';
 import ConfirmationToken from '../pages/ConfirmationToken';
+import ChangeEmailPage from '../pages/ChangeEmailPage';
 
 
 
@@ -29,9 +30,11 @@ class App extends Component {
               : <Route exact path="/verification/confirmationEmail" component={ResendConfirmationEmail} />}
             <Route exact path="/" component={ResendConfirmationEmail} />
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/login" component={LoginPage} /> : <Redirect to="/" />}
-            <Route exact path="/signup" component={UserSignupPage} />
+            <Route exact path="/verification/changeEmail" component={ChangeEmailPage} />
+            {this.props.loggedInUser.isLoggedIn === false && <Route exact path="/signup" component={UserSignupPage} />}
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/:username" component={UserPage} /> : <Redirect to="/" />}
-            <Route component={UserSignupPage} />
+            <Redirect from="/verification/confirmationEmail" exact to="/" />
+            <Route component={HomePage} />
 
           </Switch>
         </div>

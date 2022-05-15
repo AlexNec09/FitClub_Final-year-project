@@ -112,7 +112,8 @@ const reducer = (state, action) => {
       pendingFollowToggleCall: false,
       user: {
         ...state.user,
-        followed: action.payload,
+        followed: !action.payload.followed,
+        followedBy: !action.payload.followed ? action.payload.followedBy + 1 : action.payload.followedBy - 1
       }
     }
   } else if (action.type === "follow-op-failure") {
@@ -206,7 +207,7 @@ const UserPage = (props) => {
     dispatch({ type: "follow-op-init" });
     apiCalls.follow(state.user.id, !state.user.followed)
       .then((response) => {
-        dispatch({ type: "user-follow", payload: !state.user.followed });
+        dispatch({ type: "user-follow", payload: state.user });
         const updatedUser = { ...state.user };
         updatedUser.followed = !state.user.followed;
 

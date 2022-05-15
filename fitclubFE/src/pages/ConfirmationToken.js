@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
+import { Redirect } from 'react-router';
 import * as apiCalls from '../api/apiCalls';
 import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
-import ButtonWithProgressEmailConfirmation from '../components/ButtonWithProgressEmailConfirmation';
 import { Link } from 'react-router-dom';
 import yes_icon from '../assets/yes-icon.jpg';
-import exclamation_icon from '../assets/exclamation-icon.png';
-import ButtonMailto from '../components/ButtonMailto';
+import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
+import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 
 
 class ConfirmationToken extends Component {
@@ -17,16 +17,9 @@ class ConfirmationToken extends Component {
         error: false,
     }
 
-    // let urlParams = new URLSearchParams(location.search);
-    // if (urlParams.has('token')) {
-    //     verifyToken(urlParams.get('token'))
-    // }
-
     componentDidMount() {
         let url = this.props.location.search;
         let params = queryString.parse(url);
-        // console.log('params => ',params);
-        // console.log('params.token => ',params.token);
 
         this.setState({
             token: params.token,
@@ -39,7 +32,6 @@ class ConfirmationToken extends Component {
 
         apiCalls.confirmationToken(params.token)
             .then((response) => {
-                console.log('response => ', response)
                 this.setState({
                     isLoadingToken: false,
                     error: false
@@ -49,6 +41,7 @@ class ConfirmationToken extends Component {
                     };
                     this.props.dispatch(action);
                 })
+                this.id = setTimeout(() => this.setState({ redirect: true }), 5000)
             })
             .catch((e) => {
                 this.setState({
@@ -59,11 +52,11 @@ class ConfirmationToken extends Component {
 
     };
 
-    render() {
-        // let url = this.props.location.search;
-        // let params = queryString.parse(url);
-        // console.log(params);
+    componentWillUnmount() {
+        clearTimeout(this.id)
+    }
 
+    render() {
         let pageContent;
         if (this.state.isLoadingToken) {
             pageContent = (
@@ -100,87 +93,23 @@ class ConfirmationToken extends Component {
                                 </h5>
                             )}
 
-                            <div className="text-center pt-4">
+                            <div className="text-center pt-4 mb-4">
                                 <Link to="/" className="list-group-item-action">
-                                    <ButtonWithProgressEmailConfirmation
-                                        // onClick={this.confirmationEmail}
-                                        // disabled={disableSubmit || this.state.pendingApiCall}
-                                        // disabled={this.state.setButtonDisabled}
-                                        // pendingApiCall={this.state.pendingApiCall}
-                                        // pendingApiCall={this.state.pendingApiCall}
+                                    <ButtonWithProgressForEmails
                                         value="Back to Home Page &nbsp;&nbsp;"
                                     />
                                 </Link>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             )
-
         } else {
             pageContent = (
-                <div>
-                    <div className="container card d-flex p-1 card-confirmation shadow-sm">
-                        <div className="alert text-center pb-0 mb-0" role="alert">
-                            <div className="">
-                                <img className="m-auto pl-3 pt-3" src={exclamation_icon} width="200" alt="Hoaxify" />
-                            </div>
-
-                            {/* <div>
-                                <i className="fas fa-envelope-open-text mail-icon"></i>
-                                <span className="text-span font-weight-bold"> &nbsp;You've got mail!</span>
-                            </div> */}
-
-                            <h4 className="pt-5 confirmation-header">
-                                Something went wrong!
-                            </h4>
-
-                            <p className="text-secondary pt-4 textConfirmation">
-                                The token is no longer available or the server is under maintenance.
-                            </p>
-
-                            {this.state.successfullyMessage && (
-
-                                <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
-                                    <span className="far fa-check-circle fa-lg fa-2x"></span>
-                                    <span className="">&nbsp;Something went wrong!</span>
-                                </h5>
-                            )}
-
-                            <div className="text-center pt-4">
-                                <Link to="/" className="list-group-item-action">
-                                    <ButtonWithProgressEmailConfirmation
-                                        // onClick={this.confirmationEmail}
-                                        // disabled={disableSubmit || this.state.pendingApiCall}
-                                        // disabled={this.state.setButtonDisabled}
-                                        // pendingApiCall={this.state.pendingApiCall}
-                                        // pendingApiCall={this.state.pendingApiCall}
-                                        value="Back to Home Page &nbsp;&nbsp;"
-                                    />
-                                </Link>
-                            </div>
-
-                            <p className="text-center display-6 text-secondary text-login-card-bottom pt-5">
-                                For assistance, contact FitClub support at:
-                                <br></br>
-                                <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
-                            </p>
-                        </div>
-
-                    </div>
-
-                </div>
+                <TokenExpiredOrUsed />
             )
         }
-
-        return (
-            <div className="">
-                {/* <p>Test confirmationToken page: {this.state.token}</p> */}
-                {pageContent}
-            </div>
-        )
+        return this.state.redirect ? <Redirect to="/" /> : <div>{pageContent}</div>
     }
 }
 

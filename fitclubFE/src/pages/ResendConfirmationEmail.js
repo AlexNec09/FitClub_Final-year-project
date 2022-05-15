@@ -1,32 +1,44 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import image from '../assets/confirmationEmail.png';
-import ButtonWithProgressEmailConfirmation from '../components/ButtonWithProgressEmailConfirmation';
 import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
+import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
 
 class ResendConfirmationEmail extends Component {
     state = {
         id: this.props.loggedInUser.id,
         pendingApiCall: false,
         apiError: undefined,
-        successfullyMessage: false,
+        successfullyMessage: undefined,
         setButtonDisabled: false,
     };
+
 
     confirmationEmail = () => {
         this.setState({ pendingApiCall: true });
         apiCalls.resendEmailVerification(this.state.id, this.props.loggedInUser.jwt)
             .then((response) => {
-                this.setState({
-                    pendingApiCall: false,
-                    successfullyMessage: true,
-                    setButtonDisabled: true,
-                })
+                if (response.data.result === "FAIL") {
+                    this.setState({
+                        apiError: {
+                            content: "Email already confirmed!"
+                        },
+                        setButtonDisabled: true,
+                        pendingApiCall: false,
+                    })
+                } else {
+                    this.setState({
+                        pendingApiCall: false,
+                        successfullyMessage: true,
+                        setButtonDisabled: true,
+                    })
+                }
             })
             .catch((error) => {
                 if (error.response) {
                     this.setState({
+                        successfullyMessage: false,
                         apiError: error.response.data.message,
                         pendingApiCall: false,
                     });
@@ -63,15 +75,21 @@ class ResendConfirmationEmail extends Component {
                         </p>
 
                         {this.state.successfullyMessage && (
-
-                            <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
-                                <span className="far fa-check-circle fa-lg fa-2x"></span>
+                            <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                <span className="far fa-check-circle fa-lg mb-1"></span>
                                 <span className="">&nbsp;Email was successfully sent!</span>
                             </h5>
                         )}
 
+                        {this.state.apiError && (
+                            <h5 className="text-fail font-weight-bold pt-3 text-center text-resend">
+                                <span className="far fa-times-circle fa-lg mb-1"></span>
+                                <span className="">&nbsp;Email is already confirmed or the server is under maintenance!</span>
+                            </h5>
+                        )}
+
                         <div className="text-center pt-4">
-                            <ButtonWithProgressEmailConfirmation
+                            <ButtonWithProgressForEmails
                                 onClick={this.confirmationEmail}
                                 // disabled={disableSubmit || this.state.pendingApiCall}
                                 disabled={this.state.setButtonDisabled}
@@ -80,16 +98,14 @@ class ResendConfirmationEmail extends Component {
                             />
                         </div>
 
-                        <p className="text-center display-6 text-secondary text-login-card-bottom pt-5">
+                        <p className="text-center display-7 text-secondary text-login-card-bottom pt-5">
                             For assistance, contact FitClub support at:
                             <br></br>
                             <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
                         </p>
                     </div>
-
                 </div>
             </div>
-
         )
     }
 }

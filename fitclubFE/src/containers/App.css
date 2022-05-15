@@ -200,7 +200,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   font-weight: lighter !important;
 }
 
-.ButtonWithProgressEmailConfirmation {
+.email-button {
   background-color: #ffd930 !important;
   width: 37% !important;
   border-color: rgba(0, 0, 0, 0.041) !important;
@@ -209,7 +209,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   padding: 15px !important;
 }
 
-.ButtonWithProgressEmailConfirmation:hover {
+.email-button:hover {
   background-color: #fde475 !important;
   transition: all .3s !important;
 }
@@ -311,10 +311,9 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   font-weight: lighter !important;
 }
 
-.success-text-resend {
+.text-resend {
   animation: animateMovieinfo 1s !important;
 }
-
 
 .text-login-card-bottom {
   font-size: 15px;
@@ -344,4 +343,51 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   padding-top: 5px;
   padding-right: 0px;
   margin: 6px;
+}
+
+.textSecurityTop {
+  font-size: 14px !important;
+}
+
+.verticalLine {
+  border-left: thick solid #FFD930 !important;
+  border-top: thick solid transparent !important;
+  border-right: thick solid transparent !important;
+  border-bottom: thick solid transparent !important;
+}
+
+.text-security-changes {
+  font-size: 1.4rem !important;
+  font-weight: 300 !important;
+}
+
+.form-control-user-input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+  outline: none !important;
+  border-bottom: 0.1em solid #19160b26 !important;
+  box-shadow: none !important;
+}
+
+.invalid-input {
+  position: absolute;
+  margin-top: 27px !important;
+}
+
+.containerSecurityChanges {
+  /* width:31% !important; */
+  display: block;
+  margin-left: auto;
+  margin-right: auto
 }

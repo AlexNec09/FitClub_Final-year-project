@@ -1,6 +1,7 @@
 package com.project.fitclub.shared;
 
 import com.project.fitclub.model.User;
+import com.project.fitclub.validation.verificationToken.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,36 +15,27 @@ public class EmailSenderService {
 
 
     // The subject line for the email.
-    final String SUBJECT = "One last step to complete your registration with Hoaxify App";
+    final String SUBJECT_EMAIL_CONFIRMATION = "One last step to complete your registration on FitClub platform";
+
+    final String SUBJECT_CHANGE_EMAIL = "Change your email on FitClub platform";
+
 
     final String PASSWORD_RESET_SUBJECT = "Password reset request";
 
-    // verification email messages
-    // The HTML body for the email.
-//    final String HTMLBODY = "<h1>Please verify your email address</h1>"
-//            + "<p>Thank you for registering with our Hoaxify App. To complete registration process and be able to log in,"
-//            + " click on the following link: "
-//            + "<a href='http://localhost:3000/#/verification/confirmationToken?token=$tokenValue'>"
-//
-//            + "Final step to complete your registration" + "</a><br/><br/>"
-//            + "Thank you! And we are waiting for you inside!";
-
     // The email body for recipients with non-HTML email clients.
-    final String TEXTBODY = "Please verify your email address. "
+    final String TEXTBODY_EMAIL_CONFIRMATION = "Please verify your email address. "
             + "Thank you for your registration. To complete this process and be able to log in,"
             + " you need to confirm your email address by opening thefollowing URL in your browser window: "
-            + "http://localhost:3000/#/verification/confirmationToken?token=$tokenValue>"
+            + "http://localhost:3000/#/verification/confirmationToken?token=$tokenValue"
             + " Thank you!";
 
-    // password reset messages
-    final String PASSWORD_RESET_HTMLBODY = "<h1>A request to reset your password</h1>"
-            + "<p>Hi, $firstName!</p> "
-            + "<p>Someone has requested to reset your password with our project. If it were not you, please ignore it."
-            + " otherwise please click on the link below to set a new password: "
-            + "<a href='http://localhost:3000/verification_service_war/password-reset.html?token=$tokenValue'>"
-            + " Click this link to Reset Password"
-            + "</a><br/><br/>"
-            + "Thank you!";
+    final String TEXTBODY_CHANGE_EMAIL = "<h1>Hello, </h1>"
+            + "You're receiving this email because you requested to change your email on FitClub platform. "
+            + "If you did not request this, please disregard this email. This confirmation link is valid for 1 hour and can be used only once."
+            + "<br/>"
+            + "If you would like to continue and change it, please click the following link:"
+            + "http://localhost:3000/#/verification/changeEmail?token=$tokenValue"
+            + " Click here to redirect for change your email.</a>";
 
     // The email body for recipients with non-HTML email clients.
     final String PASSWORD_RESET_TEXTBODY = "A request to reset your password "
@@ -57,13 +49,28 @@ public class EmailSenderService {
     public void verifyEmail(User user) {
 
 //        String htmlBodyWithToken = HTMLBODY.replace("$tokenValue", user.getEmailVerificationToken());
-        String textBodyWithToken = TEXTBODY.replace("$tokenValue", user.getEmailVerificationToken());
+        String textBodyWithToken = TEXTBODY_EMAIL_CONFIRMATION.replace("$tokenValue", user.getVerificationToken().getEmailToken());
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("fitclub.by.alexnec@gmail.com");
         message.setTo(user.getUsername());
         message.setText(textBodyWithToken);
-        message.setSubject(SUBJECT);
+        message.setSubject(SUBJECT_EMAIL_CONFIRMATION);
+
+        mailSender.send(message);
+
+        System.out.println("Email sent to: " + user.getUsername());
+    }
+
+    public void changeEmail(VerificationToken verificationToken, User user) {
+
+        String textBodyWithToken = TEXTBODY_CHANGE_EMAIL.replace("$tokenValue", verificationToken.getEmailToken());
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("fitclub.by.alexnec@gmail.com");
+        message.setTo(user.getUsername());
+        message.setText(textBodyWithToken);
+        message.setSubject(SUBJECT_CHANGE_EMAIL);
 
         mailSender.send(message);
 

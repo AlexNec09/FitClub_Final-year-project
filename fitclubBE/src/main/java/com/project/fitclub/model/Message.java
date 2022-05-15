@@ -20,7 +20,7 @@ public class Message {
     private long id;
 
     @NotNull
-    @Size(min = 10, max = 5000)
+    @Size(min = 2, max = 5000)
     @Column(length = 5000)
     private String content;
 
