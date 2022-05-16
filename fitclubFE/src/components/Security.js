@@ -82,7 +82,7 @@ class Security extends Component {
                         <Col xs={11} md={11} lg={11} xl={11}>
                             <div className="card-body d-flex flex-column mt-1">
                                 <p className="text-secondary textSecurityTop mb-0">
-                                    DO NOT share your personal information via FitClub platform.
+                                    DO NOT share your sensitive information via FitClub platform.
                                 </p>
                             </div>
                         </Col>
@@ -191,9 +191,8 @@ class Security extends Component {
                                 </h6>
 
                                 {this.state.isChangePasswordSentSuccessfully && (
-
-                                    <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
-                                        <span className="far fa-check-circle fa-lg fa-2x"></span>
+                                    <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                        <span className="far fa-check-circle fa-lg mb-1"></span>
                                         <span className="">&nbsp;Email was successfully sent!</span>
                                     </h5>
                                 )}

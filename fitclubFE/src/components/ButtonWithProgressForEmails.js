@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from './Spinner';
 
 const ButtonWithProgressForEmails = (props) => {
     return (
@@ -11,10 +12,12 @@ const ButtonWithProgressForEmails = (props) => {
             <span className="text-button-confirmation">{props.value}</span>
 
             {props.pendingApiCall && (
-                <div className="spinner-border spinner-border-sm mr-1">
-                    <span className="sr-only">Loading...</span>
-                </div>
+                <Spinner />
             )}
+
+            { /*           <div className="spinner-border spinner-border-sm mr-1">
+                    <span className="sr-only">Loading...</span>
+            </div> */}
 
             {!props.pendingApiCall && (
                 <i className="fas fa-arrow-right pb-1 arrowIcon-button"></i>

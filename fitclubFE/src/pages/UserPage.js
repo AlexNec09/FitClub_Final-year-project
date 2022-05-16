@@ -313,6 +313,7 @@ const UserPage = (props) => {
                         })
                       }
                       pendingUpdateCall={state.loggedInUser}
+                      pendingFollowToggleCall={state.pendingFollowToggleCall}
                       entering={entering}
 
                       loadedImage={state.image}

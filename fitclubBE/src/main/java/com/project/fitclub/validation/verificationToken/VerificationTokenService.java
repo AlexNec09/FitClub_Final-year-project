@@ -53,36 +53,36 @@ public class VerificationTokenService {
         verificationTokenRepository.deleteById(verificationToken.getId());
     }
 
-    public boolean verifyChangeEmailToken(String token) {
+    public User verifyChangeEmailToken(String token) {
         boolean isTokenValid = jwtTokenProvider.validateToken(token);
 
         if (isTokenValid) {
             VerificationToken changeEmailToken = verificationTokenRepository.findByEmailToken(token);
             changeEmailToken.setEmailToken(null);
+            User userDB = changeEmailToken.getUser();
             if (changeEmailToken.getPasswordToken() == null) {
-                User userDB = changeEmailToken.getUser();
                 deleteTokenById(changeEmailToken);
                 userDB.setVerificationToken(null);
             }
-            return true;
+            return userDB;
         }
-        return false;
+        return null;
     }
 
-    public boolean verifyChangePasswordToken(String token) {
+    public User verifyChangePasswordToken(String token) {
         boolean isTokenValid = jwtTokenProvider.validateToken(token);
 
         if (isTokenValid) {
-            VerificationToken changeEmailToken = verificationTokenRepository.findByPasswordToken(token);
-            changeEmailToken.setEmailToken(null);
-            if (changeEmailToken.getPasswordToken() == null) {
-                User userDB = changeEmailToken.getUser();
-                deleteTokenById(changeEmailToken);
+            VerificationToken changePasswordToken = verificationTokenRepository.findByPasswordToken(token);
+            changePasswordToken.setPasswordToken(null);
+            User userDB = changePasswordToken.getUser();
+            if (changePasswordToken.getEmailToken() == null) {
+                deleteTokenById(changePasswordToken);
                 userDB.setVerificationToken(null);
             }
-            return true;
+            return userDB;
         }
-        return false;
+        return null;
     }
 
     public boolean changePasswordById(long id) {

@@ -213,7 +213,7 @@ public class UserService {
     public boolean changePassword(String username, NewPasswordRequest updatedPassword) {
         try {
             User inDB = userRepository.findByUsername(username);
-            inDB.setUsername(updatedPassword.getNewPassword());
+            inDB.setPassword(passwordEncoder.encode(updatedPassword.getNewPassword()));
             userRepository.save(inDB);
             return true;
         } catch (RuntimeException e) {

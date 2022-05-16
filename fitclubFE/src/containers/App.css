@@ -391,3 +391,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   margin-left: auto;
   margin-right: auto
 }
+
+.arrowIcon-button {
+  opacity: 0.9;
+}

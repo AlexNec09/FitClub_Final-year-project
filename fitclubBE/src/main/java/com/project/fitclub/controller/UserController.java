@@ -115,16 +115,18 @@ public class UserController {
     }
 
     @PostMapping(path = "/users/email-verification/changeEmailToken/{token}")
-    public ResponseEntity verifyEmailTokenForChangeEmail(@CurrentUser UserPrincipal loggedInUser,
-                                                         @PathVariable String token,
+    public ResponseEntity verifyEmailTokenForChangeEmail(@PathVariable String token,
                                                          @Valid @RequestBody(required = false) UpdateEmailRequest updatedEmail) {
         try {
-            String username = loggedInUser.getUsername();
-            boolean isVerifiedAndDeleted = verificationTokenService.verifyChangeEmailToken(token);
-            boolean isChangeEmail = userService.changeEmail(username, updatedEmail);
-            if (isVerifiedAndDeleted && isChangeEmail) {
-                System.out.println("SUCCESS");
-                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            User user = verificationTokenService.verifyChangeEmailToken(token);
+            if (user != null) {
+                boolean isEmailChanged = userService.changeEmail(user.getUsername(), updatedEmail);
+                if (isEmailChanged) {
+                    System.out.println("SUCCESS");
+                    return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+                }
+            } else {
+                throw new Exception("Token already used or expired!");
             }
         } catch (Exception e) {
             System.out.println("FAILING");
@@ -168,16 +170,18 @@ public class UserController {
     }
 
     @PostMapping(path = "/users/email-verification/passwordReset/{token}")
-    public ResponseEntity verifyEmailTokenForPasswordReset(@CurrentUser UserPrincipal loggedInUser,
-                                                           @PathVariable String token,
+    public ResponseEntity verifyEmailTokenForPasswordReset(@PathVariable String token,
                                                            @Valid @RequestBody(required = false) NewPasswordRequest updatedPassword) {
         try {
-            String username = loggedInUser.getUsername();
-            boolean isVerifiedAndDeleted = verificationTokenService.verifyChangePasswordToken(token);
-            boolean isChangeEmail = userService.changePassword(username, updatedPassword);
-            if (isVerifiedAndDeleted && isChangeEmail) {
-                System.out.println("SUCCESS");
-                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            User user = verificationTokenService.verifyChangePasswordToken(token);
+            if (user != null) {
+                boolean isPasswordChanged = userService.changePassword(user.getUsername(), updatedPassword);
+                if (isPasswordChanged) {
+                    System.out.println("SUCCESS");
+                    return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+                }
+            } else {
+                throw new Exception("Token already used or expired!");
             }
         } catch (Exception e) {
             System.out.println("FAILING");
@@ -185,5 +189,4 @@ public class UserController {
         }
         return null;
     }
-
 }
