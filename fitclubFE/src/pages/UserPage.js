@@ -312,7 +312,7 @@ const UserPage = (props) => {
                           payload: event.target.value,
                         })
                       }
-                      pendingUpdateCall={state.loggedInUser}
+                      pendingUpdateCall={state.pendingUpdateCall}
                       pendingFollowToggleCall={state.pendingFollowToggleCall}
                       entering={entering}
 

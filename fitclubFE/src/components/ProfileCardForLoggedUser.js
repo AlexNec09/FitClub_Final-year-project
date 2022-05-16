@@ -84,20 +84,28 @@ const ProfileCardForLoggedUser = (props) => {
                                 // Email: {`${username}`} </h4>
                                 <div className="float-left pl-5">
 
+                                    <Row className="pt-1">
+                                        <div className="text-center font-weight-bold">Display Name:</div>
+                                        <p className="text-center text-login-page text-secondary notClickable-text">
+                                            &nbsp;{displayName}
+                                        </p>
+                                    </Row>
                                     <Row>
-                                        <div className="text-center font-weight-bold">Email:</div>
+                                        <div className="text-center font-weight-bold">Username:</div>
                                         <p className="text-center text-login-page text-secondary notClickable-text">
                                             &nbsp;{username}
                                         </p>
 
                                     </Row>
 
-                                    <Row className="pt-1">
-                                        <div className="text-center font-weight-bold">Display name:</div>
+                                    {props.loggedInUser.username === username && (<Row>
+                                        <div className="text-center font-weight-bold">Email:</div>
                                         <p className="text-center text-login-page text-secondary notClickable-text">
-                                            &nbsp;{displayName}
+                                            &nbsp;{props.user.email}
                                         </p>
-                                    </Row>
+
+                                    </Row>)}
+
                                 </div>
                             )}
 
@@ -127,28 +135,25 @@ const ProfileCardForLoggedUser = (props) => {
 
                             {props.inEditMode && (
                                 <div className="row m-1 pt-1">
-                                    <div className="">
+                                    <div className="d-flex justify-content-center">
                                         <ButtonWithProgress
-                                            className="btn btn-outline-primary editProfileButton"
+                                            className="btn btn-primary"
                                             onClick={props.onClickSave}
+                                            disabled={props.pendingUpdateCall}
                                             text={
-                                                <span>
-                                                    <i className="far fa-save mr-2" />Save
+                                                <span className='mx-2'>
+                                                    <i className="fas fa-save mr-2" /> Save
                                                 </span>
                                             }
                                             pendingApiCall={props.pendingUpdateCall}
-                                            disabled={props.pendingUpdateCall}
                                         />
+                                        <button className="btn btn-outline-secondary mx-3"
+                                            onClick={props.onClickCancel}
+                                            disabled={props.pendingUpdateCall}
+                                        >
+                                            <i className="fas fa-times mr-2 " /> Cancel
+                                        </button>
                                     </div>
-
-                                    <button
-                                        className="btn btn-outline-secondary ml-auto editProfileButton"
-                                        onClick={props.onClickCancel}
-                                        disabled={props.pendingUpdateCall}
-                                    >
-                                        <i className="fas fa-times mr-2 "></i>
-                                        Cancel
-                                    </button>
                                 </div>
                             )}
 
@@ -164,7 +169,6 @@ const ProfileCardForLoggedUser = (props) => {
                                 )}
                             </div>
 
-
                         </div>
                     </Col>
 
@@ -177,7 +181,7 @@ const ProfileCardForLoggedUser = (props) => {
                 </Row>
             </div>
 
-            <div className="card mt-4 p-2 shadow-sm">
+            {(props.loggedInUser.isLoggedIn && props.loggedInUser.username === username) && (<div className="card mt-4 p-2 shadow-sm">
                 <Row>
                     <Col xs={12} md={12} lg={12} xl={8}>
                         <div className="card-body d-flex flex-column mt-2">
@@ -199,7 +203,7 @@ const ProfileCardForLoggedUser = (props) => {
                     </Col>
 
                 </Row>
-            </div>
+            </div>)}
 
 
 

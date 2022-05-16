@@ -49,12 +49,14 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/testing2
+    url: jdbc:mysql://localhost:3306/testing5
     username: root
     password: root
+    initialization-mode: always
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
 fitclub:
   upload-path: uploads-dev
 

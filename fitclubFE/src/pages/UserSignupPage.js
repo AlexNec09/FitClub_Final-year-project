@@ -8,6 +8,7 @@ export const UserSignupPage = (props) => {
   const [form, setForm] = useState({
     displayName: "",
     username: "",
+    email: "",
     password: "",
     passwordRepeat: "",
   });
@@ -37,6 +38,7 @@ export const UserSignupPage = (props) => {
       const user = {
         username: form.username,
         displayName: form.displayName,
+        email: form.email,
         password: form.password,
       };
       setPendingApiCall(true);
@@ -87,6 +89,20 @@ export const UserSignupPage = (props) => {
           error={errors.username}
         />
       </div>
+
+      <div className="col-12 mb-3">
+        <Input
+          name="email"
+          label="Email"
+          placeholder="Your email address"
+          type="email"
+          value={form.email}
+          onChange={onChange}
+          hasError={errors.email && true}
+          error={errors.email}
+        />
+      </div>
+
       <div className="col-12 mb-3">
         <Input
           name="password"

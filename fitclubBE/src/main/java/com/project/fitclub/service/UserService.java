@@ -56,11 +56,9 @@ public class UserService {
 
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setEmailVerificationToken(jwtTokenProvider.generateEmailVerificationToken(user.getUsername()));
         user.setEmailVerificationStatus(false);
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER);
         user.setRoles(Collections.singleton(userRole));
-//        user.setVerificationToken(newToken);
         VerificationToken newToken = new VerificationToken(user);
         newToken.setEmailToken(jwtTokenProvider.generateVerificationToken(user.getUsername()));
         user.setVerificationToken(newToken);
@@ -68,10 +66,6 @@ public class UserService {
         verificationTokenService.saveToken(newToken);
         emailSender.verifyEmail(savedUser);
         return savedUser;
-    }
-
-    public void updateUserWithVerificationToken(User user) {
-        userRepository.save(user);
     }
 
     public User update(long id, UserUpdateVM userUpdate) throws IOException {
@@ -158,6 +152,9 @@ public class UserService {
 //            userDB.setEmailVerificationToken(new JwtTokenProvider().generateEmailVerificationToken(userDB.getUsername()));
 //            userRepository.save(userDB);
 
+            System.out.println("In resendEmail");
+            System.out.println(userDB.getEmail());
+
             emailSender.verifyEmail(userDB);
             return true;
         } catch (Exception e) {
@@ -198,10 +195,10 @@ public class UserService {
         return false;
     }
 
-    public boolean changeEmail(String username, UpdateEmailRequest updatedEmail) {
+    public boolean changeEmail(String email, UpdateEmailRequest updatedEmail) {
         try {
-            User inDB = userRepository.findByUsername(username);
-            inDB.setUsername(updatedEmail.getNewEmail());
+            User inDB = userRepository.findByEmail(email);
+            inDB.setEmail(updatedEmail.getNewEmail());
             userRepository.save(inDB);
             return true;
         } catch (RuntimeException e) {
@@ -210,9 +207,9 @@ public class UserService {
         return false;
     }
 
-    public boolean changePassword(String username, NewPasswordRequest updatedPassword) {
+    public boolean changePassword(String email, NewPasswordRequest updatedPassword) {
         try {
-            User inDB = userRepository.findByUsername(username);
+            User inDB = userRepository.findByEmail(email);
             inDB.setPassword(passwordEncoder.encode(updatedPassword.getNewPassword()));
             userRepository.save(inDB);
             return true;

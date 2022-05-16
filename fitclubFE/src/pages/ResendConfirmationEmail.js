@@ -69,7 +69,7 @@ class ResendConfirmationEmail extends Component {
                         <p className="text-secondary pt-2 textConfirmation">
                             The confirmation of the email is necessary to have access to all the functionalities of
                             the application. A confirmation email has been sent to&nbsp;
-                            <span className="font-weight-bold">{this.props.loggedInUser.username}</span>
+                            <span className="font-weight-bold">{this.props.loggedInUser.email}</span>
                             &nbsp;at account creation. Please access the link inside it to confirm the email address.
                             To submit a new one, click the button below.
                         </p>

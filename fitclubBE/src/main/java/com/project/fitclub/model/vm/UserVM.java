@@ -16,6 +16,8 @@ public class UserVM {
 
     String displayName;
 
+    String email;
+
     String image;
 
     int follows;
@@ -32,6 +34,7 @@ public class UserVM {
         this.setId(user.getId());
         this.setUsername(user.getUsername());
         this.setDisplayName(user.getDisplayName());
+        this.setEmail(user.getEmail());
         this.setImage(user.getImage());
         this.setFollows(user.getFollows().size());
         this.setFollowedBy(user.getFollowedBy().size());
@@ -49,6 +52,7 @@ public class UserVM {
         vm.setId(user.getId());
         vm.setUsername(user.getUsername());
         vm.setDisplayName(user.getDisplayName());
+        vm.setEmail(user.getEmail());
         vm.setImage(user.getImage());
         return vm;
     }

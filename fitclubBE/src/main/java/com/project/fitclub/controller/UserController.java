@@ -120,7 +120,7 @@ public class UserController {
         try {
             User user = verificationTokenService.verifyChangeEmailToken(token);
             if (user != null) {
-                boolean isEmailChanged = userService.changeEmail(user.getUsername(), updatedEmail);
+                boolean isEmailChanged = userService.changeEmail(user.getEmail(), updatedEmail);
                 if (isEmailChanged) {
                     System.out.println("SUCCESS");
                     return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
@@ -175,7 +175,7 @@ public class UserController {
         try {
             User user = verificationTokenService.verifyChangePasswordToken(token);
             if (user != null) {
-                boolean isPasswordChanged = userService.changePassword(user.getUsername(), updatedPassword);
+                boolean isPasswordChanged = userService.changePassword(user.getEmail(), updatedPassword);
                 if (isPasswordChanged) {
                     System.out.println("SUCCESS");
                     return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));

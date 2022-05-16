@@ -203,7 +203,7 @@ class Security extends Component {
                                         // disabled={disableSubmit || this.state.pendingApiCall}
                                         disabled={this.state.setButtonDisabledChangePassword}
                                         pendingApiCall={this.state.pendingApiCallChangePassword}
-                                        value="Send Email&nbsp;&nbsp;"
+                                        value="Change Password&nbsp;&nbsp;"
                                     />
                                 </div>
                             </div>

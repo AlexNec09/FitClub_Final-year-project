@@ -8,11 +8,13 @@ import lombok.EqualsAndHashCode;
 import java.beans.Transient;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -39,6 +41,12 @@ public class User extends DateAudit {
     @Size(min = 4, max = 255)
     String displayName;
 
+    @NaturalId(mutable=true)
+    @Email
+    @Size(min = 6, max = 50)
+    @NotNull
+    private String email;
+
     @NotNull
     @Size(min = 8, max = 255)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{fitclub.constraints.password.Pattern.message}")
@@ -54,8 +62,6 @@ public class User extends DateAudit {
 
     @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private VerificationToken verificationToken;
-
-//    private String emailVerificationToken = "";
 
     @NotNull
     private Boolean emailVerificationStatus = false;

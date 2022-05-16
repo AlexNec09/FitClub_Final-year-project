@@ -63,13 +63,13 @@ public class EmailSenderService {
     private void mailCompose(User user, String textBodyWithToken, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("fitclub.by.alexnec@gmail.com");
-        message.setTo(user.getUsername());
+        message.setTo(user.getEmail());
         message.setText(textBodyWithToken);
         message.setSubject(subject);
 
         mailSender.send(message);
 
-        System.out.println("Email sent to: " + user.getUsername());
+        System.out.println("Email sent to: " + user.getEmail());
     }
 
 
