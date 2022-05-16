@@ -108,6 +108,7 @@ export const PasswordResetPage = (props) => {
         passwordRepeatError =
             newPassword === newPasswordRepeat ? "" : "Passwords must match!";
     }
+
     let pageContent;
     if (isLoadingToken) {
         pageContent = (
@@ -141,7 +142,6 @@ export const PasswordResetPage = (props) => {
                                 error={errors.newPassword}
                             />
                         </div>
-
 
                         <div className="col-12 mb-3">
                             <Input

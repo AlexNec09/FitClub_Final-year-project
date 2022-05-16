@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
 import queryString from 'query-string';
 import * as apiCalls from '../api/apiCalls';
@@ -9,190 +9,194 @@ import Input from '../components/Input';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 import Spinner from '../components/Spinner';
 
-class ChangeEmailPage extends Component {
-    state = {
-        token: this.props.match.params.token,
-        redirect: false,
-        email: '',
-        emailRepeat: '',
-        hasTokenExpired: true,
-        isLoadingToken: true,
-        errors: {},
-        tokenIdentifier: "tokenForEmail",
-        successfullyMessage: false,
-        emailRepeatConfirmed: false,
-    }
 
-    componentDidMount() {
-        let url = this.props.location.search;
-        let params = queryString.parse(url);
+export const ChangeEmailPage = (props) => {
+    const [form, setForm] = useState({
+        newEmail: "",
+        newEmailRepeat: "",
+        tokenIdentifier: "tokenForEmail"
+    });
 
-        this.setState({
-            token: params.token,
-        })
+    const [errors, setErrors] = useState({});
+    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [isLoadingToken, setIsLoadingToken] = useState(true);
+    const [hasTokenExpired, setHasTokenExpired] = useState(true);
+    const [successfullyMessage, setSuccessfullyMessage] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+    const [shouldRedirect, setShouldRedirect] = useState(false);
+    const token = (queryString.parse(props.location.search)).token;
 
-        apiCalls.checkValidToken(params.token, this.state.tokenIdentifier)
-            .then((response) => {
-                if (response.data.result === "VALID") {
-                    this.setState({
-                        hasTokenExpired: false
-                    });
-                }
-                this.setState({
-                    isLoadingToken: false,
-                });
-            })
-            .catch((e) => {
-                this.setState({
-                    isLoadingToken: false,
-                    hasTokenExpired: false
-                });
-            })
-
-    };
-
-    componentWillUnmount() {
-        clearTimeout(this.id)
-    }
-
-    onChangeEmail = (event) => {
-        const value = event.target.value;
-        const emailRepeatConfirmed = this.state.emailRepeat === value;
-        const errors = { ...this.state.errors };
-        delete errors.newEmail;
-        errors.emailRepeat = emailRepeatConfirmed ? '' : 'Does not match to email'
-        this.setState({ email: value, emailRepeatConfirmed, errors });
-    };
-
-    onChangeEmailRepeat = (event) => {
-        const value = event.target.value;
-        const emailRepeatConfirmed = this.state.email === value;
-        const errors = { ...this.state.errors };
-        errors.emailRepeat = emailRepeatConfirmed ? '' : 'Does not match to email'
-        this.setState({ emailRepeat: value, emailRepeatConfirmed, errors });
-    };
-
-    onClickSave = () => {
-        const data = ({
-            "newEmail": this.state.email
+    const onChange = (event) => {
+        const { value, name } = event.target;
+        setForm((previousForm) => {
+            return {
+                ...previousForm,
+                [name]: value,
+            };
         });
-        this.setState({ pendingApiCall: true });
+
+        setErrors((previousErrors) => {
+            return {
+                ...previousErrors,
+                [name]: undefined,
+            };
+        });
+    };
+
+    useEffect(() => {
+        const init = () => {
+            apiCalls.checkValidToken(token, form.tokenIdentifier)
+                .then((response) => {
+                    if (response.data.result === "VALID") {
+                        setHasTokenExpired(false);
+                    }
+                    setIsLoadingToken(false);
+                })
+                .catch((e) => {
+                    setIsLoadingToken(false);
+                    setHasTokenExpired(false);
+                });
+        };
+
+        init();
+    }, [token, form.tokenIdentifier]);
+
+    useEffect(() => {
+        if (shouldRedirect) {
+            const id = setTimeout(() => {
+                setRedirect(true);
+            }, 5000);
+
+            return () => clearTimeout(id);
+        }
+    }, [shouldRedirect]);
+
+    const onClickSave = () => {
+        const data = ({
+            "newEmail": form.newEmail
+        });
+        setPendingApiCall(true);
         const action = {
             type: 'logout-success'
         };
 
-        apiCalls.saveChangeEmail(this.state.token, data)
+        apiCalls.saveChangeEmail(token, data)
             .then((response) => {
-                this.setState({
-                    pendingApiCall: false,
-                    successfullyMessage: true,
-                })
-                this.id = setTimeout(() => this.setState({ redirect: true }), 5000)
-            }, setTimeout(() => this.props.dispatch(action), 1000))
-
+                setPendingApiCall(false);
+                setSuccessfullyMessage(true);
+                if (emailRepeatError === "") {
+                    setShouldRedirect(true);
+                }
+            }, setTimeout(() => {
+                props.dispatch(action);
+            }, 1000))
             .catch((apiError) => {
-                let newError = { ...this.state.errors };
+                let newError = { ...errors };
                 if (apiError.response.data && apiError.response.data.validationErrors) {
                     newError = { ...apiError.response.data.validationErrors };
                 }
-                this.setState({
-                    pendingApiCall: false,
-                    errors: newError
-                });
+                setPendingApiCall(false);
+                setErrors(newError);
             });
 
 
     };
 
-    handleSubmit = (event) => {
-        event.preventDefault();
-        this.props.history.push('/');
+    let emailRepeatError;
+    const { newEmail, newEmailRepeat } = form;
+    if (newEmail || newEmailRepeat) {
+        emailRepeatError =
+            newEmail === newEmailRepeat ? "" : "Email addresses must match!";
     }
 
-    render() {
+    let pageContent;
+    if (isLoadingToken) {
+        pageContent = (
+            <Spinner value="Loading..." />
+        );
+    } else if (!hasTokenExpired) {
+        pageContent = (
+            <div className="">
+                <div className="containerSecurityChanges card d-flex shadow-sm mt-2">
+                    <div className="alert pb-0 mb-0" role="alert">
+                        <h4 className="pt-1 confirmation-header text-center">
+                            Change Email
+                        </h4>
 
-        let pageContent;
-        if (this.state.isLoadingToken) {
-            pageContent = (
-                <Spinner value="Loading..." />
-            );
-        } else if (!this.state.hasTokenExpired) {
-            pageContent = (
-                <div className="">
-                    <div className="containerSecurityChanges card d-flex shadow-sm mt-2">
-                        <div className="alert pb-0 mb-0" role="alert">
-                            <h4 className="pt-1 confirmation-header text-center">
-                                Change Email
-                            </h4>
+                        <p className="text-secondary pt-3 textConfirmation text-left">
+                            If you would like to change your email, enter a new email in the field below.
+                            Before being able to log back in, you will have to verify your new address by
+                            clicking the activation link in the email we send to your new address.&nbsp;
+                        </p>
 
-                            <p className="text-secondary pt-3 textConfirmation text-left">
-                                If you would like to change your email, enter a new email in the field below.
-                                Before being able to log back in, you will have to verify your new address by
-                                clicking the activation link in the email we send to your new address.&nbsp;
-                            </p>
-                            <div className="form-group py-4 pt-5">
-                                <Input
-                                    label="New Email Address"
-                                    placeholder="New Email Address"
-                                    value={this.state.email}
-                                    onChange={this.onChangeEmail}
-                                    hasError={this.state.errors.newEmail && true}
-                                    error={this.state.errors.newEmail}
-                                />
-                            </div>
 
-                            <div className="form-group py-4">
-                                <Input
-                                    label="New Email Address Repeat"
-                                    placeholder="Repeat your email"
-                                    value={this.state.emailRepeat}
-                                    onChange={this.onChangeEmailRepeat}
-                                    hasError={this.state.errors.newEmail && true}
-                                    error={this.state.errors.newEmail}
-                                />
-                            </div>
 
-                            {this.state.successfullyMessage && (
-                                <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
-                                    <span className="far fa-check-circle fa-lg mb-1"></span>
-                                    <span className="">&nbsp;Email has been successfully changed!
-                                        <br></br>In 5 seconds, you will be redirected to the Login.</span>
-                                </h5>
-                            )}
-
-                            {!this.state.successfullyMessage && (
-                                <div className="pull-right pt-3">
-                                    <ButtonWithProgressForEmails
-                                        onClick={this.onClickSave}
-                                        disabled={this.state.pendingApiCall || !this.state.emailRepeatConfirmed}
-                                        pendingApiCall={this.state.pendingApiCall}
-                                        text="Save"
-                                    />
-                                </div>
-                            )}
-
-                            <p className="text-center display-7 text-secondary text-login-card-bottom pt-5">
-                                For assistance, contact FitClub support at:
-                                <br></br>
-                                <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
-                            </p>
+                        <div className="col-12 mb-3">
+                            <Input
+                                name="newEmail"
+                                label="New Email Address"
+                                placeholder="Your new email address"
+                                type="email"
+                                value={form.newEmail}
+                                onChange={onChange}
+                                hasError={errors.newEmail && true}
+                                error={errors.newEmail}
+                            />
                         </div>
+
+
+                        <div className="col-12 mb-3">
+                            <Input
+                                name="newEmailRepeat"
+                                label="New Email Address Repeat"
+                                placeholder="Repeat your new email address"
+                                type="email"
+                                value={form.newEmailRepeat}
+                                onChange={onChange}
+                                hasError={emailRepeatError && true}
+                                error={emailRepeatError}
+                            />
+                        </div>
+
+                        {successfullyMessage && (
+                            <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                <span className="far fa-check-circle fa-lg mb-1"></span>
+                                <span className="">&nbsp;Email has been successfully changed!
+                                    <br></br>In 5 seconds, you will be redirected to the Login.</span>
+                            </h5>
+                        )}
+
+                        {!successfullyMessage && (
+                            <div className="text-center mt-3">
+                                <ButtonWithProgressForEmails
+                                    onClick={onClickSave}
+                                    disabled={pendingApiCall || emailRepeatError ? true : false}
+                                    pendingApiCall={pendingApiCall}
+                                    value="Save&nbsp;"
+                                />
+                            </div>
+                        )}
+
+                        <p className="text-center display-7 text-secondary text-login-card-bottom pt-5">
+                            For assistance, contact FitClub support at:
+                            <br></br>
+                            <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
+                        </p>
                     </div>
                 </div>
-            )
-        } else {
-            pageContent = (
-                <TokenExpiredOrUsed />
-            )
-        }
-        return this.state.redirect ? <Redirect to="/login" /> : <div>{pageContent}</div>
+            </div>
+        )
+    } else {
+        pageContent = (
+            <TokenExpiredOrUsed />
+        )
     }
+
+    return redirect ? <Redirect to="/login" /> : <div>{pageContent}</div>
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    dispatch
+})
 
-export default connect(mapStateToProps)(ChangeEmailPage);
+export default connect(null, mapDispatchToProps)(ChangeEmailPage)

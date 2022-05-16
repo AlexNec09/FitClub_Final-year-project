@@ -174,7 +174,7 @@ class Security extends Component {
 
                 {/* Change Password */}
 
-                <div className="card mt-4 p-2 shadow-sm">
+                <div className="card mt-4 p-2 mb-4 shadow-sm">
                     <Row>
                         <Col xs={12} md={12} lg={12} xl={8}>
                             <div className="card-body d-flex flex-column">
