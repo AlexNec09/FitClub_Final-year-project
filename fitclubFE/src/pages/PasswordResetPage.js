@@ -9,18 +9,18 @@ import Input from '../components/Input';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 import Spinner from '../components/Spinner';
 
-class ChangeEmailPage extends Component {
+class PasswordResetPage extends Component {
     state = {
         token: this.props.match.params.token,
         redirect: false,
-        email: '',
-        emailRepeat: '',
+        password: '',
+        passwordRepeat: '',
         hasTokenExpired: true,
         isLoadingToken: true,
         errors: {},
-        tokenIdentifier: "tokenForEmail",
+        tokenIdentifier: "tokenForPassword",
         successfullyMessage: false,
-        emailRepeatConfirmed: false,
+        passwordRepeatConfirmed: false,
     }
 
     componentDidMount() {
@@ -31,8 +31,11 @@ class ChangeEmailPage extends Component {
             token: params.token,
         })
 
+        console.log("THE TOKEN: " + params.token);
+
         apiCalls.checkValidToken(params.token, this.state.tokenIdentifier)
             .then((response) => {
+                console.log("FROM PASSWORD: " + JSON.stringify(response));
                 if (response.data.result === "VALID") {
                     this.setState({
                         hasTokenExpired: false
@@ -55,33 +58,33 @@ class ChangeEmailPage extends Component {
         clearTimeout(this.id)
     }
 
-    onChangeEmail = (event) => {
+    onChangePassword = (event) => {
         const value = event.target.value;
-        const emailRepeatConfirmed = this.state.emailRepeat === value;
+        const passwordRepeatConfirmed = this.state.passwordRepeat === value;
         const errors = { ...this.state.errors };
-        delete errors.newEmail;
-        errors.emailRepeat = emailRepeatConfirmed ? '' : 'Does not match to email'
-        this.setState({ email: value, emailRepeatConfirmed, errors });
+        delete errors.newpassword;
+        errors.passwordRepeat = passwordRepeatConfirmed ? '' : 'Passwords do not match!'
+        this.setState({ password: value, passwordRepeatConfirmed, errors });
     };
 
-    onChangeEmailRepeat = (event) => {
+    onChangePasswordRepeat = (event) => {
         const value = event.target.value;
-        const emailRepeatConfirmed = this.state.email === value;
+        const passwordRepeatConfirmed = this.state.password === value;
         const errors = { ...this.state.errors };
-        errors.emailRepeat = emailRepeatConfirmed ? '' : 'Does not match to email'
-        this.setState({ emailRepeat: value, emailRepeatConfirmed, errors });
+        errors.passwordRepeat = passwordRepeatConfirmed ? '' : 'Passwords do not match!'
+        this.setState({ passwordRepeat: value, passwordRepeatConfirmed, errors });
     };
 
     onClickSave = () => {
         const data = ({
-            "newEmail": this.state.email
+            "newPassword": this.state.password
         });
         this.setState({ pendingApiCall: true });
         const action = {
             type: 'logout-success'
         };
 
-        apiCalls.saveChangeEmail(this.state.token, data)
+        apiCalls.saveNewPassword(this.state.token, data)
             .then((response) => {
                 this.setState({
                     pendingApiCall: false,
@@ -122,40 +125,40 @@ class ChangeEmailPage extends Component {
                     <div className="containerSecurityChanges card d-flex shadow-sm mt-2">
                         <div className="alert pb-0 mb-0" role="alert">
                             <h4 className="pt-1 confirmation-header text-center">
-                                Change Email
+                                Change Password
                             </h4>
 
                             <p className="text-secondary pt-3 textConfirmation text-left">
-                                If you would like to change your email, enter a new email in the field below.
+                                If you would like to change your password, enter a new password in the field below.
                                 Before being able to log back in, you will have to verify your new address by
-                                clicking the activation link in the email we send to your new address.&nbsp;
+                                clicking the activation link in the password we send to your new address.&nbsp;
                             </p>
                             <div className="form-group py-4 pt-5">
                                 <Input
-                                    label="New Email Address"
-                                    placeholder="New Email Address"
-                                    value={this.state.email}
-                                    onChange={this.onChangeEmail}
-                                    hasError={this.state.errors.newEmail && true}
-                                    error={this.state.errors.newEmail}
+                                    label="New Password"
+                                    placeholder="New Password"
+                                    value={this.state.password}
+                                    onChange={this.onChangePassword}
+                                    hasError={this.state.errors.newPassword && true}
+                                    error={this.state.errors.newPassword}
                                 />
                             </div>
 
                             <div className="form-group py-4">
                                 <Input
-                                    label="New Email Address Repeat"
-                                    placeholder="Repeat your email"
-                                    value={this.state.emailRepeat}
-                                    onChange={this.onChangeEmailRepeat}
-                                    hasError={this.state.errors.newEmail && true}
-                                    error={this.state.errors.newEmail}
+                                    label="New Password Repeat"
+                                    placeholder="Repeat your new password"
+                                    value={this.state.passwordRepeat}
+                                    onChange={this.onChangepasswordRepeat}
+                                    hasError={this.state.errors.newPassword && true}
+                                    error={this.state.errors.newPassword}
                                 />
                             </div>
 
                             {this.state.successfullyMessage && (
                                 <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
                                     <span className="far fa-check-circle fa-lg mb-1"></span>
-                                    <span className="">&nbsp;Email has been successfully changed!
+                                    <span className="">&nbsp;Password has been successfully changed!
                                         <br></br>In 5 seconds, you will be redirected to the Login.</span>
                                 </h5>
                             )}
@@ -164,7 +167,7 @@ class ChangeEmailPage extends Component {
                                 <div className="pull-right pt-3">
                                     <ButtonWithProgressForEmails
                                         onClick={this.onClickSave}
-                                        disabled={this.state.pendingApiCall || !this.state.emailRepeatConfirmed}
+                                        disabled={this.state.pendingApiCall || !this.state.passwordRepeatConfirmed}
                                         pendingApiCall={this.state.pendingApiCall}
                                         text="Save"
                                     />
@@ -195,4 +198,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(ChangeEmailPage);
+export default connect(mapStateToProps)(PasswordResetPage);

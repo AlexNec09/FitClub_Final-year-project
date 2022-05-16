@@ -69,6 +69,44 @@ public class VerificationTokenService {
         return false;
     }
 
+    public boolean verifyChangePasswordToken(String token) {
+        boolean isTokenValid = jwtTokenProvider.validateToken(token);
+
+        if (isTokenValid) {
+            VerificationToken changeEmailToken = verificationTokenRepository.findByPasswordToken(token);
+            changeEmailToken.setEmailToken(null);
+            if (changeEmailToken.getPasswordToken() == null) {
+                User userDB = changeEmailToken.getUser();
+                deleteTokenById(changeEmailToken);
+                userDB.setVerificationToken(null);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changePasswordById(long id) {
+        try {
+            User userDB = userRepository.findById(id).get();
+
+            VerificationToken userToken = verificationTokenRepository.findByUser(userDB);
+            if (userToken == null) {
+                userToken = new VerificationToken(userDB);
+            }
+            userToken.setPasswordToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            saveToken(userToken);
+
+//            userDB.setVerificationToken(verificationToken);
+//            userRepository.save(userDB);
+
+            emailSender.changePassword(userToken, userDB);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean changeEmailById(long id) {
         boolean returnValue = false;
         try {

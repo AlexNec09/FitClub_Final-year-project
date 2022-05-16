@@ -9,6 +9,7 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.NewPasswordRequest;
 import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.shared.EmailSenderService;
 import com.project.fitclub.validation.verificationToken.VerificationToken;
@@ -165,12 +166,16 @@ public class UserService {
         return false;
     }
 
-    public boolean checkTokenValidity(String token) {
-        VerificationToken userToken = verificationTokenService.getTokenByEmailToken(token);
-        System.out.println(userToken.getEmailToken());
-        if (userToken == null) {
-            return false;
-        }
+    public boolean checkTokenValidity(String tokenIdentifier, String token) {
+        if (tokenIdentifier.equals("tokenForEmail")) {
+            if (verificationTokenService.getTokenByEmailToken(token) == null) {
+                return false;
+            }
+        } else if (tokenIdentifier.equals("tokenForPassword")) {
+            if (verificationTokenService.getTokenByPasswordToken(token) == null) {
+                return false;
+            }
+        } else return false;
         return jwtTokenProvider.validateToken(token);
     }
 
@@ -193,11 +198,23 @@ public class UserService {
         return false;
     }
 
-    public boolean changeEmail(String username, UpdateEmailRequest updateEmail) {
+    public boolean changeEmail(String username, UpdateEmailRequest updatedEmail) {
         try {
-            User inDb = userRepository.findByUsername(username);
-            inDb.setUsername(updateEmail.getNewEmail());
-            userRepository.save(inDb);
+            User inDB = userRepository.findByUsername(username);
+            inDB.setUsername(updatedEmail.getNewEmail());
+            userRepository.save(inDB);
+            return true;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean changePassword(String username, NewPasswordRequest updatedPassword) {
+        try {
+            User inDB = userRepository.findByUsername(username);
+            inDB.setUsername(updatedPassword.getNewPassword());
+            userRepository.save(inDB);
             return true;
         } catch (RuntimeException e) {
             e.printStackTrace();

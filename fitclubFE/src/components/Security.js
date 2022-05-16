@@ -12,48 +12,31 @@ import ButtonWithProgressForEmails from './ButtonWithProgressForEmails';
 class Security extends Component {
     state = {
         id: this.props.loggedInUser.id,
-        pendingApiCallChangePassword: false,
-        apiError: undefined,
-        successfullyMessage: false,
-        setButtonDisabled: false,
 
         //
         pendingApiCallChangeEmail: false,
         successfullyMessageChangeEmail: false,
         setButtonDisabledChangeEmail: false,
         apiErrorChangeEmail: false,
-        successfullyEmailMessage: false,
-    };
+        isChangeMailSentSuccessfully: false,
 
-    // changePassword = () => {
-    //     this.setState({ pendingApiCallChangePassword: true });
-    //     apiCalls.sendChangePasswordEmail(this.state.id, this.props.loggedInUser.jwt)
-    //         .then((response) => {
-    //             this.setState({
-    //                 pendingApiCallChangePassword: false,
-    //                 successfullyMessage: true,
-    //                 setButtonDisabled: true,
-    //             })
-    //         })
-    //         .catch((error) => {
-    //             if (error.response) {
-    //                 this.setState({
-    //                     apiError: error.response.data.message,
-    //                     pendingApiCallChangePassword: false,
-    //                 });
-    //             }
-    //         });
-    // }
+        //
+        pendingApiCallChangePassword: false,
+        successfullyMessageChangePassword: false,
+        setButtonDisabledChangePassword: false,
+        apiErrorChangePassword: false,
+        isChangePasswordSentSuccessfully: false,
+    };
 
     changeEmail = () => {
         this.setState({ pendingApiCallChangeEmail: true });
-        apiCalls.changeEmail(this.state.id)
+        apiCalls.changeEmail(this.state.id, this.props.loggedInUser.jwt)
             .then((response) => {
                 this.setState({
                     pendingApiCallChangeEmail: false,
                     successfullyMessageChangeEmail: true,
                     setButtonDisabledChangeEmail: true,
-                    successfullyEmailMessage: true,
+                    isChangeMailSentSuccessfully: true,
                 })
             })
             .catch((error) => {
@@ -61,7 +44,29 @@ class Security extends Component {
                     this.setState({
                         apiErrorChangeEmail: error.response.data.message,
                         pendingApiCallChangeEmail: false,
-                        successfullyEmailMessage: false,
+                        isChangeMailSentSuccessfully: false,
+                    });
+                }
+            });
+    }
+
+    changePassword = () => {
+        this.setState({ pendingApiCallChangePassword: true });
+        apiCalls.changePassword(this.state.id, this.props.loggedInUser.jwt)
+            .then((response) => {
+                this.setState({
+                    pendingApiCallChangePassword: false,
+                    successfullyMessageChangePassword: true,
+                    setButtonDisabledChangePassword: true,
+                    isChangePasswordSentSuccessfully: true
+                })
+            })
+            .catch((error) => {
+                if (error.response) {
+                    this.setState({
+                        apiError: error.response.data.message,
+                        pendingApiCallChangePassword: false,
+                        isChangePasswordSentSuccessfully: false
                     });
                 }
             });
@@ -132,14 +137,13 @@ class Security extends Component {
                                 </div>
 
                                 <h6 className="text-login-page text-secondary notClickable-text">
-                                    <span className="">If you would like to change your email,
-                                        enter a new email in the field below. Before being able to log back in,
-                                        you will have to verify your new address by clicking the activation
-                                        link in the email we send to your new address.
+                                    <span className="">Change your email address by clicking the activation
+                                        link in the email that will be sent to your current address.<br></br>
+                                        You will need to login again after this change.
                                     </span>
                                 </h6>
 
-                                {this.state.successfullyEmailMessage && (
+                                {this.state.isChangeMailSentSuccessfully && (
                                     <h5 className="text-success font-weight-bold pt-4 text-center text-resend">
                                         <span className="far fa-check-circle fa-lg mb-1"></span>
                                         <span className="">&nbsp;Email was successfully sent!</span>
@@ -176,18 +180,17 @@ class Security extends Component {
                             <div className="card-body d-flex flex-column">
 
                                 <div //  text-center 
-                                    className="card-title textSettingsSecurityChangePassword pb-2">
-                                    Change password with the help of email.
+                                    className="card-title text-security-changes pb-2">
+                                    Change Password
                                 </div>
 
                                 <h6 className="text-login-page text-secondary notClickable-text">
-                                    <span className="">By confirming this request you will be sent an email with
-                                        instructions on how to change your password.<br></br>
+                                    <span className="">You will be sent an email with instructions on how to change your password.<br></br>
                                         Are you sure you want to do this?
                                     </span>
                                 </h6>
 
-                                {this.state.successfullyMessage && (
+                                {this.state.isChangePasswordSentSuccessfully && (
 
                                     <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
                                         <span className="far fa-check-circle fa-lg fa-2x"></span>
@@ -199,7 +202,7 @@ class Security extends Component {
                                     <ButtonWithProgressForEmails
                                         onClick={this.changePassword}
                                         // disabled={disableSubmit || this.state.pendingApiCall}
-                                        disabled={this.state.setButtonDisabled}
+                                        disabled={this.state.setButtonDisabledChangePassword}
                                         pendingApiCall={this.state.pendingApiCallChangePassword}
                                         value="Send Email&nbsp;&nbsp;"
                                     />

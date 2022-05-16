@@ -4,6 +4,7 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.model.vm.UserVM;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.NewPasswordRequest;
 import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.CurrentUser;
@@ -97,12 +98,12 @@ public class UserController {
     }
 
     @PostMapping(path = "/users/email-verification/changeEmail/{id:[0-9]+}")
-//    @PreAuthorize("id == principal.id")
+    @PreAuthorize("#id == principal.id")
     public ResponseEntity<?> changeEmailToken(@PathVariable long id) {
         try {
             boolean isSaveToDBAndSentWithSuccess = verificationTokenService.changeEmailById(id);
             if (isSaveToDBAndSentWithSuccess) {
-                System.out.println("Email ChangeEmailToken was successfully!");
+                System.out.println("Email for changing email address was successfully!");
                 return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
             }
 
@@ -116,11 +117,11 @@ public class UserController {
     @PostMapping(path = "/users/email-verification/changeEmailToken/{token}")
     public ResponseEntity verifyEmailTokenForChangeEmail(@CurrentUser UserPrincipal loggedInUser,
                                                          @PathVariable String token,
-                                                         @Valid @RequestBody(required = false) UpdateEmailRequest updateEmail) {
+                                                         @Valid @RequestBody(required = false) UpdateEmailRequest updatedEmail) {
         try {
             String username = loggedInUser.getUsername();
             boolean isVerifiedAndDeleted = verificationTokenService.verifyChangeEmailToken(token);
-            boolean isChangeEmail = userService.changeEmail(username, updateEmail);
+            boolean isChangeEmail = userService.changeEmail(username, updatedEmail);
             if (isVerifiedAndDeleted && isChangeEmail) {
                 System.out.println("SUCCESS");
                 return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
@@ -132,10 +133,10 @@ public class UserController {
         return null;
     }
 
-    @GetMapping(path = "/users/isValidToken/{token}")
-    public ResponseEntity isTokenValid(@PathVariable String token) {
+    @GetMapping(path = "/users/isValidToken/{tokenIdentifier}/{token}")
+    public ResponseEntity isTokenValid(@PathVariable String tokenIdentifier, @PathVariable String token) {
         try {
-            boolean isValid = userService.checkTokenValidity(token);
+            boolean isValid = userService.checkTokenValidity(tokenIdentifier, token);
 
             if (isValid) {
                 return ResponseEntity.ok(Collections.singletonMap("result", "VALID"));
@@ -145,6 +146,44 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.ok(Collections.singletonMap("result", "INVALID"));
         }
+    }
+
+    //
+
+    @PostMapping(path = "/users/email-verification/changePassword/{id:[0-9]+}")
+    @PreAuthorize("#id == principal.id")
+    public ResponseEntity<?> changePasswordToken(@PathVariable long id) {
+        try {
+            boolean isSavedToDBWithSuccess = verificationTokenService.changePasswordById(id);
+            if (isSavedToDBWithSuccess) {
+                System.out.println("Email for changing password was successfully!");
+                return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("An error has occurred on the process of sending email!");
+            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
+        }
+        return null;
+    }
+
+    @PostMapping(path = "/users/email-verification/passwordReset/{token}")
+    public ResponseEntity verifyEmailTokenForPasswordReset(@CurrentUser UserPrincipal loggedInUser,
+                                                           @PathVariable String token,
+                                                           @Valid @RequestBody(required = false) NewPasswordRequest updatedPassword) {
+        try {
+            String username = loggedInUser.getUsername();
+            boolean isVerifiedAndDeleted = verificationTokenService.verifyChangePasswordToken(token);
+            boolean isChangeEmail = userService.changePassword(username, updatedPassword);
+            if (isVerifiedAndDeleted && isChangeEmail) {
+                System.out.println("SUCCESS");
+                return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            }
+        } catch (Exception e) {
+            System.out.println("FAILING");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
 }

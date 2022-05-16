@@ -150,8 +150,11 @@ export const confirmationToken = (token) => {
 };
 
 
-export const changeEmail = (id) => {
-  return axios.post(`/api/1.0/users/email-verification/changeEmail/${id}`);
+export const changeEmail = (id, jwt) => {
+  const config = {
+    headers: { Authorization: `Bearer ${jwt}` }
+  };
+  return axios.post(`/api/1.0/users/email-verification/changeEmail/${id}`, config);
 };
 
 // confirm token + body
@@ -159,6 +162,18 @@ export const saveChangeEmail = (token, file) => {
   return axios.post(`/api/1.0/users/email-verification/changeEmailToken/` + token, file);
 };
 
-export const checkValidToken = (token) => {
-  return axios.get(`/api/1.0/users/isValidToken/${token}`);
+export const changePassword = (id, jwt) => {
+  const config = {
+    headers: { Authorization: `Bearer ${jwt}` }
+  };
+  return axios.post(`/api/1.0/users/email-verification/changePassword/${id}`, config);
+};
+
+// confirm token + body
+export const saveNewPassword = (token, file) => {
+  return axios.post(`/api/1.0/users/email-verification/passwordReset/` + token, file);
+};
+
+export const checkValidToken = (token, identifier) => {
+  return axios.get(`/api/1.0/users/isValidToken/${identifier}/${token}`);
 };
