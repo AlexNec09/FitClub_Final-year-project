@@ -17,71 +17,74 @@ import Nav from 'react-bootstrap/Nav';
 class HomePage extends React.Component {
   render() {
     return (
+      <div className="background-image pt-5" id="background-image">
 
-      <div className="container pt-2">
-        <div data-testid="homepage">
+        <div className="container pt-2">
 
-          <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-            <Row className="pt-2 ">
+          <div data-testid="homepage">
 
-              <Col className="" sm={3}>
+            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+              <Row className="pt-2 ">
 
-                <Nav variant="pills" className="flex-column sticky-menu">
-                  <Nav.Item>
-                    <Nav.Link eventKey="first" className="my-nav-item">
-                      {/* <i className="fas fa-home text-secondary pr-2"></i> */}
-                      <img src={FeedPage} width="40" alt="FeedPage" />
-                      <span className="pl-2"> Feeds</span>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="second" className="my-nav-item">
-                      {/* <i className="fas fa-heart text-secondary pr-2"></i> */}
-                      <img src={Users} width="40" alt="Users" />
-                      <span className="pl-2"> Users</span>
-                    </Nav.Link>
-                  </Nav.Item>
+                <Col className="" sm={3}>
 
-                  {this.props.loggedInUser.isLoggedIn && (<div>
-                    <hr width="98%"></hr>
+                  <Nav variant="pills" className="flex-column sticky-menu">
+                    <Nav.Item>
+                      <Nav.Link eventKey="first" className="my-nav-item">
+                        {/* <i className="fas fa-home text-secondary pr-2"></i> */}
+                        <img src={FeedPage} width="40" alt="FeedPage" />
+                        <span className="pl-2"> Feeds</span>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="second" className="my-nav-item">
+                        {/* <i className="fas fa-heart text-secondary pr-2"></i> */}
+                        <img src={Users} width="40" alt="Users" />
+                        <span className="pl-2"> Users</span>
+                      </Nav.Link>
+                    </Nav.Item>
 
-                    <Link to={{
-                      pathname: `/${this.props.loggedInUser.username}`,
-                      tabValue: '1',
-                    }}
-                      className="my-nav-item"
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <img src={MyProfile} width="39" alt="MyProfile" />
-                      <span className="pl-2"> My Profile</span>
-                    </Link>
-                  </div>)}
-                </Nav>
+                    {this.props.loggedInUser.isLoggedIn && (<div>
+                      <hr width="98%"></hr>
 
-
-              </Col>
-
-              <Col sm={9}>
-                <Tab.Content>
-
-                  {/* Feed Page */}
-                  <Tab.Pane eventKey="first">
-                    {/*this.props.loggedInUser.isLoggedIn && <MessageSubmit />*/}
-                    <MessageFeed />
-                  </Tab.Pane>
-
-                  {/* Users */}
-                  <Tab.Pane eventKey="second">
-                    <UserList />
-                  </Tab.Pane>
-
-                </Tab.Content>
-
-              </Col>
-            </Row>
-          </Tab.Container>
+                      <Link to={{
+                        pathname: `/${this.props.loggedInUser.username}`,
+                        tabValue: '1',
+                      }}
+                        className="my-nav-item"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <img src={MyProfile} width="39" alt="MyProfile" />
+                        <span className="pl-2"> My Profile</span>
+                      </Link>
+                    </div>)}
+                  </Nav>
 
 
+                </Col>
+
+                <Col sm={9}>
+                  <Tab.Content>
+
+                    {/* Feed Page */}
+                    <Tab.Pane eventKey="first">
+                      {/*this.props.loggedInUser.isLoggedIn && <MessageSubmit />*/}
+                      <MessageFeed />
+                    </Tab.Pane>
+
+                    {/* Users */}
+                    <Tab.Pane eventKey="second">
+                      <UserList />
+                    </Tab.Pane>
+
+                  </Tab.Content>
+
+                </Col>
+              </Row>
+            </Tab.Container>
+
+
+          </div>
         </div>
       </div>
 

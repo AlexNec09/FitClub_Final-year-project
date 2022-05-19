@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import logo from "../assets/mylogo.png";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -10,11 +10,29 @@ const TopBar = (props) => {
 
   const dropDownVisible = useClickTracker(actionArea);
 
+  // const [topBarClassName, setTopBarClassName] = useState("shadow-sm mb-2 sticky-header");
+  // const [topBarClassName, setTopBarClassName] = useState(props.className);
+
+
+  // useEffect(() => {
+  //   const loadClassName = () => {
+  //     console.log(props.user.isLoggedIn);
+  //     console.log(topBarClassName);
+  //     if (props.user.isLoggedIn) {
+  //       setTopBarClassName("bg-white " + props.className);
+  //     } else {
+  //       setTopBarClassName(props.className);
+  //     }
+  //   };
+  //   loadClassName();
+  // }, [props.user]);
+
   const onClickLogout = () => {
     const action = {
       type: "logout-success",
     };
     props.dispatch(action);
+    window.location.reload();
   };
 
   let links = (

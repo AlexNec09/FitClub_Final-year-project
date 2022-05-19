@@ -13,17 +13,12 @@ import ChangeEmailPage from '../pages/ChangeEmailPage';
 import PasswordResetPage from '../pages/PasswordResetPage';
 
 
-
-// function App() {
-//   return (
 class App extends Component {
-  // const App = () => {
   render() {
-    console.log("here: " + this.props.loggedInUser.emailVerificationStatus)
     return (
       <div>
         <TopBar />
-        <div className="container">
+        <div className="">
           <Switch>
             <Route path="/:verification/confirmationToken" component={ConfirmationToken} />
 

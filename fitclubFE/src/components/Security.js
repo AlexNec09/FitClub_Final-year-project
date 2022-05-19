@@ -137,8 +137,8 @@ class Security extends Component {
                                 </div>
 
                                 <h6 className="text-login-page text-secondary notClickable-text">
-                                    <span className="">Change your email address by clicking the activation
-                                        link in the email that will be sent to your current address.<br></br>
+                                    <span className="">Change your email address by clicking the
+                                        link in the email that will be sent to your current registered address.<br></br>
                                         You will need to login again after this change.
                                     </span>
                                 </h6>
@@ -174,7 +174,7 @@ class Security extends Component {
 
                 {/* Change Password */}
 
-                <div className="card mt-4 p-2 mb-4 shadow-sm">
+                <div className="card mt-4 p-2 shadow-sm">
                     <Row>
                         <Col xs={12} md={12} lg={12} xl={8}>
                             <div className="card-body d-flex flex-column">
@@ -185,8 +185,8 @@ class Security extends Component {
                                 </div>
 
                                 <h6 className="text-login-page text-secondary notClickable-text">
-                                    <span className="">You will be sent an email with instructions on how to change your password.<br></br>
-                                        Are you sure you want to do this?
+                                    <span className="">An email will be sent to your current registered address with instructions on how to change your password.<br></br>
+                                        You will need to login again after this change.
                                     </span>
                                 </h6>
 
@@ -210,8 +210,8 @@ class Security extends Component {
                         </Col>
 
                         <Col xs={12} md={12} lg={12} xl={4}>
-                            <div className="d-flex justify-content-center pr-5 pt-5 pb-2">
-                                <img className="m-auto" src={changePassword} width="230" alt="Hoaxify" />
+                            <div className="d-flex justify-content-center pr-5 pt-5">
+                                <img className="m-auto" src={changePassword} width="230" alt="ChangePass" />
                             </div>
                         </Col>
 

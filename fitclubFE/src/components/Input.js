@@ -1,7 +1,7 @@
 import React from "react";
 
 const Input = (props) => {
-  let inputClassName = "form-control";
+  let inputClassName = "custom-row-input";
 
   if (props.type === "file") {
     inputClassName += "-file";
@@ -12,7 +12,7 @@ const Input = (props) => {
 
   return (
     <div>
-      {props.label && <label className="mt-2">{props.label}</label>}
+      {props.label && <label className="mt-2 custom-row-label">{props.label}</label>}
       <input
         name={props.name}
         className={inputClassName}

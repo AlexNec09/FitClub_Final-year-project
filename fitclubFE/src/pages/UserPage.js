@@ -423,9 +423,12 @@ const UserPage = (props) => {
     );
   }
   return (
-    <div data-testid="userpage">
-      <div className="row">
-        <div className="col">{pageContent}</div>
+    <div className="background-image pt-5" id="background-image">
+
+      <div data-testid="userpage">
+        <div className="pb-4">
+          <div className="col">{pageContent}</div>
+        </div>
       </div>
     </div>
   );

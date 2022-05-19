@@ -66,7 +66,7 @@ const ProfileCardForLoggedUser = (props) => {
                     </Col>
 
                     <Col xs={12} md={12} lg={6} xl={3}>
-                        <div className="d-flex justify-content-center personalInfo pr-5">
+                        <div className="d-flex justify-content-center personalInfo mt-1 pe-4">
                             <img className="" src={personalInfo} width="250" alt="PersonalInfoImg" />
                         </div>
 
@@ -173,8 +173,8 @@ const ProfileCardForLoggedUser = (props) => {
                     </Col>
 
                     <Col xs={12} md={12} lg={4}>
-                        <div className="d-flex justify-content-center personalInfo2 pr-5">
-                            <img className="m-auto" src={personalInfo2} width="250" alt="Hoaxify" />
+                        <div className="d-flex justify-content-center personalInfo2 pt-5 mt-3">
+                            <img className="m-auto" src={personalInfo2} width="250" alt="PersInfo" />
                         </div>
                     </Col>
 
