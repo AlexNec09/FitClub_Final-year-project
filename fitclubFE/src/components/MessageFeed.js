@@ -281,8 +281,8 @@ const MessageFeed = (props) => {
 
   if (page.content.length === 0 && newMessageCount === 0 && hasFullAccess) {
     return (
-      <div>
-        <div className="card d-flex flex-row p-1">
+      <div className="pt-4">
+        {(props.user && props.loggedInUser.username === props.user.username) && (<div className="card d-flex flex-row p-1">
           <ProfileImageWithDefault
             className="rounded-circle m-1"
             width="32"
@@ -337,7 +337,7 @@ const MessageFeed = (props) => {
               </div>
             )}
           </div>
-        </div>
+        </div>)}
         <div className="card card-header text-center">There are no messages</div>
       </div>
     );
@@ -372,95 +372,103 @@ const MessageFeed = (props) => {
             <SessionExpired />
           </div>
         </div>
-        ) : (<div className="card d-flex flex-row p-1">
-          <ProfileImageWithDefault
-            className="rounded-circle m-1"
-            width="32"
-            height="32"
-            image={props.loggedInUser.image}
-          />
-          <div className="flex-fill">
-            <textarea
-              className={textAreaClassName}
-              rows={focused ? 3 : 1}
-              onFocus={onFocus}
-              value={content}
-              onChange={onChangeContent}
+        ) : (<div className="container">
+          <div className="card d-flex flex-row p-1">
+            <ProfileImageWithDefault
+              className="rounded-circle m-1"
+              width="32"
+              height="32"
+              image={props.loggedInUser.image}
             />
+            <div className="flex-fill">
+              <textarea
+                className={textAreaClassName}
+                rows={focused ? 3 : 1}
+                onFocus={onFocus}
+                value={content}
+                onChange={onChangeContent}
+              />
 
-            {errors.content && (
-              <span className="invalid-feedback">
-                {errors.content}
-              </span>
-            )}
+              {errors.content && (
+                <span className="invalid-feedback">
+                  {errors.content}
+                </span>
+              )}
 
-            {focused && (
-              <div>
-                <div className="pt-2">
-                  <Input type="file" onChange={onFileSelect} />
-                  {image && (
-                    <img
-                      className="mt-2 img-thumbnail"
-                      src={image}
-                      alt="uploadedImg"
-                      width="128"
-                      height="64"
+              {focused && (
+                <div>
+                  <div className="pt-2">
+                    <Input type="file" onChange={onFileSelect} />
+                    {image && (
+                      <img
+                        className="mt-2 img-thumbnail"
+                        src={image}
+                        alt="uploadedImg"
+                        width="128"
+                        height="64"
+                      />
+                    )}
+                  </div>
+                  <div className="text-end mt-2">
+                    <ButtonWithProgress
+                      className="btn btn-success"
+                      disabled={pendingApiCall}
+                      onClick={onClickSend}
+                      pendingApiCall={pendingApiCall}
+                      text="Send"
                     />
-                  )}
+                    <button
+                      className="btn btn-light ms-1"
+                      onClick={resetState}
+                      disabled={pendingApiCall}
+                    >
+                      <i className="fas fa-times"></i> Cancel
+                    </button>
+                  </div>
                 </div>
-                <div className="text-end mt-2">
-                  <ButtonWithProgress
-                    className="btn btn-success"
-                    disabled={pendingApiCall}
-                    onClick={onClickSend}
-                    pendingApiCall={pendingApiCall}
-                    text="Send"
-                  />
-                  <button
-                    className="btn btn-light ms-1"
-                    onClick={resetState}
-                    disabled={pendingApiCall}
-                  >
-                    <i className="fas fa-times"></i> Cancel
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
         )}
       </div>
       {(newMessageCount > 0 && props.loggedInUser.isLoggedIn) && (
-        <div
-          className="card card-header text-center"
-          onClick={onClickLoadNew}
-          style={{
-            cursor: isLoadingNewMessages ? "not-allowed" : "pointer",
-          }}
-        >
-          {isLoadingNewMessages ? <Spinner /> : newMessageCountMessage}
+        <div className="container">
+          <div
+            className="card card-header text-center"
+            onClick={onClickLoadNew}
+            style={{
+              cursor: isLoadingNewMessages ? "not-allowed" : "pointer",
+            }}
+          >
+            {isLoadingNewMessages ? <Spinner /> : newMessageCountMessage}
+          </div>
         </div>
       )}
       {page.content.map((message) => {
         return (
-          <MessageView
-            key={message.id}
-            message={message}
-            onClickDelete={() => setMessageToBeDeleted(message)}
-            onClickLike={() => onReact(message, 'like')}
-            onClickDislike={() => onReact(message, 'dislike')}
-          />
+          <div className="container">
+            <MessageView
+              key={message.id}
+              message={message}
+              onClickDelete={() => setMessageToBeDeleted(message)}
+              onClickLike={() => onReact(message, 'like')}
+              onClickDislike={() => onReact(message, 'dislike')}
+            />
+          </div>
         );
       })}
       {page.last === false && (
-        <div
-          className="card card-header text-center"
-          onClick={onClickLoadMore}
-          style={{
-            cursor: isLoadingOldMessages ? "not-allowed" : "pointer",
-          }}
-        >
-          {isLoadingOldMessages ? <Spinner /> : "View More Posts"}
+        <div className="container">
+          <div
+            className="card card-header text-center"
+            onClick={onClickLoadMore}
+            style={{
+              cursor: isLoadingOldMessages ? "not-allowed" : "pointer",
+            }}
+          >
+            {isLoadingOldMessages ? <Spinner /> : "View More Posts"}
+          </div>
         </div>
       )}
       <ModalView

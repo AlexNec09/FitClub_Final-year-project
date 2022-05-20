@@ -223,22 +223,28 @@ const UserPage = (props) => {
 
   let pageContent;
   if (state.isLoadingUser) {
-    pageContent = <Spinner />;
+    pageContent = (
+      <div className="container pt-4">
+        <Spinner />
+      </div>
+    );
   } else if (state.userNotFound) {
     pageContent = (
-      <div className="row">
-        <div className="col">
-          <div className="alert alert-danger text-center">
-            <div className="alert-heading">
-              <i className="fas fa-exclamation-triangle fa-3x" />
+      <div className="container pt-4">
+        <div className="row">
+          <div className="col">
+            <div className="alert alert-danger text-center">
+              <div className="alert-heading">
+                <i className="fas fa-exclamation-triangle fa-3x" />
+              </div>
+              <br></br>
+              <h5>User not found</h5>
             </div>
-            <br></br>
-            <h5>User not found</h5>
           </div>
-        </div>
-        <div className="col">
-          <div className="card card-header text-center">
-            There are no messages
+          <div className="col">
+            <div className="card card-header text-center">
+              There are no messages
+            </div>
           </div>
         </div>
       </div>
@@ -297,7 +303,7 @@ const UserPage = (props) => {
 
                 <Tab.Pane eventKey="first">
 
-                  {props.loggedInUser.isLoggedIn ? (<div>
+                  {props.loggedInUser.isLoggedIn ? (<div className="pt-4">
 
                     <ProfileCardForLoggedUser
                       user={state.user}

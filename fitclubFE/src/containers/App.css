@@ -437,7 +437,6 @@ a#left-tabs-example-tab-fifth.nav-link.active {
 }
 
 .sticky-header {
-  position: -webkit-sticky;
   position: sticky !important;
   top: 1px !important;
   z-index: 1;
