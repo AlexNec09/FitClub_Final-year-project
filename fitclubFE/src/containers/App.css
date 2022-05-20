@@ -67,8 +67,6 @@ a#left-tabs-example-tab-third.nav-link.active {
 .nav-pills .show>.nav-link {
   background: rgb(0, 180, 250) !important;
   border-radius: 30px 30px 30px 30px;
-  /* margin: 0px !important;
-  padding: 0px !important; */
   transition: all .25s;
 }
 
@@ -383,23 +381,6 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   justify-content: space-between;
 }
 
-.background-image {
-
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 10 10 10px;
-  top: 0;
-  position: absolute;
-  background-position: bottom, center !important;
-  overflow-y: auto;
-
-  background:
-    linear-gradient(to top, rgba(0, 0, 0, 0.363) 0%,
-      rgba(255, 241, 241, 0) 0%, rgb(255, 255, 255) 100%),
-    url(../assets/feed-userpage-background.jpg) no-repeat center / cover;
-}
-
 
 /* Exclamation mark of User not found! */
 .icon-exclamation {
@@ -413,33 +394,6 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   color: rgb(209, 0, 0);
   /* color: rgb(221, 221, 221); */
   text-shadow: 0 0 3px rgb(255, 255, 255);
-}
-
-.card-body {
-  border-radius: 10px 0 0 10px;
-  flex: 1 1 auto;
-  min-height: 1px;
-  padding: 0.75rem !important;
-  background: inherit;
-}
-
-.card-home {
-  border: 0px !important;
-}
-
-
-.sticky-menu {
-  position: -webkit-sticky;
-  position: sticky !important;
-  top: 60px !important;
-  z-index: 1;
-  cursor: pointer;
-}
-
-.sticky-header {
-  position: sticky !important;
-  top: 1px !important;
-  z-index: 1;
 }
 
 .login-img {
@@ -512,7 +466,6 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   opacity: 0.8;
 }
 
-
 .forgot-password {
   color: rgb(134, 110, 122);
   cursor: pointer;
@@ -520,9 +473,7 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   align-self: flex-end;
 }
 
-
 .background-login-image {
-
   flex: 1;
   width: 100%;
   height: 100%;
@@ -562,4 +513,60 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   align-self: start;
   padding-left: 1.5rem;
   color: rgba(89, 85, 85, 0.9);
+}
+
+.card-body {
+  border-radius: 10px 0 0 10px;
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 0.75rem !important;
+  background: inherit;
+}
+
+.card-home {
+  border: 0px !important;
+}
+
+
+.sticky-menu {
+  position: -webkit-sticky;
+  position: sticky !important;
+  top: 60px !important;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.sticky-header {
+  position: sticky !important;
+  top: 1px !important;
+  z-index: 2;
+}
+
+.background-image {
+  flex: 1;
+  margin: auto;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.363) 0%,
+      rgba(255, 241, 241, 0) 0%, rgb(255, 255, 255) 100%),
+    url(../assets/feed-userpage-background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100%;
+  border-radius: 10px 10 10 10px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  position: fixed;
+  overflow-y: scroll;
+}
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

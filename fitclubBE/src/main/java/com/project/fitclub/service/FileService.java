@@ -76,7 +76,12 @@ public class FileService {
         try {
             byte[] fileAsByte = file.getBytes();
             FileUtils.writeByteArrayToFile(target, fileAsByte);
-            fileAttachment.setFileType(detectType(fileAsByte));
+            String fileType = detectType(fileAsByte);
+            if (fileType.equalsIgnoreCase("image/png") || fileType.equalsIgnoreCase("image/jpeg")) {
+                fileAttachment.setFileType(fileType);
+            } else {
+                throw new IOException("Only PNG and JPG files are allowed!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

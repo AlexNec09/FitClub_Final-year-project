@@ -1,6 +1,5 @@
 import React from "react";
 import UserList from "../components/UserList";
-import MessageSubmit from "../components/MessageSubmit";
 import { connect } from "react-redux";
 import MessageFeed from "../components/MessageFeed";
 import { Link } from 'react-router-dom';
@@ -60,7 +59,6 @@ class HomePage extends React.Component {
                     </div>)}
                   </Nav>
 
-
                 </Col>
 
                 <Col sm={9}>
@@ -68,7 +66,6 @@ class HomePage extends React.Component {
 
                     {/* Feed Page */}
                     <Tab.Pane eventKey="first">
-                      {/*this.props.loggedInUser.isLoggedIn && <MessageSubmit />*/}
                       <MessageFeed />
                     </Tab.Pane>
 
@@ -82,27 +79,9 @@ class HomePage extends React.Component {
                 </Col>
               </Row>
             </Tab.Container>
-
-
           </div>
         </div>
       </div>
-
-
-
-
-
-      // <div data-testid="homepage">
-      //   <div className="row">
-      //     <div className="col-8">
-      //       {this.props.loggedInUser.isLoggedIn && <MessageSubmit />}
-      //       <MessageFeed />
-      //     </div>
-      //     <div className="col-4">
-      //       <UserList />
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
 }

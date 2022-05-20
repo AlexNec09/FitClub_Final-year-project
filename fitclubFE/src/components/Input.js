@@ -20,6 +20,7 @@ const Input = (props) => {
         placeholder={props.placeholder}
         value={props.value}
         onChange={props.onChange}
+        accept={props.accept || ""}
       />
       {props.hasError && (
         <span className="invalid-feedback-forprofileCard">{props.error}</span>

@@ -27,7 +27,6 @@ const MessageFeed = (props) => {
   const [content, setContent] = useState();
   const [pendingApiCall, setPendingApiCall] = useState(false);
   const [errors, setErrors] = useState({});
-  const [file, setFile] = useState();
   const [image, setImage] = useState();
   const [attachment, setAttachment] = useState();
 
@@ -211,15 +210,14 @@ const MessageFeed = (props) => {
     let reader = new FileReader();
     reader.onloadend = () => {
       setImage(reader.result);
-      setFile(file);
-      uploadFile();
+      uploadFile(event.target.files[0]);
     };
     reader.readAsDataURL(file);
   };
 
-  const uploadFile = () => {
+  const uploadFile = (receivedFile) => {
     const body = new FormData();
-    body.append("file", file);
+    body.append("file", receivedFile);
     apiCalls.postMessageFile(body, props.loggedInUser.jwt).then((response) => {
       setAttachment(response.data);
     });
@@ -231,7 +229,6 @@ const MessageFeed = (props) => {
     setContent("");
     setErrors({});
     setImage();
-    setFile();
     setAttachment();
   };
 
@@ -307,7 +304,7 @@ const MessageFeed = (props) => {
             {focused && (
               <div>
                 <div className="pt-2">
-                  <Input type="file" onChange={onFileSelect} />
+                  <Input type="file" accept="image/png, image/jpeg" onChange={onFileSelect} />
                   {image && (
                     <img
                       className="mt-2 img-thumbnail"
@@ -372,8 +369,8 @@ const MessageFeed = (props) => {
             <SessionExpired />
           </div>
         </div>
-        ) : (<div className="container">
-          <div className="card d-flex flex-row p-1">
+        ) : (<div className="container pb-3">
+          <div className="card d-flex flex-row p-2">
             <ProfileImageWithDefault
               className="rounded-circle m-1"
               width="32"
@@ -383,6 +380,7 @@ const MessageFeed = (props) => {
             <div className="flex-fill">
               <textarea
                 className={textAreaClassName}
+                placeholder="Share something with your followers"
                 rows={focused ? 3 : 1}
                 onFocus={onFocus}
                 value={content}
@@ -398,7 +396,7 @@ const MessageFeed = (props) => {
               {focused && (
                 <div>
                   <div className="pt-2">
-                    <Input type="file" onChange={onFileSelect} />
+                    <Input type="file" accept="image/png, image/jpeg" onChange={onFileSelect} />
                     {image && (
                       <img
                         className="mt-2 img-thumbnail"
@@ -447,7 +445,7 @@ const MessageFeed = (props) => {
       )}
       {page.content.map((message) => {
         return (
-          <div className="container">
+          <div className="container pb-1">
             <MessageView
               key={message.id}
               message={message}
@@ -459,7 +457,7 @@ const MessageFeed = (props) => {
         );
       })}
       {page.last === false && (
-        <div className="container">
+        <div className="container pb-3">
           <div
             className="card card-header text-center"
             onClick={onClickLoadMore}
