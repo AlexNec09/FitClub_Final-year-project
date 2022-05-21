@@ -8,6 +8,7 @@ import * as apiCalls from '../api/apiCalls';
 import changePassword from '../assets/changePassword.png';
 import changeEmail from '../assets/changeEmail.png';
 import ButtonWithProgressForEmails from './ButtonWithProgressForEmails';
+import ButtonWithProgress from "./ButtonWithProgress";
 
 class Security extends Component {
     state = {
@@ -150,13 +151,13 @@ class Security extends Component {
                                     </h5>
                                 )}
 
-                                <div className="text-center mt-4">
-                                    <ButtonWithProgressForEmails
+                                <div className="container text-center mt-4">
+                                    <ButtonWithProgress className="custom-row-email-button"
                                         onClick={this.changeEmail}
                                         // disabled={disableSubmit || this.state.pendingApiCall}
                                         disabled={this.state.setButtonDisabledChangeEmail}
                                         pendingApiCall={this.state.pendingApiCallChangeEmail}
-                                        value="Change Email&nbsp;&nbsp;"
+                                        text="Change Email"
                                     />
                                 </div>
                             </div>
@@ -197,13 +198,13 @@ class Security extends Component {
                                     </h5>
                                 )}
 
-                                <div className="text-center mt-3">
-                                    <ButtonWithProgressForEmails
+                                <div className="container text-center mt-3">
+                                    <ButtonWithProgress className="custom-row-email-button"
                                         onClick={this.changePassword}
                                         // disabled={disableSubmit || this.state.pendingApiCall}
                                         disabled={this.state.setButtonDisabledChangePassword}
                                         pendingApiCall={this.state.pendingApiCallChangePassword}
-                                        value="Change Password&nbsp;&nbsp;"
+                                        text="Change Password"
                                     />
                                 </div>
                             </div>

@@ -78,7 +78,7 @@ export const UserSignupPage = (props) => {
             </div>
           </Col>
 
-          <Col className="" xs={10} md={10} lg={10} xl={3}>
+          <Col className="ps-5" xs={10} md={10} lg={10} xl={4}>
             <div className="card-body pt-2 ps-5">
               <div className="form-group py-4">
                 <Input

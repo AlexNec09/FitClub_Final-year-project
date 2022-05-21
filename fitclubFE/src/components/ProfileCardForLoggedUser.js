@@ -53,7 +53,7 @@ const ProfileCardForLoggedUser = (props) => {
                             <Row>
                                 {props.isFollowable && <div className=" text-center mt-4">
                                     <ButtonWithProgress
-                                        className="btn btn-primary"
+                                        className="custom-row-edit-button"
                                         onClick={props.onToggleFollow}
                                         disabled={props.pendingFollowToggleCall}
                                         pendingApiCall={props.pendingFollowToggleCall}
@@ -77,7 +77,7 @@ const ProfileCardForLoggedUser = (props) => {
             <div className="card mt-4 p-2 shadow-sm">
                 <Row>
                     <Col xs={12} md={12} lg={8}>
-                        <div className="card-body d-flex flex-column">
+                        <div className="card-body d-flex flex-column m-2 float-left pl-3 mt-2">
                             {!props.inEditMode && (
                                 // <h4>Displayname: {`${displayName}`} 
                                 // <br></br>
@@ -157,14 +157,14 @@ const ProfileCardForLoggedUser = (props) => {
                                 </div>
                             )}
 
-                            <div className="text-center mt-1 ml-auto">
+                            <div className="container text-center mt-1 ml-auto">
                                 {showEditButton && (
                                     <button
-                                        className="btn btn-outline-primary px-4 editProfileButton"
+                                        className="custom-row-edit-button"
                                         onClick={props.onClickEdit}
                                     >
-                                        {/* <i className="far fa-edit mr-2"></i> */}
-                                        Edit Profile
+                                        <i className="far fa-edit mr-2"> </i>
+                                        &nbsp;&nbsp;Edit Profile
                                     </button>
                                 )}
                             </div>
@@ -173,8 +173,8 @@ const ProfileCardForLoggedUser = (props) => {
                     </Col>
 
                     <Col xs={12} md={12} lg={4}>
-                        <div className="d-flex justify-content-center personalInfo2 pt-5 mt-3">
-                            <img className="m-auto" src={personalInfo2} width="250" alt="PersInfo" />
+                        <div className="d-flex justify-content-center personalInfo2 ps-5 p-4 pb-2">
+                            <img className="m-auto" src={personalInfo2} width="300" alt="PersInfo" />
                         </div>
                     </Col>
 

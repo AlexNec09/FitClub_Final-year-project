@@ -332,7 +332,7 @@ const UserPage = (props) => {
                       emailVerificationStatus={props.loggedInUser.emailVerificationStatus}
                     />
 
-                  </div>) : (<div>
+                  </div>) : (<div className="pt-4">
                     <ProfileCard
                       user={state.user}
                       isEditable={isEditable}
