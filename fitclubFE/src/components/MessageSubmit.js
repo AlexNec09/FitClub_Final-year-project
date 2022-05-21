@@ -107,8 +107,8 @@ class MessageSubmit extends Component {
       textAreaClassName += " is-invalid";
     }
     return (
-      <div>
-        {this.props.loggedInUser.isLoggedIn ? (<div className="card d-flex flex-row p-1">
+      <div className="pb-3">
+        {this.props.loggedInUser.isLoggedIn ? (<div className="card d-flex flex-row p-2">
           <ProfileImageWithDefault
             className="rounded-circle m-1"
             width="32"
@@ -119,6 +119,7 @@ class MessageSubmit extends Component {
             <textarea
               className={textAreaClassName}
               rows={this.state.focused ? 3 : 1}
+              placeholder="Share something with your followers"
               onFocus={this.onFocus}
               value={this.state.content}
               onChange={this.onChangeContent}
@@ -133,7 +134,7 @@ class MessageSubmit extends Component {
             {this.state.focused && (
               <div>
                 <div className="pt-2">
-                  <Input type="file" onChange={this.onFileSelect} />
+                  <Input type="file" accept="image/png, image/jpeg" onChange={this.onFileSelect} />
                   {this.state.image && (
                     <img
                       className="mt-2 img-thumbnail"

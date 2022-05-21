@@ -199,7 +199,6 @@ const UserPage = (props) => {
   };
 
   const entering = (e) => {
-    // e.children[0].style.borderTopColor = 'green';
     e.children[1].style.backgroundColor = 'rgba(0,0,0,0.4)';
   };
 
@@ -262,7 +261,6 @@ const UserPage = (props) => {
           id="left-tabs-example"
           defaultActiveKey="first">
           <Row className="pt-2 ">
-
             <Col className="" md={3} >
 
               <Nav variant="pills" className="flex-column sticky-menu">
@@ -272,7 +270,6 @@ const UserPage = (props) => {
                     {/* <i className="fas fa-user text-secondary pr-2"></i> */}
                     <img src={userProfileIcon} width="40" alt="UserProfile" />
                     <span className="pl-2"> Profile</span>
-
 
                   </Nav.Link>
                 </Nav.Item>
@@ -304,7 +301,6 @@ const UserPage = (props) => {
                 <Tab.Pane eventKey="first">
 
                   {props.loggedInUser.isLoggedIn ? (<div className="pt-4">
-
                     <ProfileCardForLoggedUser
                       user={state.user}
                       isEditable={isEditable}
@@ -326,13 +322,12 @@ const UserPage = (props) => {
                       onFileSelect={onFileSelect}
                       onToggleFollow={onToggleFollow}
                       isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
-
                       errors={state.errors}
 
                       emailVerificationStatus={props.loggedInUser.emailVerificationStatus}
                     />
 
-                  </div>) : (<div className="pt-4">
+                  </div>) : (<div className="pt-4 mt-2">
                     <ProfileCard
                       user={state.user}
                       isEditable={isEditable}
@@ -380,52 +375,6 @@ const UserPage = (props) => {
           </Row>
         </Tab.Container>
       </div>
-
-
-
-
-
-
-
-
-      //////////////////////////////////////
-
-
-
-
-
-
-
-
-
-      // <div className="row">
-      //   <div className="col">
-      //     <ProfileCard
-      //       user={state.user}
-      //       isEditable={isEditable}
-      //       inEditMode={state.inEditMode}
-      //       onClickEdit={() => dispatch({ type: "edit-mode" })}
-      //       onClickCancel={() => dispatch({ type: "cancel" })} // inline function
-      //       onClickSave={onClickSave}
-      //       onChangeDisplayName={(event) =>
-      //         dispatch({
-      //           type: "update-displayName",
-      //           payload: event.target.value,
-      //         })
-      //       }
-      //       pendingUpdateCall={state.pendingUpdateCall}
-      //       loadedImage={state.image}
-      //       onFileSelect={onFileSelect}
-      //       isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
-      //       onToggleFollow={onToggleFollow}
-      //       pendingFollowToggleCall={state.pendingFollowToggleCall}
-      //       errors={state.errors}
-      //     />
-      //   </div>
-      //   <div className="col">
-      //     <MessageFeed user={props.match.params.username} />
-      //   </div>
-      // </div>
     );
   }
   return (
