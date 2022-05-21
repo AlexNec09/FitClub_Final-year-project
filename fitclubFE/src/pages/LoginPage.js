@@ -64,6 +64,7 @@ export const LoginPage = (props) => {
             <div className="card-body pt-2">
               <div className="form-group py-4">
                 <Input
+                  name="username"
                   label="Username"
                   placeholder="Your username"
                   value={username}
@@ -73,6 +74,7 @@ export const LoginPage = (props) => {
 
               <div className="form-group py-2">
                 <Input
+                  name="password"
                   label="Password"
                   placeholder="Your password"
                   type="password"

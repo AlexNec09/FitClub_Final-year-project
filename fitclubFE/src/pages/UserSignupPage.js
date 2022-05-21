@@ -74,12 +74,13 @@ export const UserSignupPage = (props) => {
         <Row>
           <Col className="ps-5" xs={10} md={10} lg={10} xl={7}>
             <div className="d-flex justify-content-center ps-4">
-              <img className="pt-5" src={signupImg} width="750" alt="SignUpImg" />
+              <img className="pt-5 mt-5" src={signupImg} width="750" alt="SignUpImg" />
             </div>
           </Col>
 
           <Col className="ps-5" xs={10} md={10} lg={10} xl={4}>
-            <div className="card-body pt-2 ps-5">
+            <h2 className="headerTitle text-center ps-4 ms-3">Create Account</h2>
+            <div className="card-body pt-1 ps-5">
               <div className="form-group py-4">
                 <Input
                   name="displayName"

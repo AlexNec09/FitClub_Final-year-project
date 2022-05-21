@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, queryAllByText } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -92,6 +92,7 @@ const setUserOneLoggedInStorage = () => {
       image: "image1.png",
       password: "P4ssword",
       isLoggedIn: true,
+      jwt: "test-jwt-token"
     })
   );
 };
@@ -102,26 +103,37 @@ describe("App", () => {
     expect(queryByTestId("homepage")).toBeInTheDocument();
   });
 
-  it("displays LoginPage when url is /login", () => {
-    const { container } = setup("/login");
-    const header = container.querySelector("h1");
-    expect(header).toHaveTextContent("Login");
+  it("displays userpage when url  other than /, /login or /signup", () => {
+    const { queryByTestId } = setup("/user1");
+    expect(queryByTestId("userpage")).toBeInTheDocument();
   });
 
-  it("displays only LoginPage when url is /login", () => {
-    const { queryByTestId } = setup("/login");
-    expect(queryByTestId("homepage")).not.toBeInTheDocument();
+  it("shows the UserSignupPage when clicking signup", () => {
+    const { queryAllByText, container } = setup("/");
+    const signupLink = queryAllByText("Sign Up")[0];
+    fireEvent.click(signupLink);
+    const header = container.querySelector("h2");
+    expect(header).toHaveTextContent("Create Account");
   });
 
   it("displays UserSignupPage when url is /signup", () => {
     const { container } = setup("/signup");
-    const header = container.querySelector("h1");
-    expect(header).toHaveTextContent("Sign Up");
+    const header = container.querySelector("h2");
+    expect(header).toHaveTextContent("Create Account");
   });
 
-  it("displays userpage when url  other than /, /login or /signup", () => {
-    const { queryByTestId } = setup("/user1");
-    expect(queryByTestId("userpage")).toBeInTheDocument();
+  it("shows the LoginPage when clicking login", () => {
+    const { queryAllByText, container } = setup("/");
+    const loginLink = queryAllByText("Login")[0];
+    fireEvent.click(loginLink);
+    const header = container.querySelector("h2");
+    expect(header).toHaveTextContent("Welcome!");
+  });
+
+  it("displays LoginPage when url is /login", () => {
+    const { container } = setup("/login");
+    const header = container.querySelector("h2");
+    expect(header).toHaveTextContent("Welcome!");
   });
 
   it("displays topBar when url is /", () => {
@@ -148,22 +160,6 @@ describe("App", () => {
     expect(navigation).toBeInTheDocument();
   });
 
-  it("shows the UserSignupPage when clicking signup", () => {
-    const { queryByText, container } = setup("/");
-    const signupLink = queryByText("Sign Up");
-    fireEvent.click(signupLink);
-    const header = container.querySelector("h1");
-    expect(header).toHaveTextContent("Sign Up");
-  });
-
-  it("shows the LoginPage when clicking login", () => {
-    const { queryByText, container } = setup("/");
-    const loginLink = queryByText("Login");
-    fireEvent.click(loginLink);
-    const header = container.querySelector("h1");
-    expect(header).toHaveTextContent("Login");
-  });
-
   it("shows the HomePage when clicking the logo", () => {
     const { queryByTestId, container } = setup("/login");
     const logo = container.querySelector("img");
@@ -172,10 +168,10 @@ describe("App", () => {
   });
 
   it("displays My Profile on TopBar after login success", async () => {
-    const { queryByPlaceholderText, container, queryByText } = setup("/login");
-    const usernameInput = queryByPlaceholderText("Your username");
+    const { container, queryByText } = setup("/login");
+    const usernameInput = container.querySelector(`input[name="username"]`);
     fireEvent.change(usernameInput, changeEvent("user1"));
-    const passwordInput = queryByPlaceholderText("Your password");
+    const passwordInput = container.querySelector(`input[name="password"]`);
     fireEvent.change(passwordInput, changeEvent("P4ssword"));
     const button = container.querySelector("button");
 
@@ -195,8 +191,8 @@ describe("App", () => {
     const { queryByPlaceholderText, container, queryByText } = setup("/signup");
 
     const displayNameInput = queryByPlaceholderText("Your display name");
-    const userNameInput = queryByPlaceholderText("Your username");
-    const passwordInput = queryByPlaceholderText("Your password");
+    const userNameInput = container.querySelector(`input[name="username"]`);
+    const passwordInput = container.querySelector(`input[name="password"]`);
     const passwordRepeat = queryByPlaceholderText("Repeat your password");
 
     fireEvent.change(displayNameInput, changeEvent("display1"));
@@ -227,9 +223,9 @@ describe("App", () => {
 
   it("saves logged in user data to localStorage after login success", async () => {
     const { queryByPlaceholderText, container, queryByText } = setup("/login");
-    const usernameInput = queryByPlaceholderText("Your username");
+    const usernameInput = container.querySelector(`input[name="username"]`);
     fireEvent.change(usernameInput, changeEvent("user1"));
-    const passwordInput = queryByPlaceholderText("Your password");
+    const passwordInput = container.querySelector(`input[name="password"]`);
     fireEvent.change(passwordInput, changeEvent("P4ssword"));
     const button = container.querySelector("button");
 
@@ -256,16 +252,16 @@ describe("App", () => {
 
   it("displays logged in topBar when storage has logged in user data", async () => {
     setUserOneLoggedInStorage();
-    const { queryByText } = setup("/");
-    const myProfileLink = queryByText("My Profile");
+    const { queryAllByText } = setup("/");
+    const myProfileLink = queryAllByText("My Profile")[0];
     expect(myProfileLink).toBeInTheDocument();
   });
 
   it("set axios authorization with base64 encoded user credentials after login success", async () => {
     const { queryByPlaceholderText, container, queryByText } = setup("/login");
-    const usernameInput = queryByPlaceholderText("Your username");
+    const usernameInput = container.querySelector(`input[name="username"]`);
     fireEvent.change(usernameInput, changeEvent("user1"));
-    const passwordInput = queryByPlaceholderText("Your password");
+    const passwordInput = container.querySelector(`input[name="password"]`);
     fireEvent.change(passwordInput, changeEvent("P4ssword"));
     const button = container.querySelector("button");
 
@@ -314,11 +310,11 @@ describe("App", () => {
       .mockResolvedValueOnce(mockSuccessGetUser2);
 
     setUserOneLoggedInStorage();
-    const { queryByText } = setup("/user2");
+    const { queryAllByText, queryByText } = setup("/user2");
     await waitFor(() => queryByText("display2@user2"));
-    const myProfileLink = queryByText("My Profile");
+    const myProfileLink = queryAllByText("My Profile")[0];
     fireEvent.click(myProfileLink);
-    waitFor(() => expect(queryByText("display1@user1")).toBeInTheDocument()); // Good test
+    waitFor(() => expect(queryByText("display1")).toBeInTheDocument()); // Good test
   });
 
   it("updates page after clicking my profile when another non existing user page was opened", async () => {
@@ -328,10 +324,10 @@ describe("App", () => {
       .mockResolvedValueOnce(mockSuccessGetUser2);
     setUserOneLoggedInStorage();
 
-    const { queryByText } = setup("/user50");
+    const { queryAllByText, queryByText } = setup("/user50");
     await waitFor(() => queryByText("User not found"));
-    const myProfileLink = queryByText("My Profile");
+    const myProfileLink = queryAllByText("My Profile")[0];
     fireEvent.click(myProfileLink);
-    waitFor(() => expect(queryByText("display1@user1")).toBeInTheDocument()); // Good test
+    waitFor(() => expect(queryByText("display1")).toBeInTheDocument()); // Good test
   });
 });

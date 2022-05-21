@@ -63,19 +63,19 @@ describe('Layout', () => {
     it('has default style when there is no validation error or success', () => {
         const { container } = render(<Input />);
         const input = container.querySelector('input');
-        expect(input.className).toBe('form-control');
+        expect(input.className).toBe('custom-row-input');
     });
 
     it('has success style when hasError property is false', () => {
         const { container } = render(<Input hasError={false} />);
         const input = container.querySelector('input');
-        expect(input.className).toBe('form-control is-valid');
+        expect(input.className).toBe('custom-row-input is-valid');
     });
 
     it('has style for error case when there is error', () => {
         const { container } = render(<Input hasError={true} />);
         const input = container.querySelector('input');
-        expect(input.className).toBe('form-control is-invalid');
+        expect(input.className).toBe('custom-row-input is-invalid');
     });
 
     it('displays the error text when it is provided', () => {
@@ -88,9 +88,9 @@ describe('Layout', () => {
         expect(queryByText('Cannot be null')).not.toBeInTheDocument();
     });
 
-    it('has form-control-file class when type is file', () => {
+    it('has custom-row-input-file class when type is file', () => {
         const { container } = render(<Input type="file" />);
         const input = container.querySelector('input');
-        expect(input.className).toBe('form-control-file');
+        expect(input.className).toBe('custom-row-input-file');
     });
 });

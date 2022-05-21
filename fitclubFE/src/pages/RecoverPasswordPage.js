@@ -42,7 +42,6 @@ export const RecoverPasswordPage = () => {
 
         apiCalls.recoverPasswordByEmail(data)
             .then((response) => {
-                console.log(JSON.stringify(response));
                 if (response.status !== 200) {
                     setSuccessfullyMessage(false);
                     setSearchError("Your search did not return any account. Please try again.")

@@ -86,7 +86,7 @@ const ProfileCardForLoggedUser = (props) => {
 
                                     <Row className="pt-1">
                                         <div className="text-center font-weight-bold">Display Name:</div>
-                                        <p className="text-center text-login-page text-secondary notClickable-text">
+                                        <p data-testid="displayNameTestId" className="text-center text-login-page text-secondary notClickable-text">
                                             &nbsp;{displayName}
                                         </p>
                                     </Row>

@@ -7,24 +7,19 @@ beforeEach(cleanup);
 
 describe('UserSignupPage', () => {
     describe('Layout', () => {
-        it('has header of Sign Up', () => {
-            const { container } = render(<UserSignupPage />);
-            const header = container.querySelector('h1');
-            expect(header).toHaveTextContent('Sign Up');
-        });
         it('has input for display name', () => {
             const { queryByPlaceholderText } = render(<UserSignupPage />);
             const displayNameInput = queryByPlaceholderText('Your display name');
             expect(displayNameInput).toBeInTheDocument();
         });
         it('has input for username', () => {
-            const { queryByPlaceholderText } = render(<UserSignupPage />);
-            const usernameInput = queryByPlaceholderText('Your username');
+            const { container } = render(<UserSignupPage />);
+            const usernameInput = container.querySelector(`input[name="username"]`);
             expect(usernameInput).toBeInTheDocument();
         });
         it('has input for password', () => {
-            const { queryByPlaceholderText } = render(<UserSignupPage />);
-            const passwordInput = queryByPlaceholderText('Your password');
+            const { container } = render(<UserSignupPage />);
+            const passwordInput = container.querySelector(`input[name="password"]`);
             expect(passwordInput).toBeInTheDocument();
         });
         it('has password type for password input', () => {
@@ -68,7 +63,7 @@ describe('UserSignupPage', () => {
             });
         };
 
-        let button, displayNameInput, userNameInput, passwordInput, passwordRepeat;
+        let button, displayNameInput, userNameInput, emailInput, passwordInput, passwordRepeat;
 
         const setupForSubmit = (props) => {
             const rendered = render(<UserSignupPage {...props} />);
@@ -77,11 +72,13 @@ describe('UserSignupPage', () => {
 
             displayNameInput = queryByPlaceholderText('Your display name');
             userNameInput = queryByPlaceholderText('Your username');
+            emailInput = container.querySelector(`input[name="email"]`);
             passwordInput = queryByPlaceholderText('Your password');
             passwordRepeat = queryByPlaceholderText('Repeat your password');
 
             fireEvent.change(displayNameInput, changeEvent('my-display-name'));
             fireEvent.change(userNameInput, changeEvent('my-user-name'));
+            fireEvent.change(emailInput, changeEvent('my-email-address'));
             fireEvent.change(passwordInput, changeEvent('P4ssword'));
             fireEvent.change(passwordRepeat, changeEvent('P4ssword'));
 
@@ -143,6 +140,7 @@ describe('UserSignupPage', () => {
             fireEvent.click(button);
             const expectedUserObject = {
                 username: 'my-user-name',
+                email: "my-email-address",
                 displayName: 'my-display-name',
                 password: 'P4ssword'
             }
@@ -334,7 +332,7 @@ describe('UserSignupPage', () => {
             fireEvent.click(button);
             await waitForElementToBeRemoved(() => queryByRole("status"));
 
-            expect(history.push).toHaveBeenCalledWith('/');
+            expect(history.push).toHaveBeenCalledWith('/verification/confirmationEmail');
         });
     });
 });

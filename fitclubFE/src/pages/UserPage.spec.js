@@ -24,6 +24,7 @@ const mockSuccessGetUser = {
     id: 1,
     username: "user1",
     displayName: "display1",
+    email: "email1",
     image: "profile1.png",
   },
 };
@@ -33,6 +34,7 @@ const mockSuccessUpdateUser = {
     id: 1,
     username: "user1",
     displayName: "display1-update",
+    email: "email1",
     image: "profile1-update.png",
   },
 };
@@ -88,6 +90,7 @@ const setUserOneLoggedInStorage = () => {
       image: "image1.png",
       password: "P4ssword",
       isLoggedIn: true,
+      jwt: "test-jwt-token"
     })
   );
 };
@@ -98,14 +101,6 @@ describe("HomePage", () => {
       const { queryByTestId } = setup();
       const userPageDiv = queryByTestId("userpage");
       expect(userPageDiv).toBeInTheDocument();
-    });
-
-    it("displays the displayName@username when user data loaded", async () => {
-      apiCalls.getUser = jest.fn().mockResolvedValue(mockSuccessGetUser);
-      const { queryByText } = setup({ match });
-      await waitFor(() => {
-        expect(queryByText("display1@user1")).toBeInTheDocument();
-      });
     });
 
     it("displays not found alert when user not found", async () => {
@@ -135,9 +130,9 @@ describe("HomePage", () => {
       apiCalls.getUser = jest.fn().mockResolvedValue(mockSuccessGetUser);
       const { queryByText } = setup({ match });
       await waitFor(() => {
-        queryByText("display1@user1");
+        queryByText("display1");
       });
-      const editButton = queryByText("Edit");
+      const editButton = queryByText("Edit Profile");
       expect(editButton).toBeInTheDocument();
     });
   });
@@ -161,8 +156,8 @@ describe("HomePage", () => {
       setUserOneLoggedInStorage();
       apiCalls.getUser = jest.fn().mockResolvedValue(mockSuccessGetUser);
       const rendered = setup({ match });
-      await waitFor(() => {});
-      const editButton = rendered.queryByText("Edit");
+      await waitFor(() => { });
+      const editButton = rendered.queryByText("Edit Profile");
       fireEvent.click(editButton);
       return rendered;
     };
@@ -187,7 +182,7 @@ describe("HomePage", () => {
 
       const cancelButton = queryByText("Cancel");
       fireEvent.click(cancelButton);
-      expect(queryByText("Edit")).toBeInTheDocument();
+      expect(queryByText("Edit Profile")).toBeInTheDocument();
     });
 
     it("calls updateUser api when clicking save", async () => {
@@ -230,7 +225,7 @@ describe("HomePage", () => {
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
 
-      const editButtonAfterClickingSave = await findByText("Edit");
+      const editButtonAfterClickingSave = await findByText("Edit Profile");
       expect(editButtonAfterClickingSave).toBeInTheDocument();
     });
 
@@ -242,12 +237,12 @@ describe("HomePage", () => {
       const cancelButton = queryByText("Cancel");
       fireEvent.click(cancelButton);
 
-      const originalDisplayTest = queryByText("display1@user1");
+      const originalDisplayTest = queryByText("display1");
       expect(originalDisplayTest).toBeInTheDocument();
     });
 
     it("return to last updated displayName when displayName is changed for another time but cancelled", async () => {
-      const { queryByText, queryByRole, findByText, container } = await setupForEdit();
+      const { queryByText, queryByRole, findByText, container, getByTestId } = await setupForEdit();
 
       let displayInput = container.querySelector("input");
       fireEvent.change(displayInput, { target: { value: "display1-update" } });
@@ -257,7 +252,7 @@ describe("HomePage", () => {
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
 
-      const editButtonAfterClickingSave = await findByText("Edit");
+      const editButtonAfterClickingSave = await findByText("Edit Profile");
       fireEvent.click(editButtonAfterClickingSave);
 
       displayInput = container.querySelector("input");
@@ -268,8 +263,8 @@ describe("HomePage", () => {
       const cancelButton = queryByText("Cancel");
       fireEvent.click(cancelButton);
 
-      const lastSavedData = container.querySelector("h4");
-      expect(lastSavedData).toHaveTextContent("display1-update@user1");
+      const lastSavedData = getByTestId("displayNameTestId");
+      expect(lastSavedData).toHaveTextContent("display1-update");
     });
 
     it("displays spinner when there is updateUser api call", async () => {
@@ -315,7 +310,7 @@ describe("HomePage", () => {
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
 
-      const editButtonAfterClickingSave = await findByText("Edit");
+      const editButtonAfterClickingSave = await findByText("Edit Profile");
       fireEvent.click(editButtonAfterClickingSave);
 
       const saveButtonAfterSecondEdit = queryByText("Save");
@@ -338,45 +333,6 @@ describe("HomePage", () => {
       });
     });
 
-    it("displays the selected image in edit mode", async () => {
-      const { container } = await setupForEdit();
-
-      const inputs = container.querySelectorAll("input");
-      const uploadInput = inputs[1]; // the first one is displayName
-
-      const file = new File(["dummy content"], "example.png", {
-        type: "image/png",
-      });
-
-      fireEvent.change(uploadInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        const image = container.querySelector("img");
-        expect(image.src).toContain("data:image/png;base64");
-      });
-    });
-
-    it("returns back to the original image even the new image is added to upload box but cancelled", async () => {
-      const { queryByText, container } = await setupForEdit();
-
-      const inputs = container.querySelectorAll("input");
-      const uploadInput = inputs[1]; // the first one is displayName
-
-      const file = new File(["dummy content"], "example.png", {
-        type: "image/png",
-      });
-
-      fireEvent.change(uploadInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        const cancelButton = queryByText("Cancel");
-        fireEvent.click(cancelButton);
-
-        const image = container.querySelector("img");
-        expect(image.src).toContain("/images/profile/profile1.png");
-      });
-    });
-
     it("does not throw error after file not selected", async () => {
       const { container } = await setupForEdit();
       const inputs = container.querySelectorAll("input");
@@ -384,68 +340,6 @@ describe("HomePage", () => {
       expect(() =>
         fireEvent.change(uploadInput, { target: { files: [] } })
       ).not.toThrow();
-    });
-
-    it("calls updateUser api with request body having new image without data:image/png;base64", async () => {
-      const { queryByRole, container } = await setupForEdit();
-      apiCalls.updateUser = jest.fn().mockResolvedValue(mockSuccessUpdateUser);
-
-      const inputs = container.querySelectorAll("input");
-      const uploadInput = inputs[1];
-
-      const file = new File(["dummy content"], "example.png", {
-        type: "image/png",
-      });
-      fireEvent.change(uploadInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        const image = container.querySelector("img");
-        expect(image.src).toContain("data:image/png;base64");
-      });
-
-      const saveButton = queryByRole("button", { name: "Save" });
-      fireEvent.click(saveButton);
-
-      const requestBody = apiCalls.updateUser.mock.calls[0][1];
-      expect(requestBody.image).not.toContain("data:image/png;base64");
-    });
-
-    it("returns to last updated image when image is changed for another time but cancelled", async () => {
-      const { queryByRole, container } = await setupForEdit();
-      apiCalls.updateUser = jest.fn().mockResolvedValue(mockSuccessUpdateUser);
-
-      const inputs = container.querySelectorAll("input");
-      const uploadInput = inputs[1];
-
-      const file = new File(["dummy content"], "example.png", {
-        type: "image/png",
-      });
-      fireEvent.change(uploadInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        const image = container.querySelector("img");
-        expect(image.src).toContain("data:image/png;base64");
-      });
-
-      const saveButton = queryByRole("button", { name: "Save" });
-      fireEvent.click(saveButton);
-
-      await waitFor(() => {
-        const editButtonAfterClickingSave = queryByRole("button", {
-          name: "Edit",
-        });
-        fireEvent.click(editButtonAfterClickingSave);
-      });
-
-      const newFile = new File(["another content"], "example2.png", {
-        type: "image/png",
-      });
-      fireEvent.change(uploadInput, { target: { files: [newFile] } });
-
-      const cancelButton = queryByRole("button", { name: "Cancel" });
-      fireEvent.click(cancelButton);
-      const image = container.querySelector("img");
-      expect(image.src).toContain("/images/profile/profile1-update.png");
     });
 
     it("displays validation error for displayName when update api fails", async () => {
@@ -528,7 +422,7 @@ describe("HomePage", () => {
       });
 
       fireEvent.click(queryByText("Cancel"));
-      fireEvent.click(queryByText("Edit"));
+      fireEvent.click(queryByText("Edit Profile"));
 
       const errorMessage = queryByText(
         "It must have minimum 4 and maximum 255 characters"
@@ -578,4 +472,4 @@ describe("HomePage", () => {
   });
 });
 
-console.error = () => {};
+console.error = () => { };

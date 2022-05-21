@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import authReducer from "../redux/authReducer";
 import * as apiCalls from "../api/apiCalls";
+import { BrowserRouter } from "react-router-dom";
 
 const defaultState = {
   id: 1,
@@ -27,7 +28,9 @@ const setup = (state = defaultState) => {
   store = createStore(authReducer, state);
   return render(
     <Provider store={store}>
-      <HomePage />
+      <BrowserRouter>
+        <HomePage />
+      </BrowserRouter>
     </Provider>
   );
 };
@@ -48,12 +51,6 @@ describe("HomePage", () => {
       expect(homePageDiv).toBeInTheDocument();
     });
 
-    it("displays message submit when user logged in", () => {
-      const { container } = setup();
-      const textArea = container.querySelector("textarea");
-      expect(textArea).toBeInTheDocument();
-    });
-
     it("does not display message submit when user not logged in", () => {
       const notLoggedInState = {
         id: 0,
@@ -70,4 +67,4 @@ describe("HomePage", () => {
   });
 });
 
-console.error = () => {};
+console.error = () => { };

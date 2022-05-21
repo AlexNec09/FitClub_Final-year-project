@@ -82,7 +82,6 @@ export const PasswordResetPage = (props) => {
 
         apiCalls.saveNewPassword(token, data)
             .then((response) => {
-                console.log(data.newPassword);
                 setPendingApiCall(false);
                 setSuccessfullyMessage(true);
                 if (passwordRepeatError === "") {

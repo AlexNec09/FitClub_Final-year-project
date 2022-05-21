@@ -23,11 +23,11 @@ describe("apiCalls", () => {
     });
   });
   describe("listUser", () => {
-    it("calls /api/1.0/users?page=0&size=3 when no param provided for listUsers", () => {
+    it("calls /api/1.0/users?page=0&size=10 when no param provided for listUsers", () => {
       const mockListUsers = jest.fn();
       axios.get = mockListUsers;
       apiCalls.listUsers();
-      expect(mockListUsers).toBeCalledWith("/api/1.0/users?page=0&size=3");
+      expect(mockListUsers).toBeCalledWith("/api/1.0/users?page=0&size=10");
     });
 
     it("calls /api/1.0/users?page=5&size=10 when corresponding params are provided for listUsers", () => {
@@ -40,13 +40,13 @@ describe("apiCalls", () => {
       expect(mockListUsers).toBeCalledWith("/api/1.0/users?page=5&size=10");
     });
 
-    it("calls /api/1.0/users?page=5&size=3 when only page param is provided for listUsers", () => {
+    it("calls /api/1.0/users?page=5&size=10 when only page param is provided for listUsers", () => {
       const mockListUsers = jest.fn();
       axios.get = mockListUsers;
       apiCalls.listUsers({
         page: 5,
       });
-      expect(mockListUsers).toBeCalledWith("/api/1.0/users?page=5&size=3");
+      expect(mockListUsers).toBeCalledWith("/api/1.0/users?page=5&size=10");
     });
 
     it("calls /api/1.0/users?page=0&size=5 when only size param is provided for listUsers", () => {

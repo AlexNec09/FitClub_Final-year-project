@@ -143,3 +143,5 @@ describe('TopBar', () => {
         });
     });
 });
+
+console.error = () => { };
