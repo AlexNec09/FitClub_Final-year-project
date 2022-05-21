@@ -160,7 +160,7 @@ export const ChangeEmailPage = (props) => {
                             </div>
 
                             {successfullyMessage && (
-                                <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                <h5 className="text-success font-weight-bold pt-4 text-center text-resend">
                                     <span className="far fa-check-circle fa-lg mb-1"></span>
                                     <span className="">&nbsp;Email has been successfully changed!
                                         <br></br>In 5 seconds, you will be redirected to the Login.</span>

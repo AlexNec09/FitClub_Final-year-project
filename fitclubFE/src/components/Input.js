@@ -21,6 +21,7 @@ const Input = (props) => {
         value={props.value}
         onChange={props.onChange}
         accept={props.accept || ""}
+        readOnly={props.readOnly}
       />
       {props.hasError && (
         <span className="invalid-feedback-forprofileCard">{props.error}</span>

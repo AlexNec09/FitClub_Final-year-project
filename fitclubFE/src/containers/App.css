@@ -304,6 +304,21 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   border-bottom: 1px solid #fde475 !important;
 }
 
+.textSecurityTop {
+  font-size: 14px !important;
+}
+
+.notFoundAddressLine {
+  border-left: thick solid #cd0000 !important;
+  border-top: 2px solid #e34444 !important;
+  border-right: 2px solid #e34444 !important;
+  border-bottom: 2px solid #e34444 !important;
+}
+
+.notFoundAddressText {
+  font-size: 16px !important;
+}
+
 .securityMessageSubmit {
   opacity: 0.23;
   padding-top: 5px;
@@ -311,9 +326,6 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   margin: 6px;
 }
 
-.textSecurityTop {
-  font-size: 14px !important;
-}
 
 .verticalLine {
   border-left: thick solid #FFD930 !important;

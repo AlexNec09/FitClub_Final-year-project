@@ -81,7 +81,7 @@ export const LoginPage = (props) => {
                 />
               </div>
 
-              <a className="forgot-password" href="#/signup">
+              <a className="forgot-password" href="#/forgotPassword">
                 <p className="pt-1 text-end">Forgot Password?</p>
               </a>
 

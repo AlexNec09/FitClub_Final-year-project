@@ -19,7 +19,10 @@ public class EmailSenderService {
 
     final String SUBJECT_CHANGE_EMAIL = "Change your email on FitClub platform";
 
-    final String SUBJECT_RESET_PASSWORD = "Change your password on FitClub platform";
+    final String SUBJECT_RESET_PASSWORD = "Reset your password on FitClub platform";
+
+    final String SUBJECT_CHANGE_PASSWORD = "Change your password on FitClub platform";
+
 
     // The email body for recipients with non-HTML email clients.
     final String TEXTBODY_EMAIL_CONFIRMATION = "Please verify your email address. "
@@ -33,14 +36,17 @@ public class EmailSenderService {
             + "If you did not request this, please disregard this email. This confirmation link is valid for 1 hour and can be used only once."
             + "<br/>"
             + "If you would like to continue and change it, please click the following link:"
-            + "http://localhost:3000/#/verification/changeEmail?token=$tokenValue"
-            + " Click here to redirect for change your email.</a>";
+            + "http://localhost:3000/#/verification/changeEmail?token=$tokenValue";
 
-    // The email body for recipients with non-HTML email clients.
-    final String TEXTBODY_PASSWORD_RESET = "Hi, $firstName! You're receiving this email because you requested to change your password on FitClub platform. "
+    final String TEXTBODY_PASSWORD_RESET = "Hi, $firstName! You're receiving this email because you requested to reset your password on FitClub platform. "
             + "If you did not request this, please disregard this email. This confirmation link is valid for 1 hour and can be used only once."
             + "<br/>"
-            + "If you would like to continue and change it, please click the following link:"
+            + "If you would like to continue and change it, please open the following URL in your browser window:"
+            + " http://localhost:3000/#/verification/passwordReset?token=$tokenValue";
+
+    final String TEXTBODY_CHANGE_PASSWORD = "Hi, $firstName! You're receiving this email because you requested to change your password on FitClub platform. "
+            + "<br/>"
+            + "To complete this process, you need to open the following URL in your browser window: "
             + " http://localhost:3000/#/verification/passwordReset?token=$tokenValue";
 
 
@@ -55,6 +61,12 @@ public class EmailSenderService {
     }
 
     public void changePassword(VerificationToken verificationToken, User user) {
+        String textBodyWithToken = TEXTBODY_CHANGE_PASSWORD.replace("$tokenValue", verificationToken.getPasswordToken());
+        textBodyWithToken = textBodyWithToken.replace("$firstName", user.getDisplayName());
+        mailCompose(user, textBodyWithToken, SUBJECT_CHANGE_PASSWORD);
+    }
+
+    public void resetPassword(VerificationToken verificationToken, User user) {
         String textBodyWithToken = TEXTBODY_PASSWORD_RESET.replace("$tokenValue", verificationToken.getPasswordToken());
         textBodyWithToken = textBodyWithToken.replace("$firstName", user.getDisplayName());
         mailCompose(user, textBodyWithToken, SUBJECT_RESET_PASSWORD);

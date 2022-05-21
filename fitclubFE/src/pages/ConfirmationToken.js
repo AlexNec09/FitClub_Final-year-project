@@ -88,7 +88,7 @@ class ConfirmationToken extends Component {
 
                             {this.state.successfullyMessage && (
 
-                                <h5 className="text-success font-weight-bold pt-3 text-center success-text-resend">
+                                <h5 className="text-success font-weight-bold pt-4 text-center success-text-resend">
                                     <span className="far fa-check-circle fa-lg fa-2x"></span>
                                     <span className="">&nbsp;Email Resending was successfully!</span>
                                 </h5>

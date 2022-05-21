@@ -189,4 +189,14 @@ public class UserController {
         }
         return null;
     }
+
+    @PostMapping(path = "/users/recoverPassword")
+    public ResponseEntity<?> sendEmailToRecoverPassword(@Valid @RequestBody UpdateEmailRequest userEmail) {
+        boolean isEmailValid = userService.sendRecoveryEmail(userEmail.getNewEmail());
+        if (isEmailValid) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+    }
 }

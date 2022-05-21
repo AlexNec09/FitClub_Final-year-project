@@ -11,6 +11,7 @@ import ResendConfirmationEmail from '../pages/ResendConfirmationEmail';
 import ConfirmationToken from '../pages/ConfirmationToken';
 import ChangeEmailPage from '../pages/ChangeEmailPage';
 import PasswordResetPage from '../pages/PasswordResetPage';
+import RecoverPasswordPage from '../pages/RecoverPasswordPage';
 
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/" component={HomePage} />
               : <Route exact path="/verification/confirmationEmail" component={ResendConfirmationEmail} />}
             <Route exact path="/" component={ResendConfirmationEmail} />
+            <Route exact path="/forgotPassword" component={RecoverPasswordPage} />
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/login" component={LoginPage} /> : <Redirect to="/" />}
             <Route exact path="/verification/changeEmail" component={ChangeEmailPage} />
             <Route exact path="/verification/passwordReset" component={PasswordResetPage} />

@@ -149,7 +149,6 @@ export const confirmationToken = (token) => {
   return axios.get(`/api/1.0/users/email-verification/confirmationToken/${token}`);
 };
 
-
 export const changeEmail = (id, jwt) => {
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
@@ -176,4 +175,8 @@ export const saveNewPassword = (token, file) => {
 
 export const checkValidToken = (token, identifier) => {
   return axios.get(`/api/1.0/users/isValidToken/${identifier}/${token}`);
+};
+
+export const recoverPasswordByEmail = (email) => {
+  return axios.post("/api/1.0/users/recoverPassword", email);
 };

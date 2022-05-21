@@ -77,14 +77,14 @@ class ResendConfirmationEmail extends Component {
                         </p>
 
                         {this.state.successfullyMessage && (
-                            <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                            <h5 className="text-success font-weight-bold pt-4 text-center text-resend">
                                 <span className="far fa-check-circle fa-lg mb-1"></span>
                                 <span className="">&nbsp;Email was successfully sent!</span>
                             </h5>
                         )}
 
                         {this.state.apiError && (
-                            <h5 className="text-fail font-weight-bold pt-3 text-center text-resend">
+                            <h5 className="text-fail font-weight-bold pt-4 text-center text-resend">
                                 <span className="far fa-times-circle fa-lg mb-1"></span>
                                 <span className="">&nbsp;Email is already confirmed or the server is under maintenance!</span>
                             </h5>

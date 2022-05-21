@@ -207,6 +207,26 @@ public class UserService {
         return false;
     }
 
+    public boolean sendRecoveryEmail(String userEmail) {
+        try {
+            User userDB = userRepository.findByEmail(userEmail);
+            if (userDB == null) {
+                return false;
+            }
+            VerificationToken userToken = verificationTokenService.getTokenByUser(userDB);
+            if (userToken == null) {
+                userToken = new VerificationToken(userDB);
+            }
+            userToken.setPasswordToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            verificationTokenService.saveToken(userToken);
+            emailSender.resetPassword(userToken, userDB);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean changePassword(String email, NewPasswordRequest updatedPassword) {
         try {
             User inDB = userRepository.findByEmail(email);
