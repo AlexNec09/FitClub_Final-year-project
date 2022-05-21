@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
 import { connect } from 'react-redux';
-import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
+import ButtonWithProgress from '../components/ButtonWithProgress';
 import Input from '../components/Input';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 import Spinner from '../components/Spinner';
@@ -47,7 +47,6 @@ export const PasswordResetPage = (props) => {
         const init = () => {
             apiCalls.checkValidToken(token, form.tokenIdentifier)
                 .then((response) => {
-                    console.log("FROM PASSWORD: " + JSON.stringify(response));
                     if (response.data.result === "VALID") {
                         setHasTokenExpired(false);
                     }
@@ -116,70 +115,70 @@ export const PasswordResetPage = (props) => {
         );
     } else if (!hasTokenExpired) {
         pageContent = (
-            <div className="">
-                <div className="containerSecurityChanges card d-flex shadow-sm mt-2">
-                    <div className="alert pb-0 mb-0" role="alert">
-                        <h4 className="pt-1 confirmation-header text-center">
-                            Change Password
-                        </h4>
+            <div className="background-image pt-5" id="background-image">
+                <div className="container p-5 pt-5">
+                    <div className="containerSecurityChanges card d-flex shadow-sm mt-2">
+                        <div className="alert pb-0 mb-0" role="alert">
+                            <h4 className="pt-1 confirmation-header text-center">
+                                Change Password
+                            </h4>
 
-                        <p className="text-secondary pt-3 textConfirmation text-left">
-                            If you would like to change your password, enter a new password in the field below.
-                            Before being able to log back in, you will have to verify your new address by
-                            clicking the activation link in the password we send to your new address.&nbsp;
-                        </p>
+                            <p className="text-center text-secondary pt-3 textConfirmation text-left">
+                                If you would like to change/reset your password, enter a new password in the field below. Make sure both passwords are matching! <br></br>
+                            </p>
 
 
-                        <div className="col-12 mb-3">
-                            <Input
-                                name="newPassword"
-                                label="New Password"
-                                placeholder="Your new password"
-                                type="password"
-                                value={form.newPassword}
-                                onChange={onChange}
-                                hasError={errors.newPassword && true}
-                                error={errors.newPassword}
-                            />
-                        </div>
-
-                        <div className="col-12 mb-3">
-                            <Input
-                                name="newPasswordRepeat"
-                                label="New Password Repeat"
-                                placeholder="Repeat your new password"
-                                type="password"
-                                value={form.newPasswordRepeat}
-                                onChange={onChange}
-                                hasError={passwordRepeatError && true}
-                                error={passwordRepeatError}
-                            />
-                        </div>
-
-                        {successfullyMessage && (
-                            <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
-                                <span className="far fa-check-circle fa-lg mb-1"></span>
-                                <span className="">&nbsp;Password has been successfully changed!
-                                    <br></br>In 5 seconds, you will be redirected to the Login.</span>
-                            </h5>
-                        )}
-
-                        {!successfullyMessage && (
-                            <div className="text-center mt-3">
-                                <ButtonWithProgressForEmails
-                                    onClick={onClickSave}
-                                    disabled={pendingApiCall || passwordRepeatError ? true : false}
-                                    pendingApiCall={pendingApiCall}
-                                    value="Save&nbsp;"
+                            <div className="col-12 mb-3">
+                                <Input
+                                    name="newPassword"
+                                    label="New Password"
+                                    placeholder="Your new password"
+                                    type="password"
+                                    value={form.newPassword}
+                                    onChange={onChange}
+                                    hasError={errors.newPassword && true}
+                                    error={errors.newPassword}
                                 />
                             </div>
-                        )}
 
-                        <p className="text-center display-7 text-secondary text-login-card-bottom pt-5">
-                            For assistance, contact FitClub support at:
-                            <br></br>
-                            <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
-                        </p>
+                            <div className="col-12 mb-3">
+                                <Input
+                                    name="newPasswordRepeat"
+                                    label="New Password Repeat"
+                                    placeholder="Repeat your new password"
+                                    type="password"
+                                    value={form.newPasswordRepeat}
+                                    onChange={onChange}
+                                    hasError={passwordRepeatError && true}
+                                    error={passwordRepeatError}
+                                />
+                            </div>
+
+                            {successfullyMessage && (
+                                <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                    <span className="far fa-check-circle fa-lg mb-1"></span>
+                                    <span className="">&nbsp;Password has been successfully changed!
+                                        <br></br>In 5 seconds, you will be redirected to the Login.</span>
+                                </h5>
+                            )}
+
+                            {!successfullyMessage && (
+                                <div className="text-center mt-4">
+                                    <ButtonWithProgress className="custom-row-edit-button"
+                                        onClick={onClickSave}
+                                        disabled={pendingApiCall || passwordRepeatError ? true : false}
+                                        pendingApiCall={pendingApiCall}
+                                        text="Change Password"
+                                    />
+                                </div>
+                            )}
+
+                            <p className="text-center display-7 text-secondary text-login-card-bottom pt-5">
+                                For assistance, contact FitClub support at:
+                                <br></br>
+                                <ButtonMailto label="fitclub.by.alexnec@gmail.com" mailto="mailto:fitclub.by.alexnec@gmail.com" />
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

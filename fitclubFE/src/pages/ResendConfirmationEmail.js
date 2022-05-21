@@ -4,6 +4,8 @@ import image from '../assets/confirmationEmail.png';
 import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
 import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
+import ButtonWithProgress from '../components/ButtonWithProgress';
+
 
 class ResendConfirmationEmail extends Component {
     state = {
@@ -89,12 +91,12 @@ class ResendConfirmationEmail extends Component {
                         )}
 
                         <div className="text-center pt-4">
-                            <ButtonWithProgressForEmails
+                            <ButtonWithProgress className="custom-row-email-button"
                                 onClick={this.confirmationEmail}
                                 // disabled={disableSubmit || this.state.pendingApiCall}
                                 disabled={this.state.setButtonDisabled}
                                 pendingApiCall={this.state.pendingApiCall}
-                                value="Resend Confirmation Email &nbsp;&nbsp;"
+                                text="Resend Confirmation Email"
                             />
                         </div>
 

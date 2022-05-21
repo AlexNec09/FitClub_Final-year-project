@@ -5,8 +5,9 @@ import * as apiCalls from '../api/apiCalls';
 import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import yes_icon from '../assets/yes-icon.jpg';
+import yes_icon from '../assets/yes-icon.png';
 import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
+import ButtonWithProgress from '../components/ButtonWithProgress';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 
 
@@ -64,7 +65,7 @@ class ConfirmationToken extends Component {
             );
         } else if (this.state.error === false) {
             pageContent = (
-                <div>
+                <div className="background-image pt-5" id="background-image">
                     <div className="container card d-flex p-1 card-confirmation shadow-sm">
                         <div className="alert text-center pb-0 mb-0" role="alert">
                             <div className="">
@@ -95,8 +96,8 @@ class ConfirmationToken extends Component {
 
                             <div className="text-center pt-4 mb-4">
                                 <Link to="/" className="list-group-item-action">
-                                    <ButtonWithProgressForEmails
-                                        value="Back to Home Page &nbsp;&nbsp;"
+                                    <ButtonWithProgress className="custom-row-edit-button"
+                                        text="Back to Home Page &nbsp;&nbsp;"
                                     />
                                 </Link>
                             </div>

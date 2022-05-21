@@ -278,64 +278,69 @@ const MessageFeed = (props) => {
 
   if (page.content.length === 0 && newMessageCount === 0 && hasFullAccess) {
     return (
-      <div className="pt-4">
-        {(props.user && props.loggedInUser.username === props.user.username) && (<div className="card d-flex flex-row p-1">
-          <ProfileImageWithDefault
-            className="rounded-circle m-1"
-            width="32"
-            height="32"
-            image={props.loggedInUser.image}
-          />
-          <div className="flex-fill">
-            <textarea
-              className={textAreaClassName}
-              rows={focused ? 3 : 1}
-              onFocus={onFocus}
-              value={content}
-              onChange={onChangeContent}
-            />
+      <div>
+        <div className="pt-4">
+          {(props.user == null || props.loggedInUser.username === props.user.username) && (<div className="pb-3">
+            <div className="card d-flex flex-row p-2">
+              <ProfileImageWithDefault
+                className="rounded-circle m-1"
+                width="32"
+                height="32"
+                image={props.loggedInUser.image}
+              />
+              <div className="flex-fill">
+                <textarea
+                  className={textAreaClassName}
+                  placeholder="Share something with your followers"
+                  rows={focused ? 3 : 1}
+                  onFocus={onFocus}
+                  value={content}
+                  onChange={onChangeContent}
+                />
 
-            {errors.content && (
-              <span className="invalid-feedback">
-                {errors.content}
-              </span>
-            )}
+                {errors.content && (
+                  <span className="invalid-feedback">
+                    {errors.content}
+                  </span>
+                )}
 
-            {focused && (
-              <div>
-                <div className="pt-2">
-                  <Input type="file" accept="image/png, image/jpeg" onChange={onFileSelect} />
-                  {image && (
-                    <img
-                      className="mt-2 img-thumbnail"
-                      src={image}
-                      alt="uploadedImg"
-                      width="128"
-                      height="64"
-                    />
-                  )}
-                </div>
-                <div className="text-end mt-2">
-                  <ButtonWithProgress
-                    className="btn btn-success"
-                    disabled={pendingApiCall}
-                    onClick={onClickSend}
-                    pendingApiCall={pendingApiCall}
-                    text="Send"
-                  />
-                  <button
-                    className="btn btn-light ms-1"
-                    onClick={resetState}
-                    disabled={pendingApiCall}
-                  >
-                    <i className="fas fa-times"></i> Cancel
-                  </button>
-                </div>
+                {focused && (
+                  <div>
+                    <div className="pt-2">
+                      <Input type="file" accept="image/png, image/jpeg" onChange={onFileSelect} />
+                      {image && (
+                        <img
+                          className="mt-2 img-thumbnail"
+                          src={image}
+                          alt="uploadedImg"
+                          width="128"
+                          height="64"
+                        />
+                      )}
+                    </div>
+                    <div className="text-end mt-2">
+                      <ButtonWithProgress
+                        className="btn btn-success"
+                        disabled={pendingApiCall}
+                        onClick={onClickSend}
+                        pendingApiCall={pendingApiCall}
+                        text="Send"
+                      />
+                      <button
+                        className="btn btn-light ms-1"
+                        onClick={resetState}
+                        disabled={pendingApiCall}
+                      >
+                        <i className="fas fa-times"></i> Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>)}
-        <div className="card card-header text-center">There are no messages</div>
+            </div>
+          </div>)}
+          <div className="card card-header text-center">There are no messages</div>
+        </div>
       </div>
     );
   }

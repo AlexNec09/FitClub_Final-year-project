@@ -192,13 +192,13 @@ class Security extends Component {
                                 </h6>
 
                                 {this.state.isChangePasswordSentSuccessfully && (
-                                    <h5 className="text-success font-weight-bold pt-3 text-center text-resend">
+                                    <h5 className="text-success font-weight-bold pt-4 text-center text-resend">
                                         <span className="far fa-check-circle fa-lg mb-1"></span>
                                         <span className="">&nbsp;Email was successfully sent!</span>
                                     </h5>
                                 )}
 
-                                <div className="container text-center mt-3">
+                                <div className="container text-center mt-4">
                                     <ButtonWithProgress className="custom-row-email-button"
                                         onClick={this.changePassword}
                                         // disabled={disableSubmit || this.state.pendingApiCall}
