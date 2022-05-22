@@ -2,26 +2,22 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-// import { Link } from 'react-router-dom';
 import exclamationSecurity from '../assets/exclamationSecurity.png';
 import * as apiCalls from '../api/apiCalls';
 import changePassword from '../assets/changePassword.png';
 import changeEmail from '../assets/changeEmail.png';
-import ButtonWithProgressForEmails from './ButtonWithProgressForEmails';
 import ButtonWithProgress from "./ButtonWithProgress";
 
 class Security extends Component {
     state = {
         id: this.props.loggedInUser.id,
 
-        //
         pendingApiCallChangeEmail: false,
         successfullyMessageChangeEmail: false,
         setButtonDisabledChangeEmail: false,
         apiErrorChangeEmail: false,
         isChangeMailSentSuccessfully: false,
 
-        //
         pendingApiCallChangePassword: false,
         successfullyMessageChangePassword: false,
         setButtonDisabledChangePassword: false,

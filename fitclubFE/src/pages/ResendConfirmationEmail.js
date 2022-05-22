@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import image from '../assets/confirmationEmail.png';
 import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
-import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
 import ButtonWithProgress from '../components/ButtonWithProgress';
 
 

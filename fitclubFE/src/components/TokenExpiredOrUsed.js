@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ButtonMailto from '../components/ButtonMailto';
-import ButtonWithProgressForEmails from './ButtonWithProgressForEmails';
 import ButtonWithProgress from './ButtonWithProgress';
 import exclamation_icon from '../assets/exclamation-icon.png';
 import { Link } from 'react-router-dom';

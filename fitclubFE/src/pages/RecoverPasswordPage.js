@@ -3,9 +3,6 @@ import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
 import ButtonWithProgress from '../components/ButtonWithProgress';
 import Input from '../components/Input';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import exclamationSecurity from '../assets/exclamationSecurity.png';
 
 export const RecoverPasswordPage = () => {
     const [form, setForm] = useState({

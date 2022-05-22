@@ -6,7 +6,6 @@ import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import yes_icon from '../assets/yes-icon.png';
-import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
 import ButtonWithProgress from '../components/ButtonWithProgress';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
 

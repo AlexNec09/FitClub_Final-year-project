@@ -4,7 +4,6 @@ import queryString from 'query-string';
 import * as apiCalls from '../api/apiCalls';
 import ButtonMailto from '../components/ButtonMailto';
 import { connect } from 'react-redux';
-import ButtonWithProgressForEmails from '../components/ButtonWithProgressForEmails';
 import ButtonWithProgress from '../components/ButtonWithProgress';
 import Input from '../components/Input';
 import TokenExpiredOrUsed from '../components/TokenExpiredOrUsed';
