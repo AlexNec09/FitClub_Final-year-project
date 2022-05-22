@@ -1,10 +1,7 @@
 package com.project.fitclub.service;
 
-import com.project.fitclub.dao.RoleRepository;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.error.NotFoundHandler;
-import com.project.fitclub.model.Role;
-import com.project.fitclub.model.RoleName;
 import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.security.JwtTokenProvider;
@@ -19,18 +16,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     UserRepository userRepository;
-
-    RoleRepository roleRepository;
 
     PasswordEncoder passwordEncoder;
 
@@ -42,11 +35,10 @@ public class UserService {
 
     VerificationTokenService verificationTokenService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
-                       FileService fileService, JwtTokenProvider jwtTokenProvider, EmailSenderService emailSender, VerificationTokenService verificationTokenService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, FileService fileService,
+                       JwtTokenProvider jwtTokenProvider, EmailSenderService emailSender, VerificationTokenService verificationTokenService) {
         super();
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.fileService = fileService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -57,8 +49,6 @@ public class UserService {
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEmailVerificationStatus(false);
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER);
-        user.setRoles(Collections.singleton(userRole));
         VerificationToken newToken = new VerificationToken(user);
         newToken.setEmailToken(jwtTokenProvider.generateVerificationToken(user.getUsername()));
         user.setVerificationToken(newToken);
@@ -66,6 +56,12 @@ public class UserService {
         verificationTokenService.saveToken(newToken);
         emailSender.verifyEmail(savedUser);
         return savedUser;
+    }
+
+    public User saveWithoutSendingEmail(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEmailVerificationStatus(true);
+        return userRepository.save(user);
     }
 
     public User update(long id, UserUpdateVM userUpdate) throws IOException {

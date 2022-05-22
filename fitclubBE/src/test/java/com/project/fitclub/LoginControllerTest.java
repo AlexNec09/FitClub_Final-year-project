@@ -59,7 +59,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_receiveOk() {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -68,7 +68,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUserId() {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -80,7 +80,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersImage() {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -92,7 +92,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersDisplayName() {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -104,7 +104,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_receiveLoggedInUsersUsername() {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -116,7 +116,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withValidCredentials_notReceiveLoggedInUsersPassword() {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -125,23 +125,8 @@ public class LoginControllerTest {
     }
 
     private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {
-//        String jwtToken = null;
-//
         ResponseEntity<UserPrincipal> userPrincipalResponseEntity = testRestTemplate.postForEntity("/api/1.0/auth/login", loggingUser, UserPrincipal.class);
-
         return userPrincipalResponseEntity;
-//
-//        // or Option 2: Creating jwt token by using the jwtUtil.
-//        jwtToken = jwtToken.generateToken(/* pass the required object*/);
-//
-//        // if(jwtToken == null) return;
-//
-//        // then add the token to testRestTemplate's Authorization header like this
-//        testRestTemplate.getRestTemplate().getInterceptors()
-//                .add((request, body, execution) -> {
-//                    request.getHeaders().add("Authorization", "Bearer " + jwtToken);
-//                    return execution.execute(request, body);
-//                });
     }
 
     @Test

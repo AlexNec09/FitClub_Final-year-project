@@ -3,12 +3,15 @@ package com.project.fitclub;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.User;
 import com.project.fitclub.service.UserService;
+import com.project.fitclub.shared.EmailSenderService;
 import com.project.fitclub.shared.GenericResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +42,9 @@ public class UserFollowControllerTest {
 
     @BeforeTransaction
     public void createUsers() {
-        currentUser = userService.save(TestUtil.createValidUser("user1"));
-        userToBeFollowed = userService.save(TestUtil.createValidUser("target-user"));
-        userToBeFollowed2 = userService.save(TestUtil.createValidUser("target-user-2"));
+        currentUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
+        userToBeFollowed2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user-2"));
     }
 
     @Test
@@ -52,7 +55,7 @@ public class UserFollowControllerTest {
 
     @Test
     public void putFollow_whenAuthorizedUserFollowsNonExistingUser_returns404() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate("user1");
 
         long nonExistingUserId = user.getId() + 5;
@@ -62,7 +65,7 @@ public class UserFollowControllerTest {
 
     @Test
     public void putFollow_whenAuthorizedUserFollowsItself_returns403() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate("user1");
 
         ResponseEntity<Object> result = follow(user.getId(), Object.class);
@@ -71,8 +74,8 @@ public class UserFollowControllerTest {
 
     @Test
     public void putFollow_whenAuthorizedUserFollowsAnotherUserForTheFirstTime_returns200() {
-        userService.save(TestUtil.createValidUser("user1"));
-        User userToBeFollowed = userService.save(TestUtil.createValidUser("target-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         authenticate("user1");
 
@@ -130,8 +133,8 @@ public class UserFollowControllerTest {
 
     @Test
     public void putFollow_whenAuthorizedUserFollowsAnotherUser_returnsGenericResponseWithMessage() {
-        userService.save(TestUtil.createValidUser("user1"));
-        User userToBeFollowed = userService.save(TestUtil.createValidUser("target-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         authenticate("user1");
 
@@ -152,7 +155,7 @@ public class UserFollowControllerTest {
 
     @Test
     public void putUnfollow_whenAuthorizedUserUnFollowsNonExistingUser_returns404() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate("user1");
 
         long nonExistingUserId = user.getId() + 5;
@@ -163,7 +166,7 @@ public class UserFollowControllerTest {
 
     @Test
     public void putUnfollow_whenAuthorizedUserUnFollowsItself_returns403() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate("user1");
 
         ResponseEntity<Object> result = unfollow(user.getId(), Object.class);
@@ -234,8 +237,8 @@ public class UserFollowControllerTest {
 
     @Test
     public void putUnfollow_whenAuthorizedUserUnFollowsAnotherUser_returnsGenericResponseWithMessage() {
-        userService.save(TestUtil.createValidUser("user1"));
-        User userToBeFollowed = userService.save(TestUtil.createValidUser("target-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         authenticate("user1");
 

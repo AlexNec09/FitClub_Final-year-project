@@ -24,7 +24,6 @@ public class MessageReactionController {
     UserRepository userRepository;
 
     @PutMapping("/messages/{id:[0-9]+}/like")
-//    @PreAuthorize("hasRole('USER')")
     GenericResponse handleLike(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
         User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
 
@@ -33,7 +32,6 @@ public class MessageReactionController {
     }
 
     @PutMapping("/messages/{id:[0-9]+}/dislike")
-//    @PreAuthorize("hasRole('USER')")
     GenericResponse handleDislike(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
         User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
 

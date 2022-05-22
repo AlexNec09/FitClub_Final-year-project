@@ -2,7 +2,6 @@ package com.project.fitclub;
 
 import com.project.fitclub.dao.MessageReactionRepository;
 import com.project.fitclub.dao.MessageRepository;
-import com.project.fitclub.dao.RoleRepository;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.*;
 import com.project.fitclub.security.JwtTokenProvider;
@@ -48,9 +47,6 @@ public class MessageReactionControllerTest {
     MessageRepository messageRepository;
 
     @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
     MessageService messageService;
 
     @Autowired
@@ -68,7 +64,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putLike_whenAuthorizedUserForUnknownMessage_returns404() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
@@ -84,7 +80,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putLike_whenAuthorizedUserForKnownMessage_savesMessageReactionToDatabase() throws URISyntaxException {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
@@ -103,7 +99,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putLike_whenAuthorizedUserForKnownMessage_returnsSuccessMessage() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
         Message message = messageService.save(user, TestUtil.createValidMessage());
@@ -115,7 +111,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putLike_whenAuthorizedUserAlreadyLikesTheMessage_removesTheReactionFromDatabase() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
         Message message = messageService.save(user, TestUtil.createValidMessage());
@@ -138,7 +134,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putDislike_whenAuthorizedUserForUnknownMessage_returns404() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
@@ -154,7 +150,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putDislike_whenAuthorizedUserForKnownMessage_savesMessageReactionToDatabase() throws URISyntaxException {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
@@ -175,7 +171,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putDislike_whenAuthorizedUserForKnownMessage_returnsSuccessMessage() {
-        User inDB = userService.save(TestUtil.createValidUser("test-user"));
+        User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         authenticate(loggingUser);
 
@@ -188,7 +184,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putDislike_whenAuthorizedUserAlreadyDislikesTheMessage_removesTheReactionFromDatabase() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
         Message message = messageService.save(user, TestUtil.createValidMessage());
@@ -204,7 +200,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putDislike_whenAuthorizedUserAlreadyLikesTheMessage_updatesTheReactionInDatabase() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
         Message message = messageService.save(user, TestUtil.createValidMessage());
@@ -221,7 +217,7 @@ public class MessageReactionControllerTest {
 
     @Test
     public void putLike_whenAuthorizedUserAlreadyDislikesTheMessage_updatesTheReactionInDatabase() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
         Message message = messageService.save(user, TestUtil.createValidMessage());

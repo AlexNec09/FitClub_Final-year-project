@@ -54,7 +54,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_receiveOk() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         ResponseEntity<Object> response = uploadFile(getRequestEntity(), Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -68,7 +68,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_receiveFileAttachmentWithDate() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         ResponseEntity<FileAttachment> response = uploadFile(getRequestEntity(), FileAttachment.class);
         assertThat(response.getBody().getDate()).isNotNull();
@@ -76,7 +76,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_receiveFileAttachmentWithRandomName() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         ResponseEntity<FileAttachment> response = uploadFile(getRequestEntity(), FileAttachment.class);
         assertThat(response.getBody().getName()).isNotNull();
@@ -85,7 +85,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_imageSavedToFolder() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         ResponseEntity<FileAttachment> response = uploadFile(getRequestEntity(), FileAttachment.class);
         String imagePath = appConfiguration.getFullAttachmentsPath() + "/" + response.getBody().getName();
@@ -95,7 +95,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_fileAttachmentSavedToDatabase() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         uploadFile(getRequestEntity(), FileAttachment.class);
         assertThat(fileAttachmentRepository.count()).isEqualTo(1);
@@ -103,7 +103,7 @@ public class FileUploadControllerTest {
 
     @Test
     public void uploadFile_withImageFromAuthorizedUser_fileAttachmentStoredWithFileType() {
-        userService.save(TestUtil.createValidUser("user1"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate();
         uploadFile(getRequestEntity(), FileAttachment.class);
         FileAttachment storedFile = fileAttachmentRepository.findAll().get(0);

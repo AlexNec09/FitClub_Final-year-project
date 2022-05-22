@@ -53,10 +53,9 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/testing5
+    url: jdbc:mysql://localhost:3306/testing6
     username: root
     password: root
-    initialization-mode: always
   jpa:
     hibernate:
       ddl-auto: update

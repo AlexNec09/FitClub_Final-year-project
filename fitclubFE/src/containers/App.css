@@ -619,6 +619,11 @@ a#left-tabs-example-tab-fifth.nav-link.active {
   opacity: 0.8;
 }
 
+.custom-row-edit-button:disabled {
+  background: rgb(34, 193, 195);
+  transition: opacity 0.25s ease-out;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

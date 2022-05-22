@@ -1,6 +1,5 @@
 package com.project.fitclub.controller;
 
-import com.project.fitclub.dao.RoleRepository;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.JwtTokenProvider;

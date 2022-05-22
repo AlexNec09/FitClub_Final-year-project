@@ -206,7 +206,7 @@ public class UserControllerTest {
     public void postUser_whenUserIsInvalid_receiveApiErrorWithValidationErrors() {
         User user = new User();
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
-        assertThat(response.getBody().getValidationErrors().size()).isEqualTo(3);
+        assertThat(response.getBody().getValidationErrors().size()).isEqualTo(4);
     }
 
     @Test
@@ -233,7 +233,7 @@ public class UserControllerTest {
         user.setUsername("abc");
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
         Map<String, String> validationErrors = response.getBody().getValidationErrors();
-        assertThat(validationErrors.get("username")).isEqualTo("Password must have minimum 4 and maximum 255 characters");
+        assertThat(validationErrors.get("username")).isEqualTo("Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters.");
     }
 
     @Test
@@ -247,7 +247,7 @@ public class UserControllerTest {
 
     @Test
     public void postUser_whenAnotherUserHasSameUsername_receiveBadRequest() {
-        userRepository.save(TestUtil.createValidUser());
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser());
         User user = TestUtil.createValidUser();
         ResponseEntity<Object> response = postSignup(user, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -255,7 +255,7 @@ public class UserControllerTest {
 
     @Test
     public void postUser_whenAnotherUserHasSameUsername_receiveMessageOfDuplicateUsername() {
-        userRepository.save(TestUtil.createValidUser());
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser());
         User user = TestUtil.createValidUser();
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
         Map<String, String> validationErrors = response.getBody().getValidationErrors();
@@ -278,7 +278,7 @@ public class UserControllerTest {
 
     @Test
     public void getUsers_whenThereIsAUserInDB_receivePageWithUser() {
-        userRepository.save(TestUtil.createValidUser());
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser());
         ResponseEntity<TestPage<Object>> response = getUsers(new ParameterizedTypeReference<TestPage<Object>>() {
         });
         assertThat(response.getBody().getNumberOfElements()).isEqualTo(1);
@@ -286,7 +286,7 @@ public class UserControllerTest {
 
     @Test
     public void getUsers_whenThereIsAUserInDB_receiveUserWithoutPassword() {
-        userRepository.save(TestUtil.createValidUser());
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser());
         ResponseEntity<TestPage<Map<String, Object>>> response = getUsers(new ParameterizedTypeReference<TestPage<Map<String, Object>>>() {
         });
         Map<String, Object> entity = response.getBody().getContent().get(0);
@@ -297,7 +297,7 @@ public class UserControllerTest {
     public void getUsers_whenPageIsRequiredFor3ItemsPerPageWhereTheDatabaseHas20Users_receive3Users() {
         IntStream.rangeClosed(1, 20).mapToObj(i -> "test-user-" + i)
                 .map(TestUtil::createValidUser)
-                .forEach(userRepository::save);
+                .forEach(userService::saveWithoutSendingEmail);
         String path = API_1_0_USERS + "?page=0&size=3";
         ResponseEntity<TestPage<Object>> response = getUsers(path, new ParameterizedTypeReference<TestPage<Object>>() {
         });
@@ -337,9 +337,9 @@ public class UserControllerTest {
 
     @Test
     public void getUsers_whenUserLoggedIn_receivePageWithoutLoggedInUser() {
-        userService.save(TestUtil.createValidUser("test-user"));
-        userService.save(TestUtil.createValidUser("user2"));
-        userService.save(TestUtil.createValidUser("user3"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         authenticateUser(loggingUser);
 
@@ -351,7 +351,7 @@ public class UserControllerTest {
     @Test
     public void getUserByUsername_whenUserExist_receiveOk() {
         String username = "test-user";
-        userService.save(TestUtil.createValidUser(username));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser(username));
         ResponseEntity<Object> response = getUser(username, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -359,7 +359,7 @@ public class UserControllerTest {
     @Test
     public void getUserByUsername_whenUserExist_receiveUserWithoutPassword() {
         String username = "test-user";
-        userService.save(TestUtil.createValidUser(username));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser(username));
         ResponseEntity<String> response = getUser(username, String.class);
         assertThat(response.getBody().contains("password")).isFalse();
     }
@@ -384,7 +384,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_whenAuthorizedUserSendsUpdateForAnotherUser_receiveForbidden() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         long anotherUserId = user.getId() + 123;
@@ -400,7 +400,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_whenAuthorizedUserSendsUpdateForAnotherUser_receiveApiError() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         long anotherUserId = user.getId() + 123;
@@ -410,7 +410,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_whenValidRequestBodyFromAuthorizedUser_receiveOk() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
         UserUpdateVM updatedUser = createValidUserUpdateVM();
 
@@ -421,7 +421,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_whenValidRequestBodyFromAuthorizedUser_displayNameUpdated() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
         UserUpdateVM updatedUser = createValidUserUpdateVM();
 
@@ -434,7 +434,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_whenValidRequestBodyFromAuthorizedUser_receiveUserVMWithUpdatedDisplayName() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
         UserUpdateVM updatedUser = createValidUserUpdateVM();
 
@@ -446,7 +446,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithSupportedImageFromAuthorizedUser_receiveUserVMWithRandomImageName() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -461,7 +461,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithSupportedImageFromAuthorizedUser_imageIsStoredUnderProfileFolder() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -482,7 +482,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withInvalidRequestBodyWithNullDisplayNameFromAuthorizedUser_receiveBadRequest() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = new UserUpdateVM();
@@ -494,7 +494,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withInvalidRequestBodyWithLessThanMinSizeDisplayNameFromAuthorizedUser_receiveBadRequest() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = new UserUpdateVM();
@@ -507,7 +507,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withInvalidRequestBodyWithMoreThanMaxSizeDisplayNameFromAuthorizedUser_receiveBadRequest() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = new UserUpdateVM();
@@ -528,7 +528,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithJPGImageFromAuthorizedUser_receiveOk() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -543,7 +543,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithGIFImageFromAuthorizedUser_receiveBadRequest() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -558,7 +558,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithTXTImageFromAuthorizedUser_receiveValidationErrorForProfileImage() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -574,7 +574,7 @@ public class UserControllerTest {
 
     @Test
     public void putUser_withValidRequestBodyWithJPGImageForUserWhoHasImage_removesOldImageFromStorage() throws IOException {
-        User user = userService.save(TestUtil.createValidUser("user1"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticate(user.getUsername());
 
         UserUpdateVM updatedUser = createValidUserUpdateVM();
@@ -594,8 +594,8 @@ public class UserControllerTest {
 
     @Test
     public void getUserByName_whenUserExistAndFollowsOthers_returnsUserVMWithFollowCount() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        User targetUser = userService.save(TestUtil.createValidUser("target-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User targetUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         userService.follow(targetUser.getId(), user.getId());
         ResponseEntity<UserVM> result = getUser(user.getUsername(), UserVM.class);
@@ -604,8 +604,8 @@ public class UserControllerTest {
 
     @Test
     public void getUserByName_whenUserExistAndFollowedByOthers_returnsUserVMWithFollowedByCount() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        User targetUser = userService.save(TestUtil.createValidUser("target-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User targetUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         userService.follow(targetUser.getId(), user.getId());
         ResponseEntity<UserVM> result = getUser(targetUser.getUsername(), UserVM.class);
@@ -614,8 +614,8 @@ public class UserControllerTest {
 
     @Test
     public void getUserByName_whenUserExistAndFollowedByCurrentUser_returnsUserVMWithIndicationOfFollowedByCurrentUser() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        User targetUser = userService.save(TestUtil.createValidUser("target-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User targetUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         userService.follow(targetUser.getId(), user.getId());
 
@@ -627,8 +627,8 @@ public class UserControllerTest {
 
     @Test
     public void getUserByName_whenUserExistAndRequestComesUnAuthorized_returnsUserVMWithIsFollowedFalse() {
-        User user = userService.save(TestUtil.createValidUser("user1"));
-        User targetUser = userService.save(TestUtil.createValidUser("target-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User targetUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
         userService.follow(targetUser.getId(), user.getId());
 

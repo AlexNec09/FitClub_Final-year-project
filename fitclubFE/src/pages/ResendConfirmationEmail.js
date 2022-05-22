@@ -87,13 +87,14 @@ class ResendConfirmationEmail extends Component {
                             <h5 className="text-fail font-weight-bold pt-4 text-center text-resend">
                                 <span className="far fa-times-circle fa-lg mb-1"></span>
                                 <span className="">&nbsp;Email is already confirmed or the server is under maintenance!</span>
+                                <br></br>
+                                <span className="">&nbsp;Please refresh this page.</span>
                             </h5>
                         )}
 
                         <div className="text-center pt-4">
                             <ButtonWithProgress className="custom-row-email-button"
                                 onClick={this.confirmationEmail}
-                                // disabled={disableSubmit || this.state.pendingApiCall}
                                 disabled={this.state.setButtonDisabled}
                                 pendingApiCall={this.state.pendingApiCall}
                                 text="Resend Confirmation Email"

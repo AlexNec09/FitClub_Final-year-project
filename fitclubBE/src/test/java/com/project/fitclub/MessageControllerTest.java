@@ -109,7 +109,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveOk() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -138,7 +138,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabase() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -154,7 +154,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedToDatabaseWithTimestamp() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -173,7 +173,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -188,7 +188,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageContentLessThan10CharactersAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -197,14 +197,14 @@ public class MessageControllerTest {
         headers.setBearerAuth(token);
 
         MessageRequest message = new MessageRequest();
-        message.setContent("123456789");
+        message.setContent("1");
         ResponseEntity<Object> result = postMessage(message, headers, Object.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void postMessage_whenMessageContentIs5000CharactersAndUserIsAuthorized_receiveOk() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -221,7 +221,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageContentMoreThan5000CharactersAndUserIsAuthorized_receiveBadRequest() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -239,7 +239,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageContentNullAndUserIsAuthorized_receiveApiErrorWithValidationErrors() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -257,7 +257,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageSavedWithAuthenticatedUserInfo() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -275,7 +275,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_messageCanBeAccessedFromUserEntity() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -294,7 +294,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageIsValidAndUserIsAuthorized_receiveMessageVM() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -310,7 +310,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentMessageRelationIsUpdatedInDatabase() throws IOException, URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -332,7 +332,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_fileAttachmentRelationIsUpdatedInDatabase() throws IOException, URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -354,7 +354,7 @@ public class MessageControllerTest {
 
     @Test
     public void postMessage_whenMessageHasFileAttachmentAndUserIsAuthorized_receiveMessageVMWithAttachment() throws IOException, URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -382,7 +382,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessages_whenThereAreNoMessages_receiveOk() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -396,7 +396,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessages_whenThereAreNoMessages_receivePageWithZeroItems() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -410,7 +410,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessages_whenThereAreMessages_receivePageWithItems() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -429,7 +429,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessages_whenThereAreMessages_receivePageWithMessageVM() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -447,7 +447,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessagesOfUser_whenUserExists_receiveOk() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -469,7 +469,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessagesOfUser_whenUserExists_receivePageWithZeroMessages() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -483,7 +483,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessagesOfUser_whenUserExistWithMessage_receivePageWithMessageVM() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -502,7 +502,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessagesOfUser_whenUserExistWithMultipleMessages_receivePageWithMatchingMessageCount() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -521,7 +521,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessagesOfUser_whenMultipleUsersExistWithMultipleMessages_receivePageWithMatchingMessageCount() throws URISyntaxException {
-        User userWithThreeMessages = userService.save(TestUtil.createValidUser("test-user"));
+        User userWithThreeMessages = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -533,7 +533,7 @@ public class MessageControllerTest {
             messageService.save(userWithThreeMessages, TestUtil.createValidMessage());
         });
 
-        User userWithFiveMessages = userService.save(TestUtil.createValidUser("user2"));
+        User userWithFiveMessages = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
         IntStream.rangeClosed(1, 5).forEach(i -> {
             messageService.save(userWithFiveMessages, TestUtil.createValidMessage());
         });
@@ -545,7 +545,7 @@ public class MessageControllerTest {
 
     @Test
     public void getMessages_whenLoggedIn_returnsMessagesOfFollowed() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -553,8 +553,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         messageService.save(myUser, TestUtil.createValidMessage());
 
         Message lastMessage = messageService.save(user2, TestUtil.createValidMessage());
@@ -575,7 +575,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessages_whenThereAreMessagesOfUnfollowedUsers_receivePageWithItemsProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
@@ -589,7 +589,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessages_whenThereAreMessages_receivePageWithMessageVMBeforeProvidedId() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -597,8 +597,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         messageService.save(myUser, TestUtil.createValidMessage());
 
         Message lastMessage = messageService.save(user2, TestUtil.createValidMessage());
@@ -612,7 +612,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -627,7 +627,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessagesOfUser_whenUserExistAndThereAreMessages_receivePageWithItemsBeforeProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -648,7 +648,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessagesOfUser_whenUserExistThereAreMessages_receivePageWithMessageVMBeforeProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -669,7 +669,7 @@ public class MessageControllerTest {
 
     @Test
     public void getOldMessagesOfUser_whenUserExistThereAreNoMessages_receivePageWithZeroItemsBeforeProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -683,7 +683,7 @@ public class MessageControllerTest {
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        userService.save(TestUtil.createValidUser("user2"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
 
         ResponseEntity<TestPage<MessageVM>> result = getOldMessagesOfUser(fourthMessage.getId(), "test-another-user", headers, new ParameterizedTypeReference<TestPage<MessageVM>>() {
         });
@@ -692,7 +692,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessages_whenThereAreMessages_receiveListOfItemsAfterProvidedId() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -700,8 +700,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message firstMessage = messageService.save(myUser, TestUtil.createValidMessage());
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
@@ -716,7 +716,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessages_whenThereAreMessages_receiveListOfMessageVMAfterProvidedId() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -724,8 +724,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message firstMessage = messageService.save(myUser, TestUtil.createValidMessage());
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
@@ -739,7 +739,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveOk() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -755,7 +755,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesOfUser_whenUserExistAndThereAreMessages_receiveListWithItemsAfterProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -776,7 +776,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesOfUser_whenUserExistThereAreMessages_receiveListWithMessageVMAfterProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -797,7 +797,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesOfUser_whenUserExistThereAreNoMessages_receiveListWithZeroItemsAfterProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -811,7 +811,7 @@ public class MessageControllerTest {
         Message fourthMessage = messageService.save(user, TestUtil.createValidMessage());
         messageService.save(user, TestUtil.createValidMessage());
 
-        userService.save(TestUtil.createValidUser("user2"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
 
         ResponseEntity<List<MessageVM>> result = getNewMessagesOfUser(fourthMessage.getId(), "user2", headers, new ParameterizedTypeReference<List<MessageVM>>() {
         });
@@ -820,7 +820,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesCount_whenThereAreMessages_receiveCountAfterProvidedId() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -828,8 +828,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message firstMessage = messageService.save(myUser, TestUtil.createValidMessage());
         messageService.save(user2, TestUtil.createValidMessage());
         messageService.save(user3, TestUtil.createValidMessage());
@@ -844,7 +844,7 @@ public class MessageControllerTest {
 
     @Test
     public void getNewMessagesCountOfUser_whenThereAreMessages_receiveCountAfterProvidedId() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -865,7 +865,7 @@ public class MessageControllerTest {
 
     @Test
     public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionLikeCount() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -873,8 +873,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message message = messageService.save(myUser, TestUtil.createValidMessage());
 
         messageReactionService.like(message.getId(), myUser);
@@ -890,7 +890,7 @@ public class MessageControllerTest {
 
     @Test
     public void getReactions_whenAnonymouslyGetAllWhenThereIsMessageWithReaction_returnsReactionDislikeCount() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -898,8 +898,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message message = messageService.save(myUser, TestUtil.createValidMessage());
 
         messageReactionService.like(message.getId(), myUser);
@@ -915,7 +915,7 @@ public class MessageControllerTest {
 
     @Test
     public void getReactions_whenThereIsMessageWithReactionWithCurrentLoggedInUser_returnsUsersReaction() throws URISyntaxException {
-        User myUser = userService.save(TestUtil.createValidUser("test-user"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -923,8 +923,8 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message message = messageService.save(myUser, TestUtil.createValidMessage());
 
         messageReactionService.like(message.getId(), myUser);
@@ -941,9 +941,9 @@ public class MessageControllerTest {
 
     @Test
     public void getReactions_whenAnonymouslyGetReactionWhenThereIsMessageWithReaction_returnsNullForUserReaction() {
-        User myUser = userService.save(TestUtil.createValidUser("user1"));
-        User user2 = userService.save(TestUtil.createValidUser("user2"));
-        User user3 = userService.save(TestUtil.createValidUser("user3"));
+        User myUser = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
+        User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
+        User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         Message message = messageService.save(myUser, TestUtil.createValidMessage());
 
         messageReactionService.like(message.getId(), myUser);
@@ -964,7 +964,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenUserIsAuthorized_receiveOk() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -980,7 +980,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenUserIsAuthorized_receiveGenericResponse() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -996,7 +996,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenUserIsAuthorized_messageRemovedFromDatabase() throws URISyntaxException {
-        User user = userService.save(TestUtil.createValidUser("test-user"));
+        User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -1013,7 +1013,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenMessageIsOwnedByAnotherUser_receiveForbidden() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -1021,7 +1021,7 @@ public class MessageControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        User messageOwner = userService.save(TestUtil.createValidUser("message-owner"));
+        User messageOwner = userService.saveWithoutSendingEmail(TestUtil.createValidUser("message-owner"));
         Message message = messageService.save(messageOwner, TestUtil.createValidMessage());
 
         ResponseEntity<Object> result = deleteMessage(message.getId(), headers, Object.class);
@@ -1030,7 +1030,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenMessageDoesNotExist_receiveForbidden() throws URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -1044,7 +1044,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromDatabase() throws IOException, URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 
@@ -1071,7 +1071,7 @@ public class MessageControllerTest {
 
     @Test
     public void deleteMessage_whenMessageHasAttachment_attachmentRemovedFromStorage() throws IOException, URISyntaxException {
-        userService.save(TestUtil.createValidUser("test-user"));
+        userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticateUser(loggingUser);
 

@@ -31,7 +31,6 @@ public class MessageController {
     UserRepository userRepository;
 
     @GetMapping("/messages")
-//    @PreAuthorize("hasRole('USER')")
     Page<?> getAllMessages(Pageable pageable, @CurrentUser UserPrincipal userPrincipal) {
         if (userPrincipal != null) {
             return messageService.getMessagesForUser(pageable, userPrincipal.getId()).map(MessageVM::new);
@@ -40,13 +39,11 @@ public class MessageController {
     }
 
     @GetMapping("/users/{username}/messages")
-//    @PreAuthorize("hasRole('USER')")
     Page<?> getMessagesOfUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable String username, Pageable pageable) {
         return messageService.getMessagesOfUser(username, pageable).map(MessageVM::new);
     }
 
     @PostMapping("/messages")
-//    @PreAuthorize("hasRole('USER')")
     MessageVM createMessage(@Valid @RequestBody Message message, @CurrentUser UserPrincipal userPrincipal) {
         User user = userRepository.findByUsername(userPrincipal.getUsername());
         return new MessageVM(messageService.save(user, message));
