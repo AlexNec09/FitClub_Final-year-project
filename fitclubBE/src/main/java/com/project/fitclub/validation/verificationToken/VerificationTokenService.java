@@ -3,14 +3,8 @@ package com.project.fitclub.validation.verificationToken;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.JwtTokenProvider;
-import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.EmailSenderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class VerificationTokenService {
@@ -93,11 +87,8 @@ public class VerificationTokenService {
             if (userToken == null) {
                 userToken = new VerificationToken(userDB);
             }
-            userToken.setPasswordToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            userToken.setPasswordToken(jwtTokenProvider.generateVerificationToken(userDB.getUsername()));
             saveToken(userToken);
-
-//            userDB.setVerificationToken(verificationToken);
-//            userRepository.save(userDB);
 
             emailSender.changePassword(userToken, userDB);
             return true;
@@ -116,11 +107,8 @@ public class VerificationTokenService {
             if (userToken == null) {
                 userToken = new VerificationToken(userDB);
             }
-            userToken.setEmailToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            userToken.setEmailToken(jwtTokenProvider.generateVerificationToken(userDB.getUsername()));
             saveToken(userToken);
-
-//            userDB.setVerificationToken(verificationToken);
-//            userRepository.save(userDB);
 
             emailSender.changeEmail(userToken, userDB);
             returnValue = true;

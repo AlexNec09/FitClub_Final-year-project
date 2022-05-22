@@ -56,6 +56,9 @@ const MessageFeed = (props) => {
             setNewMessagesCount(response.data.count);
           })
           .catch((error) => {
+            if (props.user) {
+              props.fromChildToParentCallback(true);
+            }
             setHasFullAccess(false);
           })
       }
@@ -74,7 +77,7 @@ const MessageFeed = (props) => {
       };
     }
 
-  }, [props.user, page.content, isLoadingNewMessages, props.loggedInUser, hasFullAccess]);
+  }, [props.user, props, page.content, isLoadingNewMessages, props.loggedInUser, hasFullAccess]);
 
   const onClickLoadMore = () => {
     if (isLoadingOldMessages) {

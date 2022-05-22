@@ -30,6 +30,10 @@ spring:
             enable: true
           auth: true
 
+jwt:
+  secret: FitClubJWTSecretKey
+  expirationInMs: 60480000
+
 ---
 spring:
   config:
@@ -53,7 +57,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/testing6
+    url: jdbc:mysql://localhost:3306/testing7
     username: root
     password: root
   jpa:

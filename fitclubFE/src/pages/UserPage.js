@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import * as apiCalls from "../api/apiCalls";
 import ProfileCard from "../components/ProfileCard";
 import { connect } from "react-redux";
@@ -13,6 +13,7 @@ import ProfileCardForLoggedUser from "../components/ProfileCardForLoggedUser";
 import FeedPage from '../assets/FeedPage.png';
 import userProfileIcon from '../assets/userProfile.jpg';
 import securityIcon from '../assets/security.png';
+import SessionExpired from "../components/SessionExpired";
 
 const reducer = (state, action) => {
   if (action.type === "loading-user") {
@@ -138,6 +139,9 @@ const UserPage = (props) => {
     errors: {},
   });
 
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+
   useEffect(() => {
     const loadUser = () => {
       const username = props.match.params.username;
@@ -220,6 +224,12 @@ const UserPage = (props) => {
       });
   }
 
+  const handleCallback = (isSessionExpired) => {
+    console.log("here");
+    console.log(isSessionExpired);
+    setSessionExpired(isSessionExpired);
+  }
+
   let pageContent;
   if (state.isLoadingUser) {
     pageContent = (
@@ -300,7 +310,7 @@ const UserPage = (props) => {
 
                 <Tab.Pane eventKey="first">
 
-                  {props.loggedInUser.isLoggedIn ? (<div className="pt-4">
+                  {!sessionExpired && props.loggedInUser.isLoggedIn ? (<div className="pt-4">
                     <ProfileCardForLoggedUser
                       user={state.user}
                       isEditable={isEditable}
@@ -330,7 +340,6 @@ const UserPage = (props) => {
                   </div>) : (<div className="pt-4 mt-2">
                     <ProfileCard
                       user={state.user}
-                      isEditable={isEditable}
                       inEditMode={state.inEditMode}
                       onClickEdit={() => dispatch({ type: "edit-mode" })}
                       onClickCancel={() => dispatch({ type: "cancel" })} // inline function
@@ -349,12 +358,23 @@ const UserPage = (props) => {
                       pendingFollowToggleCall={state.pendingFollowToggleCall}
                       errors={state.errors}
                     />
-                  </div>)}
+                    <div className="pt-4">
+                      {props.loggedInUser.isLoggedIn &&
+                        (
+                          <div>
+                            <SessionExpired />
+                          </div>
+                        )}
+                    </div>
+                  </div>
+
+
+                  )}
                 </Tab.Pane>
 
                 <Tab.Pane eventKey="second">
                   <Security
-                    user={state.user}
+                    user={state.user} isSessionExpired={sessionExpired}
                     emailVerificationStatus={props.loggedInUser.emailVerificationStatus}
                   />
                 </Tab.Pane>
@@ -363,7 +383,7 @@ const UserPage = (props) => {
                   <div className="row">
 
                     <div className="col">
-                      <MessageFeed user={props.match.params.username} />
+                      <MessageFeed user={props.match.params.username} fromChildToParentCallback={handleCallback} />
 
                     </div>
 

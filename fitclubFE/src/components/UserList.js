@@ -70,7 +70,7 @@ const UserList = (props) => {
   const { content, first, last } = page;
 
   return (
-    <div className="container pt-4">
+    <div className="container pt-4 mt-2 pb-5 mb-5">
       {
         props.loggedInUser.isLoggedIn && (<div className="input-group">
           <input className="form-control border-end-1 border rounded-pill mb-3" placeholder="Search"

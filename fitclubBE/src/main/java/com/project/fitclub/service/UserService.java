@@ -139,14 +139,10 @@ public class UserService {
             }
             VerificationToken updatedToken = verificationTokenService.getTokenByUser(userDB);
             if (updatedToken == null) {
-                VerificationToken newToken = new VerificationToken(userDB);
-                updatedToken = newToken;
+                updatedToken = new VerificationToken(userDB);
             }
-            updatedToken.setEmailToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            updatedToken.setEmailToken(jwtTokenProvider.generateVerificationToken(userDB.getUsername()));
             verificationTokenService.saveToken(updatedToken);
-
-//            userDB.setEmailVerificationToken(new JwtTokenProvider().generateEmailVerificationToken(userDB.getUsername()));
-//            userRepository.save(userDB);
 
             System.out.println("In resendEmail");
             System.out.println(userDB.getEmail());
@@ -168,6 +164,8 @@ public class UserService {
             if (verificationTokenService.getTokenByPasswordToken(token) == null) {
                 return false;
             }
+        } else if (tokenIdentifier == null) {
+            return jwtTokenProvider.validateToken(token);
         } else return false;
         return jwtTokenProvider.validateToken(token);
     }
@@ -213,7 +211,7 @@ public class UserService {
             if (userToken == null) {
                 userToken = new VerificationToken(userDB);
             }
-            userToken.setPasswordToken(new JwtTokenProvider().generateVerificationToken(userDB.getUsername()));
+            userToken.setPasswordToken(jwtTokenProvider.generateVerificationToken(userDB.getUsername()));
             verificationTokenService.saveToken(userToken);
             emailSender.resetPassword(userToken, userDB);
             return true;
