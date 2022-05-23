@@ -53,7 +53,7 @@ const ProfileCardForLoggedUser = (props) => {
                             <Row>
                                 {props.isFollowable && <div className=" text-center mt-4">
                                     <ButtonWithProgress
-                                        className="custom-row-edit-button"
+                                        className="custom-row-follow-button"
                                         onClick={props.onToggleFollow}
                                         disabled={props.pendingFollowToggleCall}
                                         pendingApiCall={props.pendingFollowToggleCall}
@@ -66,7 +66,7 @@ const ProfileCardForLoggedUser = (props) => {
                     </Col>
 
                     <Col xs={12} md={12} lg={6} xl={3}>
-                        <div className="d-flex justify-content-center personalInfo mt-1 pe-4">
+                        <div className="d-flex justify-content-center personalInfo mt-1 pe-4 pb-3">
                             <img className="" src={personalInfo} width="250" alt="PersonalInfoImg" />
                         </div>
 

@@ -156,17 +156,22 @@ public class UserService {
     }
 
     public boolean checkTokenValidity(String tokenIdentifier, String token) {
-        if (tokenIdentifier.equals("tokenForEmail")) {
-            if (verificationTokenService.getTokenByEmailToken(token) == null) {
+        switch (tokenIdentifier) {
+            case "undefined":
+                return jwtTokenProvider.validateToken(token);
+            case "tokenForEmail":
+                if (verificationTokenService.getTokenByEmailToken(token) == null) {
+                    return false;
+                }
+                break;
+            case "tokenForPassword":
+                if (verificationTokenService.getTokenByPasswordToken(token) == null) {
+                    return false;
+                }
+                break;
+            default:
                 return false;
-            }
-        } else if (tokenIdentifier.equals("tokenForPassword")) {
-            if (verificationTokenService.getTokenByPasswordToken(token) == null) {
-                return false;
-            }
-        } else if (tokenIdentifier == null) {
-            return jwtTokenProvider.validateToken(token);
-        } else return false;
+        }
         return jwtTokenProvider.validateToken(token);
     }
 

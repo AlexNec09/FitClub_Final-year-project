@@ -140,6 +140,7 @@ const UserPage = (props) => {
   });
 
   const [sessionExpired, setSessionExpired] = useState(false);
+  const token = props.loggedInUser.jwt;
 
 
   useEffect(() => {
@@ -149,6 +150,20 @@ const UserPage = (props) => {
         return;
       }
       dispatch({ type: "loading-user" });
+
+      apiCalls.checkValidToken(token)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.result === "VALID") {
+            setSessionExpired(false);
+          } else {
+            setSessionExpired(true);
+          }
+        })
+        .catch((e) => {
+          setSessionExpired(true);
+        });
+
       apiCalls
         .getUser(username)
         .then((response) => {
@@ -159,7 +174,7 @@ const UserPage = (props) => {
         });
     };
     loadUser();
-  }, [props.match.params.username]);
+  }, [props.match.params.username, token]);
 
   const onClickSave = () => {
     const userId = props.loggedInUser.id;
@@ -225,8 +240,6 @@ const UserPage = (props) => {
   }
 
   const handleCallback = (isSessionExpired) => {
-    console.log("here");
-    console.log(isSessionExpired);
     setSessionExpired(isSessionExpired);
   }
 

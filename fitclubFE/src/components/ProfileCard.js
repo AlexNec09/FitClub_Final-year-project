@@ -4,7 +4,7 @@ import Input from './Input';
 import ButtonWithProgress from './ButtonWithProgress';
 
 const ProfileCard = (props) => {
-    const { displayName, username, image, followed } = props.user;
+    const { displayName, username, image } = props.user;
 
     const showEditButton = props.isEditable && !props.inEditMode;
 
@@ -19,7 +19,12 @@ const ProfileCard = (props) => {
                     className='shadow rounded-circle' />
             </div>
             <div className='card-body text-center'>
-                {!props.inEditMode && <h4>{`${displayName}@${username}`}</h4>}
+                {!props.inEditMode && <div>
+                    <h5 className="display-6 text-unauthorized-access-header">
+                        {username}
+                    </h5>
+                    <h4>{displayName}</h4>
+                </div>}
                 {props.inEditMode && (
                     <div className="mb-2">
                         <Input
@@ -66,17 +71,8 @@ const ProfileCard = (props) => {
                             </button>
                         </div>
                     )}
-                {props.isFollowable && <div className="mx-2 text-center">
-                    <ButtonWithProgress
-                        className="btn btn-primary"
-                        onClick={props.onToggleFollow}
-                        disabled={props.pendingFollowToggleCall}
-                        pendingApiCall={props.pendingFollowToggleCall}
-                        text={followed ? 'Unfollow' : 'Follow'}
-                    />
-                </div>}
             </div>
-        </div>
+        </div >
     );
 };
 

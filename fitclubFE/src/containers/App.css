@@ -630,3 +630,25 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
+
+.custom-row-follow-button {
+  border-radius: 25px;
+  width: 35%;
+  height: 35px;
+  font-size: 1rem;
+  color: rgb(254, 231, 231);
+  font-weight: 600;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgba(0, 90, 205, 1) 0%, rgba(0, 50, 255, 1) 100%);
+  border: 0px;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-follow-button:hover {
+  opacity: 0.8;
+}
+
+.custom-row-follow-button:disabled {
+  background: rgb(92, 96, 132);
+  transition: opacity 0.25s ease-out;
+}
