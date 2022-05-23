@@ -34,14 +34,5 @@
     \endverb
     \field{journaltitle}{ReactJS}
   \endentry
-
-  \entry{.springjpa}{misc}{}
-    \field{labeltitlesource}{title}
-    \field{title}{Spring JPA}
-    \verb{url}
-    \verb https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
-    \endverb
-    \field{journaltitle}{Spring JPA}
-  \endentry
 \enddatalist
 \endinput

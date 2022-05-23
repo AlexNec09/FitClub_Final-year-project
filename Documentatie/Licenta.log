@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  23 MAY 2022 23:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  24 MAY 2022 00:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -828,7 +828,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--30
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Licenta.out' has not changed.
-(rerunfilecheck)             Checksum: A52DB1BAAD936AEE771BA603EBD49B62;1002.
+(rerunfilecheck)             Checksum: 09C19633CE12F86E53E372C0C2FAE93F;997.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                Licenta
@@ -839,10 +839,10 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 19316 strings out of 478582
- 338644 string characters out of 2844816
- 986506 words of memory out of 3000000
- 37233 multiletter control sequences out of 15000+600000
+ 19311 strings out of 478582
+ 338463 string characters out of 2844816
+ 986284 words of memory out of 3000000
+ 37229 multiletter control sequences out of 15000+600000
  477128 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,8n,68p,1823b,1778s stack positions out of 10000i,1000n,20000p,200000b,80000s
@@ -861,9 +861,9 @@ rs/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><
 C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti
 12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
 /cm/cmtt12.pfb>
-Output written on Licenta.pdf (8 pages, 184339 bytes).
+Output written on Licenta.pdf (8 pages, 183007 bytes).
 PDF statistics:
- 185 PDF objects out of 1000 (max. 8388607)
- 33 named destinations out of 1000 (max. 500000)
+ 182 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 500000)
  75 words of extra memory for PDF output out of 10000 (max. 10000000)
 
