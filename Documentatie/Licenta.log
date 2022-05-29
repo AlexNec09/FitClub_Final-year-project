@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  28 MAY 2022 17:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  29 MAY 2022 12:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -554,7 +554,8 @@ Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
 \@quotelevel=\count414
 \@quotereset=\count415
 (Licenta.aux (TeX_files/cover.aux) (TeX_files/chapter01.aux)
-(TeX_files/chapter02.aux))
+(TeX_files/chapter02.aux) (TeX_files/chapter03.aux) (TeX_files/chapter04.aux)
+(TeX_files/chapter05.aux))
 \openout1 = `Licenta.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
@@ -651,7 +652,7 @@ Package biblatex Info: Reference segment=0 on input line 22.
 
 pdfTeX warning: pdflatex.exe (file ./images/Logo-UT-MI-SPOT-RO.pdf): PDF inclus
 ion: found PDF version <1.6>, but at most version <1.5> allowed
-<./images/Logo-UT-MI-SPOT-RO.pdf, id=103, 198.0198pt x 83.83319pt>
+<./images/Logo-UT-MI-SPOT-RO.pdf, id=131, 198.0198pt x 83.83319pt>
 File: ./images/Logo-UT-MI-SPOT-RO.pdf Graphic file (type pdf)
 <use ./images/Logo-UT-MI-SPOT-RO.pdf>
 Package pdftex.def Info: ./images/Logo-UT-MI-SPOT-RO.pdf  used on input line 5.
@@ -674,18 +675,25 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 3.
-)
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.35 ... {4}Utilizarea aplicației}{22}{chapter.4}
+                                                  % [1
+
+
+
+])
 \tf@toc=\write5
 \openout5 = `Licenta.toc'.
 
- [2
-
-
-
-]
+ [2]
 \openout2 = `./TeX_files/chapter01.aux'.
 
- (TeX_files/chapter01.tex
+
+(TeX_files/chapter01.tex
 Capitolul 1.
 
 Underfull \hbox (badness 10000) in paragraph at lines 4--5
@@ -880,7 +888,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 86--87
 
  []
 
-<images//funct-app-web.png, id=206, 501.875pt x 444.66125pt>
+<images//funct-app-web.png, id=245, 501.875pt x 444.66125pt>
 File: images//funct-app-web.png Graphic file (type png)
 <use images//funct-app-web.png>
 Package pdftex.def Info: images//funct-app-web.png  used on input line 90.
@@ -890,7 +898,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 95--97
 
  []
 
-<images//2level-arch.jpg, id=212, 463.13025pt x 200.54926pt>
+<images//2level-arch.jpg, id=251, 463.13025pt x 200.54926pt>
 File: images//2level-arch.jpg Graphic file (type jpg)
 <use images//2level-arch.jpg>
 Package pdftex.def Info: images//2level-arch.jpg  used on input line 103.
@@ -911,7 +919,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 122--123
 
  []
 
-<images//3level-arch.png, id=220, 463.13025pt x 200.54926pt>
+<images//3level-arch.png, id=258, 463.13025pt x 200.54926pt>
 File: images//3level-arch.png Graphic file (type png)
 <use images//3level-arch.png>
 Package pdftex.def Info: images//3level-arch.png  used on input line 128.
@@ -984,7 +992,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 182--183
 
  []
 
-<images//mvc-arch.png, id=238, 803.0pt x 501.875pt>
+<images//mvc-arch.png, id=276, 803.0pt x 501.875pt>
 File: images//mvc-arch.png Graphic file (type png)
 <use images//mvc-arch.png>
 Package pdftex.def Info: images//mvc-arch.png  used on input line 186.
@@ -1034,68 +1042,119 @@ Underfull \hbox (badness 10000) in paragraph at lines 221--223
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 227--228
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--230
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 233--234
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 235--236
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 242--243
+Underfull \hbox (badness 10000) in paragraph at lines 230--231
 
  []
 
 [17]
-Overfull \hbox (2.82118pt too wide) in paragraph at lines 247--248
+Underfull \hbox (badness 10000) in paragraph at lines 237--239
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--242
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 245--246
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 247--248
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 251--252
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 253--254
+
+ []
+
+[18]
+Underfull \hbox (badness 10000) in paragraph at lines 260--261
+
+ []
+
+
+Overfull \hbox (2.82118pt too wide) in paragraph at lines 265--266
 []\OT1/cmr/m/n/12 Include un su-port ^^^Pncorporat ^^^Pmbog^^Ua[]it pen-tru dez
 vol-ta-rea Node.js
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--252
+Underfull \hbox (badness 10000) in paragraph at lines 268--270
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 257--258
+Underfull \hbox (badness 10000) in paragraph at lines 275--276
 
  []
 
-[18]
-Overfull \hbox (6.1804pt too wide) in paragraph at lines 262--263
+[19]
+Overfull \hbox (6.1804pt too wide) in paragraph at lines 280--281
 []\OT1/cmr/m/n/12 Suport^^Ua com-ple-ta-rea in-te-li-gent^^Ua a co-du-lui ba-za
 t^^Ua pe con-text. Ofer^^Ua
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--268
+Underfull \hbox (badness 10000) in paragraph at lines 284--286
 
  []
 
-) [19] [20
+) [20]
+\openout2 = `./TeX_files/chapter03.aux'.
+
+ (TeX_files/chapter03.tex
+Capitolul 3.
+) [21
+
+
+
+
+]
+\openout2 = `./TeX_files/chapter04.aux'.
+
+ (TeX_files/chapter04.tex
+Capitolul 4.
+) [22
+
+
+
+
+]
+\openout2 = `./TeX_files/chapter05.aux'.
+
+ (TeX_files/chapter05.tex
+Capitolul 5.
+) [23
+
+
+
+
+] [24
 
 
 
 ] (Licenta.aux (TeX_files/cover.aux) (TeX_files/chapter01.aux)
-(TeX_files/chapter02.aux))
+(TeX_files/chapter02.aux) (TeX_files/chapter03.aux) (TeX_files/chapter04.aux)
+(TeX_files/chapter05.aux))
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Licenta.out' has not changed.
-(rerunfilecheck)             Checksum: 257A363AA30F867230AAAF3D29ED0237;3768.
+(rerunfilecheck)             Checksum: A44A0FA4128653211F1E29290469EFA9;4595.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                Licenta
@@ -1106,13 +1165,13 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 19438 strings out of 478582
- 340723 string characters out of 2844816
- 990765 words of memory out of 3000000
- 37309 multiletter control sequences out of 15000+600000
+ 19544 strings out of 478582
+ 344481 string characters out of 2844816
+ 998706 words of memory out of 3000000
+ 37382 multiletter control sequences out of 15000+600000
  478378 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,68p,1823b,1779s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 60i,8n,68p,1823b,2073s stack positions out of 10000i,1000n,20000p,200000b,80000s
  <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1
 200.pk> <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
 tcbx1200.pk><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
@@ -1131,9 +1190,9 @@ cm/cmr8.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (20 pages, 534530 bytes).
+Output written on Licenta.pdf (25 pages, 547219 bytes).
 PDF statistics:
- 356 PDF objects out of 1000 (max. 8388607)
- 70 named destinations out of 1000 (max. 500000)
- 226 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 416 PDF objects out of 1000 (max. 8388607)
+ 82 named destinations out of 1000 (max. 500000)
+ 282 words of extra memory for PDF output out of 10000 (max. 10000000)
 

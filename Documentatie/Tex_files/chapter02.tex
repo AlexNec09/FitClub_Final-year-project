@@ -222,6 +222,24 @@ Totuși, React are anumite limitări:
 	\newline
 \end{itemize}
 
+\section{JSON Web Token}
+JWT\footnote{JSON Web Token}, este un mecanism utilizat pentru a partaja informații între două părți în siguranță - un client și un server. În cele mai multe cazuri, JWT este la bază un JSON codificat care conține un set de declarații și o semnătură. De obicei, este utilizat în contextul diverselor mecanisme de autentificare, pentru a partaja informații legate de utilizator. Este, de asemenea, o modalitate populară de autentificare/autorizare a utilizatorilor într-o arhitectură de microservicii.
+
+Autentificarea JWT este un mecanism de autentificare fără stare, bazat pe token-uri, unde aceste token-uri, odată generate, nu mai pot fi modificate. Este utilizat în mod popular ca o sesiune fără stare bazată pe client, ceea ce înseamnă că serverul nu trebuie să se bazeze în totalitate pe un depozit de date sau pe o bază de date pentru a salva informațiile despre sesiune.\newline
+
+JWT-urile pot fi criptate, dar de obicei sunt codificate și semnate. Scopul JWT-urilor semnate nu este de a ascunde datele, ci de a asigura autenticitatea acestora.\newline
+
+Un JSON Web Token este împărțit în trei șiruri consecutive de caractere, separate print-un punct de suspensie:
+
+\begin{itemize}
+	\item{Primul șir reprezintă un Header, codificat în base64, în care se scrie tipul de token, algoritmul de semnătură utilizat etc.}
+	\item{Al doilea șir de caractere va conține informațiile ce se doresc a fi reținute în componența token-ului pentru a fi utilizate ulterior, cum ar fi drepturile persoanei care deține acest token, etc. Aceste informații sunt structurate sub forma "subiect-informație": "informație-concretă". În acest context, apare noțiunea de "claims", ce reprezintă subiecte speciale care vor conține informații speciale, cum ar fi data de valabilitate a token-ului, numele serverului care a emis JWT-ul etc.}
+	\item{Al treilea șir reprezintă semnătura. Scopul este de a concatena prima și a doua și apoi de a le hash-ui cu o cheie secretă. Astfel, este posibilă verificarea integrității token-ului, deoarece, dacă primul sau al doilea șir este modificat, al treilea șir nu va mai corespunde și se va ști că token-ul a fost modificat și, prin urmare, nu este valid.}
+	\newline
+\end{itemize}
+
+Așadar, utilizarea unui astfel de mecanism de securitate devine relevantă în contextul protejării integrității informațiilor conținute în baza de date, deoarece fiecare utilizator primește un token unic în momentul autentificării pe site, ceea ce face ca utilizarea API-urilor disponibile de către orice altă sursă necunoscută să nu fie permisă.\newline
+
 \section{MySQL}
 
 MySQL este un sistem de gestionare a bazelor de date care permite stocarea datelor într-un mod structurat (bază de date, tabele, câmpuri, înregistrări etc.). Nucleul acestui sistem permite accesul la informațiile stocate prin intermediul unui limbaj specific numit SQL.\newline
