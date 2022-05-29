@@ -1,4 +1,55 @@
 \chapter{Proiectarea aplicației}
-\section{Partea de server}
-Server
+Aplicația FitClub este bazată pe doua mari module:
+
+\paragraph{•  RESTful API Web Service pe partea de server -}Acesta este creierul aplicației în sine unde se fac operațiile CRUD și accesăm API-uri înainte de a returna date structurate aplicației client-side.
+
+\paragraph{•  Partea de client care interacționează cu Web Service -}Se realizează apeluri către Web Service-ul descris anterior, și se conectează elementele de UI pentru a accepta datele pe care ar trebui să le vadă fiecare tip de utilizator.\newline
+
+\section{Implementarea server-ului web}
+
+\subsection{Securitatea aplicației}
+\lstset{frame=tb}
+
+Pentru a spori securitatea, am configurat manual comportamentul prin care Spring Security interacționează cu aplicația. Implementarea corespunzătoare se află în clasa \code{SecurityConfiguration}, unde am suprascris metoda \code{configure} din care putem accesa obiectul corespunzător HttpSecurity care este obiectul de configurare utilizat de Spring Security, și în acest mod, putem să-i modificăm comportamentul. În mod implicit, Spring Security permite CSRF\footnote{Cross-site request forgery}, care este la bază un token generat de back-end care caută acest token pentru a fi adăugat la cererile ulterioare de tip POST sau PUT generate de client. Am decis să nu folosesc acest token, deoarece aplicația folosește JWT.\newline
+
+Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-urile necesare pentru a evita cazul în care Spring să respingă cererile ulterioare, returnând codul 403 FORBIDDEN.\newline
+În acest caz, am folosit \code{http.authorizeRequests().antMatchers()} pentru a aplica autorizația la una sau mai multe căi, reprezentate prin tipul de cerere (HTTPMethod) și URL-ul corespunzător, pe care le specific în \code{antMatchers()}.\newline
+
+ \begin{lstlisting}[language=Java]
+	http.
+		authorizeRequests().and()
+		.exceptionHandling()
+		.authenticationEntryPoint(unauthorizedHandler)
+		.and()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.authorizeRequests()
+		.antMatchers("/images/**", "/api/1.0/users/find/{search}", "/api/1.0/auth/**").permitAll()
+		.antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
+		.antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/posts").authenticated()
+		.antMatchers(HttpMethod.POST, "/api/1.0/posts/upload").authenticated()
+		.antMatchers(HttpMethod.POST, "/api/1.0/posts/**").authenticated()
+		.antMatchers(HttpMethod.DELETE, "/api/1.0/posts/{id:[0-9]+}").authenticated()
+		.antMatchers(HttpMethod.PUT, "/api/1.0/posts/{id:[0-9]+}/like").authenticated()
+		.antMatchers(HttpMethod.PUT, "/api/1.0/posts/{id:[0-9]+}/dislike").authenticated()
+		.antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
+		.antMatchers(HttpMethod.GET, "/api/1.0/posts/{id:[0-9]+}").authenticated()
+		.antMatchers(HttpMethod.GET, "/api/1.0/posts/**").authenticated()
+		.and().authorizeRequests().anyRequest().permitAll();
+\end{lstlisting}
+
+În codul de mai sus, se remarcă faptul că ordinea din această configurare este foarte importantă, deoarece dorim să asigurăm totuși un acces limitat unui vizitator atunci când accesează site-ul. Astfel, i se va permite să se autentifice, să caute prin utilizatorii deja existenți și să le vadă poza de profil. De asemenea, pot exista și endpoint-uri care sunt permise să treacă de partea de validare a Spring Security, însă în cadrul acestei aplicații, funcționalitățile de bază necesită verificări de autorizare din partea fiecărui utilizator.\newline
+
+În contextul folosirii JSON Web Token, am personalizat și modul în care aplicația va gestiona excepțiile ce vor rezulta din punctul de intrare pentru autentificare, definit în cadrul clasei \code{JwtAuthenticationEntryPoint}. Pentru a oferi un context, acest punct de intrare pentru autentificare gestionează excepțiile care trebuie aruncate atunci când un utilizator încearcă să acceseze o resursă care necesită autentificare, cum ar fi posibilitatea de a vedea postările unui alt utilizator.\newline
+
+În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un REST API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea și de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
+
+De asemenea, în cadrul fișierului de configurări, am ales sa evit injectarea directa a valorilor, și am creat o clasă denumita \code{AppConfiguration} pentru aceste proprietăți personalizate. Presupunând că este necesară o proprietate pe care dorim să o numim \code{uploadsPath} în cadrul aplicației, atunci, pentru ca Spring să o poată recunoaște în fișierul de configurări denumit \code{application.yml}, o vom scrie prin unirea cuvintelor cu liniuță, adica \code{uploads-path}.
+Pentru această clasă, trebuie, de asemenea, să folosim adnotarea \code{@ConfigurationProperties}, care este necesară pentru a lega proprietățile externe de acest obiect și putem, de asemenea, să definim un prefix pentru aceste proprietăți personalizate, cum ar fi "fitclub". Concret, în fișierul de configurări \code{application.yml}, valoarea setată prin \code{fitclub.uploads-path} va seta așadar valoarea proprietății personalizate din clasă.\newline 
+Așadar, utilitatea acestei clase se rezumă la accesarea rapidă a căii unde se vor salva atașamentele ce pot veni de pe partea de client, fie din schimbarea pozei de profil a utilizatorului sau din atașarea unei imagini la o postare.\newline
+
+\subsection{Utilizarea JWT}
+
+
 \label{chap:03}

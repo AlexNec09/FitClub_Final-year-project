@@ -21,24 +21,25 @@ Site-urile web sunt așadar compuse din diverse pagini HTML legate între ele, s
 Browser-ul folosit de către utilizatori este capabil, astfel, să interpreteze acest limbaj, fară să țină cont de majuscule sau minuscule, afișând rezultatul prin intermediul unei ferestre web.\newline\newline
 
 \textbf{ Organizarea unui document HTML:}\newline
+\lstset{frame=none}
 \begin{itemize}
 	\item
- \begin{lstlisting}[language=html]
+ \begin{lstlisting}[language=HTML]
   <html>  </html>
 \end{lstlisting}
 Acest tag reprezintă elementul de nivel superior sau rădăcina oricărui document HTML. Browser-ul înțelege prin intermediul acestui tag că este vorba de un fișier HTML pentru a-l putea afișa. De asemenea, toate celelalte tag-uri trebuie să fie descendente ale acestui tag.
 	\item
-\begin{lstlisting}[language=html]
+\begin{lstlisting}[language=HTML]
   <head>  </head>
 \end{lstlisting}
 Între aceste tag-uri sunt conținute informații care pot fi citite automat (metadate) despre document precum titlul, script-urile, iar acestea vor fi prelucrate de browser.
 	\item
-\begin{lstlisting}[language=html]
+\begin{lstlisting}[language=HTML]
   <title>  </title>
 \end{lstlisting}
 Aceste tag-uri sunt folosite pentru a da un titlu documentului. Astfel, acest text se va afișa în bara de titlu a browser-ului.
 	\item
-\begin{lstlisting}[language=html]
+\begin{lstlisting}[language=HTML]
   <body>  </body>
 \end{lstlisting}
 Într-un document HTML, poate exista o singură astfel de pereche de tag-uri, ce reprezintă conținutul documentului care va fi afișat pe ecran.\newline
@@ -62,9 +63,9 @@ Așadar, folosind Bootstrap, se pot crea dropdown-uri, alerte, pop-up-uri, navig
 
 \section{CSS}
 
-CSS\footnote{Cascading Style Sheets} permite un control exact asupra aspectului elementelor HTML în browser, și astfel, se pot crea interfețe de utilizator reprezentative, fiecare pagină web putând avea un design unic. În CSS se poate defini culoarea, dimensiunea și poziția textului și a altor etichete HTML, în timp ce fișierele HTML definesc conținutul și organizarea acestuia.\newline
+CSS\footnote{Cascading Style Sheets} permite un control exact asupra aspectului elementelor HTML în browser, și astfel, se pot crea interfețe de utilizator reprezentative, fiecare pagină web putând avea un design unic. În CSS se poate defini dimensiunea, culoarea, poziția textului și a altor etichete HTML, în timp ce fișierele HTML definesc conținutul și organizarea acestuia.\newline
 
-HTML poate defini atât structura, cât și prezentarea, dar WWW\footnote{World Wide Web} recomandă utilizarea CSS, pentru a separa structura unui document HTML de prezentarea sa, deoarece în loc să definească stilul fiecărui tabel și al fiecărui bloc de text în HTML-ul unei pagini, CSS ajută dezvoltatorii front-end să creeze un aspect uniform pe mai multe pagini ale unui site web, definindu-le o singură dată într-un fișier/document CSS, având extensia specifică ".css".
+HTML poate defini atât structura, cât și prezentarea, dar WWW\footnote{World Wide Web} recomandă utilizarea CSS, pentru a separa structura unui document HTML de prezentarea sa, deoarece în loc să se definească stilul fiecărui bloc de text și al fiecărui tabel în HTML-ul unei pagini web, CSS sprijină dezvoltatorii front-end să creeze un aspect uniform ce se poate aplica pe mai multe pagini ale unui site web, definindu-le o singură dată într-un fișier/document CSS, având extensia specifică ".css".
 
 \section{Funcționarea unei aplicații web}
 
@@ -209,7 +210,7 @@ Dacă o componentă a paginii web tocmai a fost actualizată (de exemplu, dacă 
 
 Așadar, React nu este un framework, ci mai exact o bibliotecă, deoarece se ocupă doar de redarea interfețelor de utilizare și rezervă multe lucruri la discreția proiectelor individuale, putând fi considerată "View-ul" în modelul MVC. De asemenea, bibliotecile externe pot ajuta dezvoltatorul să utilizeze atât funcționalitățile HTML, cât și cele CSS și să le construiască în JSX.\newline
 
-\textbf{Observație}: JSX este o sintaxă de extensie JavaScript utilizată în React pentru a scrie cu ușurință HTML și JavaScript împreună.
+\textbf{Observație}: JSX este o sintaxă de extensie JavaScript utilizată în React cu scopul de a scrie cu ușurință HTML și JavaScript împreună.
 \newline
 
 

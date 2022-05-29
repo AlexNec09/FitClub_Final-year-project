@@ -12,7 +12,20 @@
 \usepackage{float} % For placement of figures, tables, and other objects
 \graphicspath{{images/}} % use lowercase to avoid errors for typing
 \usepackage{enumerate}
+\newcommand*\code[1]{\texttt{#1}}
 
+\lstset{frame=tb,
+	language=Java,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
 
 
 \usepackage[backend=bibtex,natbib=true,style=numeric,sorting=none]{biblatex}
@@ -23,8 +36,8 @@
 	
 \include{./TeX_files/cover}
 	
-\tableofcontents
 \setcounter{page}{2}
+\tableofcontents
 \include{./TeX_files/chapter01}
 \include{./TeX_files/chapter02}
 \include{./TeX_files/chapter03}
