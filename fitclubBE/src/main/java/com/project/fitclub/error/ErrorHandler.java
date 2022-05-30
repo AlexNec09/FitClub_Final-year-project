@@ -17,7 +17,7 @@ public class ErrorHandler implements ErrorController {
     private ErrorAttributes errorAttributes;
 
     @RequestMapping("/error")
-    ApiError handleError(WebRequest webRequest) {
+    ApiError handleError(WebRequest webRequest){
         Map<String, Object> attributes = errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
 
         int status = (Integer) attributes.get("status");

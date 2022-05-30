@@ -13,7 +13,7 @@ describe('ProfileCard', () => {
     describe('Layout', () => {
         it('displays he displayName@username', () => {
             const { queryByText } = render(<ProfileCard user={user} />);
-            const userInfo = queryByText('display1@user1');
+            const userInfo = queryByText('display1');
             expect(userInfo).toBeInTheDocument();
         });
 
@@ -65,7 +65,7 @@ describe('ProfileCard', () => {
 
         it('hides the displayName@username in edit mode', () => {
             const { queryByText } = render(<ProfileCard user={user} inEditMode={true} />);
-            const userInfo = queryByText('display1@user1');
+            const userInfo = queryByText('display1');
             expect(userInfo).not.toBeInTheDocument();
         });
 

@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 import configureStore from "../redux/configureStore";
 import axios from "axios";
 
-apiCalls.loadPosts = jest.fn().mockResolvedValue({
+apiCalls.loadMessages = jest.fn().mockResolvedValue({
   data: {
     content: [],
     number: 0,
@@ -51,7 +51,7 @@ const mockFailUpdateUser = {
   response: {
     data: {
       validationErrors: {
-        displayName: "It must have minimum 4 and maximum 255 characters",
+        displayName: "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters.",
         image: "Only PNG and JPG files are allowed",
       },
     },
@@ -87,6 +87,7 @@ const setUserOneLoggedInStorage = () => {
       id: 1,
       username: "user1",
       displayName: "displayName1",
+      email: "email1@mail.com",
       image: "image1.png",
       password: "P4ssword",
       isLoggedIn: true,
@@ -219,14 +220,16 @@ describe("HomePage", () => {
     });
 
     it("returns to non edit mode after successful updateUser api call", async () => {
-      const { findByText, queryByRole } = await setupForEdit();
+      const { queryByRole } = await setupForEdit();
       apiCalls.updateUser = jest.fn().mockResolvedValue(mockSuccessUpdateUser);
 
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
-
-      const editButtonAfterClickingSave = await findByText("Edit Profile");
-      expect(editButtonAfterClickingSave).toBeInTheDocument();
+      await waitFor(() => {
+        const editButtonAfterClickingSave = queryByRole("button", { name: "Edit Profile" });
+        expect(editButtonAfterClickingSave).toBeInTheDocument();
+        fireEvent.click(editButtonAfterClickingSave);
+      });
     });
 
     it("return to original displayName after its changed in edit mode but cancelled", async () => {
@@ -252,8 +255,12 @@ describe("HomePage", () => {
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
 
-      const editButtonAfterClickingSave = await findByText("Edit Profile");
-      fireEvent.click(editButtonAfterClickingSave);
+      let editButtonAfterClickingSave;
+      await waitFor(() => {
+        editButtonAfterClickingSave = queryByRole("button", { name: "Edit Profile" });
+        expect(editButtonAfterClickingSave).toBeInTheDocument();
+        fireEvent.click(editButtonAfterClickingSave);
+      });
 
       displayInput = container.querySelector("input");
       fireEvent.change(displayInput, {
@@ -310,10 +317,13 @@ describe("HomePage", () => {
       const saveButton = queryByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
 
-      const editButtonAfterClickingSave = await findByText("Edit Profile");
-      fireEvent.click(editButtonAfterClickingSave);
+      await waitFor(() => {
+        const editButtonAfterClickingSave = queryByRole("button", { name: "Edit Profile" });
+        expect(editButtonAfterClickingSave).toBeInTheDocument();
+        fireEvent.click(editButtonAfterClickingSave);
+      });
 
-      const saveButtonAfterSecondEdit = await findByText("Save");
+      const saveButtonAfterSecondEdit = queryByText("Save");
       expect(saveButtonAfterSecondEdit).not.toBeDisabled();
     });
 
@@ -352,7 +362,7 @@ describe("HomePage", () => {
       });
 
       const errorMessage = queryByText(
-        "It must have minimum 4 and maximum 255 characters"
+        "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters."
       );
       expect(errorMessage).toBeInTheDocument();
     });
@@ -383,7 +393,7 @@ describe("HomePage", () => {
       fireEvent.change(displayInput, { target: { value: "new-display-name" } });
 
       const errorMessage = queryByText(
-        "It must have minimum 4 and maximum 255 characters"
+        "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters."
       );
       expect(errorMessage).not.toBeInTheDocument();
     });
@@ -425,7 +435,7 @@ describe("HomePage", () => {
       fireEvent.click(queryByText("Edit Profile"));
 
       const errorMessage = queryByText(
-        "It must have minimum 4 and maximum 255 characters"
+        "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters."
       );
       expect(errorMessage).not.toBeInTheDocument();
     });

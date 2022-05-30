@@ -64,7 +64,7 @@ public class FileServiceTest {
         fileAttachment.setId(5);
         fileAttachment.setName(fileName);
 
-        Mockito.when(fileAttachmentRepository.findByDateBeforeAndPostIsNull(Mockito.any(Date.class)))
+        Mockito.when(fileAttachmentRepository.findByDateBeforeAndMessageIsNull(Mockito.any(Date.class)))
                 .thenReturn(Arrays.asList(fileAttachment));
 
         fileService.cleanupStorage();
@@ -84,7 +84,7 @@ public class FileServiceTest {
         fileAttachment.setId(5);
         fileAttachment.setName(fileName);
 
-        Mockito.when(fileAttachmentRepository.findByDateBeforeAndPostIsNull(Mockito.any(Date.class)))
+        Mockito.when(fileAttachmentRepository.findByDateBeforeAndMessageIsNull(Mockito.any(Date.class)))
                 .thenReturn(Arrays.asList(fileAttachment));
 
         fileService.cleanupStorage();

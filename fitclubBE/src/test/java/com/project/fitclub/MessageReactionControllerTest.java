@@ -1,17 +1,16 @@
 package com.project.fitclub;
 
-import com.project.fitclub.dao.PostReactionRepository;
-import com.project.fitclub.dao.PostRepository;
+import com.project.fitclub.dao.MessageReactionRepository;
+import com.project.fitclub.dao.MessageRepository;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.*;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.security.UserPrincipal;
 import com.project.fitclub.security.payload.LoginRequest;
-import com.project.fitclub.service.PostService;
+import com.project.fitclub.service.MessageService;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.GenericResponse;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,11 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration
-public class PostReactionControllerTest {
+public class MessageReactionControllerTest {
 
-    public static final String API_1_0_POSTS_LIKE = "/api/1.0/posts/%d/like";
+    public static final String API_1_0_MESSAGES_LIKE = "/api/1.0/messages/%d/like";
 
-    public static final String API_1_0_POSTS_DISLIKE = "/api/1.0/posts/%d/dislike";
+    public static final String API_1_0_MESSAGES_DISLIKE = "/api/1.0/messages/%d/dislike";
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -45,26 +44,26 @@ public class PostReactionControllerTest {
     UserRepository userRepository;
 
     @Autowired
-    PostRepository postRepository;
+    MessageRepository messageRepository;
 
     @Autowired
-    PostService postService;
+    MessageService messageService;
 
     @Autowired
     JwtTokenProvider jwtToken;
 
     @Autowired
-    PostReactionRepository postReactionRepository;
+    MessageReactionRepository messageReactionRepository;
 
     @Test
     public void putLike_whenUnauthorizedUser_returns401() {
-        String path = String.format(API_1_0_POSTS_LIKE, 5);
+        String path = String.format(API_1_0_MESSAGES_LIKE, 5);
         ResponseEntity<Object> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void putLike_whenAuthorizedUserForUnknownPost_returns404() throws URISyntaxException {
+    public void putLike_whenAuthorizedUserForUnknownMessage_returns404() throws URISyntaxException {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
@@ -74,67 +73,67 @@ public class PostReactionControllerTest {
         headers.setBearerAuth(token);
 
 
-        String path = String.format(API_1_0_POSTS_LIKE, 5);
+        String path = String.format(API_1_0_MESSAGES_LIKE, 5);
         ResponseEntity<Object> result = testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), Object.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void putLike_whenAuthorizedUserForKnownPost_savesPostReactionToDatabase() throws URISyntaxException {
+    public void putLike_whenAuthorizedUserForKnownMessage_savesMessageReactionToDatabase() throws URISyntaxException {
         User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
         String token = response.getBody().getJwt();
-        Post post = postService.save(inDB, TestUtil.createValidPost());
+        Message message = messageService.save(inDB, TestUtil.createValidMessage());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        String path = String.format(API_1_0_POSTS_LIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_LIKE, message.getId());
         testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), Object.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, inDB);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, inDB);
         assertThat(reaction).isNotNull();
     }
 
     @Test
-    public void putLike_whenAuthorizedUserForKnownPost_returnsSuccessPost() {
+    public void putLike_whenAuthorizedUserForKnownMessage_returnsSuccessMessage() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
-        Post post = postService.save(user, TestUtil.createValidPost());
+        Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        String path = String.format(API_1_0_POSTS_LIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_LIKE, message.getId());
         ResponseEntity<GenericResponse> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, GenericResponse.class);
         assertThat(result.getBody().getMessage()).isNotNull();
     }
 
     @Test
-    public void putLike_whenAuthorizedUserAlreadyLikesThePost_removesTheReactionFromDatabase() {
+    public void putLike_whenAuthorizedUserAlreadyLikesTheMessage_removesTheReactionFromDatabase() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
-        Post post = postService.save(user, TestUtil.createValidPost());
+        Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        String path = String.format(API_1_0_POSTS_LIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_LIKE, message.getId());
         testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
 
         testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, user);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, user);
         assertThat(reaction).isNull();
     }
 
     @Test
     public void putDislike_whenUnauthorizedUser_returns401() {
-        String path = String.format(API_1_0_POSTS_DISLIKE, 5);
+        String path = String.format(API_1_0_MESSAGES_DISLIKE, 5);
         ResponseEntity<Object> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserForUnknownPost_returns404() throws URISyntaxException {
+    public void putDislike_whenAuthorizedUserForUnknownMessage_returns404() throws URISyntaxException {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
@@ -143,95 +142,93 @@ public class PostReactionControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        String path = String.format(API_1_0_POSTS_DISLIKE, 5);
+        String path = String.format(API_1_0_MESSAGES_DISLIKE, 5);
         ResponseEntity<Object> result = testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), Object.class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserForKnownPost_savesPostReactionToDatabase() throws URISyntaxException {
+    public void putDislike_whenAuthorizedUserForKnownMessage_savesMessageReactionToDatabase() throws URISyntaxException {
         User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         ResponseEntity<UserPrincipal> response = authenticate(loggingUser);
 
         String token = response.getBody().getJwt();
 
-        Post post = postService.save(inDB, TestUtil.createValidPost());
+        Message message = messageService.save(inDB, TestUtil.createValidMessage());
 
-        String path = String.format(API_1_0_POSTS_DISLIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_DISLIKE, message.getId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
         testRestTemplate.exchange(RequestEntity.put(new URI(path)).headers(headers).build(), GenericResponse.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, inDB);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, inDB);
         assertThat(reaction).isNotNull();
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserForKnownPost_returnsSuccessPost() {
+    public void putDislike_whenAuthorizedUserForKnownMessage_returnsSuccessMessage() {
         User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         authenticate(loggingUser);
 
-        Post post = postService.save(inDB, TestUtil.createValidPost());
+        Message message = messageService.save(inDB, TestUtil.createValidMessage());
 
-        System.out.println(post.getId());
-
-        String path = String.format(API_1_0_POSTS_DISLIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_DISLIKE, message.getId());
         ResponseEntity<GenericResponse> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, GenericResponse.class);
         assertThat(result.getBody().getMessage()).isNotNull();
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserAlreadyDislikesThePost_removesTheReactionFromDatabase() {
+    public void putDislike_whenAuthorizedUserAlreadyDislikesTheMessage_removesTheReactionFromDatabase() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
-        Post post = postService.save(user, TestUtil.createValidPost());
+        Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        String path = String.format(API_1_0_POSTS_DISLIKE, post.getId());
+        String path = String.format(API_1_0_MESSAGES_DISLIKE, message.getId());
         testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
 
         testRestTemplate.exchange(path, HttpMethod.PUT, null, Object.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, user);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, user);
         assertThat(reaction).isNull();
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserAlreadyLikesThePost_updatesTheReactionInDatabase() {
+    public void putDislike_whenAuthorizedUserAlreadyLikesTheMessage_updatesTheReactionInDatabase() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
-        Post post = postService.save(user, TestUtil.createValidPost());
+        Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        String pathLike = String.format(API_1_0_POSTS_LIKE, post.getId());
+        String pathLike = String.format(API_1_0_MESSAGES_LIKE, message.getId());
         testRestTemplate.exchange(pathLike, HttpMethod.PUT, null, Object.class);
 
-        String pathDislike = String.format(API_1_0_POSTS_DISLIKE, post.getId());
+        String pathDislike = String.format(API_1_0_MESSAGES_DISLIKE, message.getId());
         testRestTemplate.exchange(pathDislike, HttpMethod.PUT, null, Object.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, user);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, user);
         assertThat(reaction.getReaction()).isEqualTo(Reaction.DISLIKE);
     }
 
     @Test
-    public void putLike_whenAuthorizedUserAlreadyDislikesThePost_updatesTheReactionInDatabase() {
+    public void putLike_whenAuthorizedUserAlreadyDislikesTheMessage_updatesTheReactionInDatabase() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
-        Post post = postService.save(user, TestUtil.createValidPost());
+        Message message = messageService.save(user, TestUtil.createValidMessage());
 
-        String pathDislike = String.format(API_1_0_POSTS_DISLIKE, post.getId());
+        String pathDislike = String.format(API_1_0_MESSAGES_DISLIKE, message.getId());
         testRestTemplate.exchange(pathDislike, HttpMethod.PUT, null, Object.class);
 
-        String pathLike = String.format(API_1_0_POSTS_LIKE, post.getId());
+        String pathLike = String.format(API_1_0_MESSAGES_LIKE, message.getId());
         testRestTemplate.exchange(pathLike, HttpMethod.PUT, null, Object.class);
 
-        PostReaction reaction = postReactionRepository.findByPostAndUser(post, user);
+        MessageReaction reaction = messageReactionRepository.findByMessageAndUser(message, user);
         assertThat(reaction.getReaction()).isEqualTo(Reaction.LIKE);
     }
 
@@ -246,14 +243,8 @@ public class PostReactionControllerTest {
 
     @AfterEach
     public void cleanupAfter() {
-        postReactionRepository.deleteAll();
-        postRepository.deleteAll();
-        userRepository.deleteAll();
-        testRestTemplate.getRestTemplate().getInterceptors().clear();
-    }
-
-    @BeforeEach
-    public void cleanupBefore() {
+        messageReactionRepository.deleteAll();
+        messageRepository.deleteAll();
         userRepository.deleteAll();
         testRestTemplate.getRestTemplate().getInterceptors().clear();
     }

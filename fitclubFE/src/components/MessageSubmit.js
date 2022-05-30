@@ -8,7 +8,7 @@ import securityAlert from '../assets/exclamationSecurity.png';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-class PostSubmit extends Component {
+class MessageSubmit extends Component {
   state = {
     focused: false,
     content: undefined,
@@ -51,7 +51,7 @@ class PostSubmit extends Component {
   uploadFile = () => {
     const body = new FormData();
     body.append("file", this.state.file);
-    apiCalls.postPostFile(body, this.props.loggedInUser.jwt).then((response) => {
+    apiCalls.postMessageFile(body, this.props.loggedInUser.jwt).then((response) => {
       this.setState({ attachment: response.data });
     });
   };
@@ -79,7 +79,7 @@ class PostSubmit extends Component {
     });
 
     apiCalls
-      .postPost(body, this.props.loggedInUser.jwt)
+      .postMessage(body, this.props.loggedInUser.jwt)
       .then((response) => {
         this.resetState();
       })
@@ -175,7 +175,7 @@ class PostSubmit extends Component {
             </Col>
 
             <Col xs={1} md={1} lg={1} xl={1}>
-              <div className="d-flex justify-content-center securityPostSubmit">
+              <div className="d-flex justify-content-center securityMessageSubmit">
                 <img className="m-auto" src={securityAlert} width="26" alt="SecurityAlert" />
               </div>
             </Col>
@@ -193,4 +193,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(PostSubmit);
+export default connect(mapStateToProps)(MessageSubmit);

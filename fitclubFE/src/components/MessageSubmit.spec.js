@@ -8,7 +8,7 @@ import {
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import authReducer from "../redux/authReducer";
-import PostSubmit from "./PostSubmit";
+import MessageSubmit from "./MessageSubmit";
 import * as apiCalls from "../api/apiCalls";
 import createJWKSMock from "mock-jwks";
 
@@ -27,12 +27,12 @@ const setup = (state = defaultState) => {
   store = createStore(authReducer, state);
   return render(
     <Provider store={store}>
-      <PostSubmit />
+      <MessageSubmit />
     </Provider>
   );
 };
 
-describe("PostSubmit", () => {
+describe("MessageSubmit", () => {
   const jwks = createJWKSMock("http://localhost:3000/");
 
   beforeEach(() => {
@@ -82,7 +82,7 @@ describe("PostSubmit", () => {
       expect(textArea.rows).toBe(3);
     });
 
-    it("displays send post button when focused to textarea", () => {
+    it("displays send message button when focused to textarea", () => {
       const { queryByText } = setupFocused();
       const sendButton = queryByText("Send");
       expect(sendButton).toBeInTheDocument();
@@ -113,30 +113,30 @@ describe("PostSubmit", () => {
       expect(queryByText("Cancel")).not.toBeInTheDocument();
     });
 
-    it("calls postPost with post request object when clicking Send", () => {
+    it("calls postMessage with message request object when clicking Send", () => {
       const token = jwks.token({});
       const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
 
       const { queryByText } = setupFocused(stateWithMockJwt);
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
-      expect(apiCalls.postPost).toHaveBeenCalledWith({
-        content: "Test post content",
+      expect(apiCalls.postMessage).toHaveBeenCalledWith({
+        content: "Test message content",
       }, token);
     });
 
-    it("returns back to unfocused state after successful postPost action", async () => {
+    it("returns back to unfocused state after successful postMessage action", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
       await waitFor(() => {
@@ -144,32 +144,32 @@ describe("PostSubmit", () => {
       });
     });
 
-    it("clear content after successful postPost action", async () => {
+    it("clear content after successful postMessage action", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
       await waitFor(() => {
-        expect(queryByText("Test post content")).not.toBeInTheDocument();
+        expect(queryByText("Test message content")).not.toBeInTheDocument();
       });
     });
 
     it("clears content after clicking cancel", () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       fireEvent.click(queryByText("Cancel"));
 
-      expect(queryByText("Test post content")).not.toBeInTheDocument();
+      expect(queryByText("Test message content")).not.toBeInTheDocument();
     });
 
-    it("disables Send button when there is postPost api call", async () => {
+    it("disables Send button when there is postMessage api call", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -181,16 +181,16 @@ describe("PostSubmit", () => {
         });
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       fireEvent.click(sendButton);
       expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 
-    it("disables Cancel button when there is postPost api call", async () => {
+    it("disables Cancel button when there is postMessage api call", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -202,16 +202,16 @@ describe("PostSubmit", () => {
         });
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       const cancelButton = queryByText("Cancel");
       expect(cancelButton).toBeDisabled();
     });
 
-    it("displays spinner when there is postPost api call", async () => {
+    it("displays spinner when there is postMessage api call", async () => {
       const { queryByText, queryByRole } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -223,16 +223,16 @@ describe("PostSubmit", () => {
         });
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       const spinner = queryByRole("status");
       expect(spinner).toBeInTheDocument();
     });
 
-    it("enables Send button when postPost api call fails", async () => {
+    it("enables Send button when postMessage api call fails", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -246,7 +246,7 @@ describe("PostSubmit", () => {
         },
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       await waitFor(() => {
@@ -254,9 +254,9 @@ describe("PostSubmit", () => {
       });
     });
 
-    it("enables Cancel button when postPost api call fails", async () => {
+    it("enables Cancel button when postMessage api call fails", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -270,7 +270,7 @@ describe("PostSubmit", () => {
         },
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       await waitFor(() => {
@@ -278,13 +278,13 @@ describe("PostSubmit", () => {
       });
     });
 
-    it("enables Send button after successful postPost action", async () => {
+    it("enables Send button after successful postMessage action", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
       await waitForElementToBeRemoved(sendButton);
@@ -297,7 +297,7 @@ describe("PostSubmit", () => {
 
     it("displays validation error for content", async () => {
       const { queryByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -311,7 +311,7 @@ describe("PostSubmit", () => {
         },
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       await waitFor(() => {
@@ -323,7 +323,7 @@ describe("PostSubmit", () => {
 
     it("clears validation error after clicking cancel", async () => {
       const { queryByText, findByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -337,7 +337,7 @@ describe("PostSubmit", () => {
         },
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
 
       const error = await findByText(
@@ -351,7 +351,7 @@ describe("PostSubmit", () => {
 
     it("clears validation error after content is changed", async () => {
       const { queryByText, findByText } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const sendButton = queryByText("Send");
 
@@ -365,14 +365,14 @@ describe("PostSubmit", () => {
         },
       });
 
-      apiCalls.postPost = mockFunction;
+      apiCalls.postMessage = mockFunction;
       fireEvent.click(sendButton);
       const error = await findByText(
         "It must have minimum 10 and maximum 5000 characters"
       );
 
       fireEvent.change(textArea, {
-        target: { value: "Test post content updated" },
+        target: { value: "Test message content updated" },
       });
 
       expect(error).not.toBeInTheDocument();
@@ -388,7 +388,7 @@ describe("PostSubmit", () => {
     });
 
     it("displays image component when file selected", async () => {
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
@@ -415,7 +415,7 @@ describe("PostSubmit", () => {
     });
 
     it("removes selected image after clicking cancel", async () => {
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
@@ -446,8 +446,8 @@ describe("PostSubmit", () => {
       });
     });
 
-    it("calls postPostFile when file selected", async () => {
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+    it("calls postMessageFile when file selected", async () => {
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
@@ -468,11 +468,11 @@ describe("PostSubmit", () => {
         const images = container.querySelectorAll("img");
         expect(images.length).toBe(2);
       });
-      expect(apiCalls.postPostFile).toHaveBeenCalledTimes(1);
+      expect(apiCalls.postMessageFile).toHaveBeenCalledTimes(1);
     });
 
-    it("calls postPostFile with selected file", async () => {
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+    it("calls postMessageFile with selected file", async () => {
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
@@ -494,7 +494,7 @@ describe("PostSubmit", () => {
         expect(images.length).toBe(2);
       });
 
-      const body = apiCalls.postPostFile.mock.calls[0][0];
+      const body = apiCalls.postMessageFile.mock.calls[0][0];
 
       const readFile = () => {
         return new Promise((resolve, reject) => {
@@ -512,18 +512,18 @@ describe("PostSubmit", () => {
       expect(result).toBe("dummy content");
     });
 
-    it("calls postPost with post with file attachment object when clicking Send", async () => {
+    it("calls postMessage with message with file attachment object when clicking Send", async () => {
       const token = jwks.token({});
       const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
 
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
         },
       });
       const { queryByText, container } = setupFocused(stateWithMockJwt);
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const uploadInput = container.querySelector("input");
       expect(uploadInput.type).toBe("file");
@@ -540,27 +540,27 @@ describe("PostSubmit", () => {
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
-      expect(apiCalls.postPost).toHaveBeenCalledWith({
+      expect(apiCalls.postMessage).toHaveBeenCalledWith({
         attachment: {
           id: 1,
           name: "random-name.png",
         },
-        content: "Test post content",
+        content: "Test message content",
       }, token);
     });
 
-    it("clears image after postPost success", async () => {
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+    it("clears image after postMessage success", async () => {
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
         },
       });
       const { queryByText, container } = setupFocused();
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const uploadInput = container.querySelector("input");
       expect(uploadInput.type).toBe("file");
@@ -577,7 +577,7 @@ describe("PostSubmit", () => {
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
       fireEvent.click(sendButton);
 
       fireEvent.focus(textArea);
@@ -587,18 +587,18 @@ describe("PostSubmit", () => {
       });
     });
 
-    it("calls postPost without file attachment after cancelling previous file selection", async () => {
+    it("calls postMessage without file attachment after cancelling previous file selection", async () => {
       const token = jwks.token({});
       const stateWithMockJwt = Object.assign(defaultState, { jwt: token });
 
-      apiCalls.postPostFile = jest.fn().mockResolvedValue({
+      apiCalls.postMessageFile = jest.fn().mockResolvedValue({
         data: {
           id: 1,
           name: "random-name.png",
         },
       });
       const { queryByText, container } = setupFocused(stateWithMockJwt);
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
 
       const uploadInput = container.querySelector("input");
       expect(uploadInput.type).toBe("file");
@@ -617,12 +617,12 @@ describe("PostSubmit", () => {
 
       const sendButton = queryByText("Send");
 
-      apiCalls.postPost = jest.fn().mockResolvedValue({});
-      fireEvent.change(textArea, { target: { value: "Test post content" } });
+      apiCalls.postMessage = jest.fn().mockResolvedValue({});
+      fireEvent.change(textArea, { target: { value: "Test message content" } });
       fireEvent.click(sendButton);
 
-      expect(apiCalls.postPost).toHaveBeenCalledWith({
-        content: "Test post content",
+      expect(apiCalls.postMessage).toHaveBeenCalledWith({
+        content: "Test message content",
       }, token);
     });
   });

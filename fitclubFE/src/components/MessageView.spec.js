@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import PostView from "./PostView";
+import MessageView from "./MessageView";
 import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -24,9 +24,9 @@ const loggedInStateUser2 = {
   isLoggedIn: true,
 };
 
-const postWithoutAttachment = {
+const messageWithoutAttachment = {
   id: 8,
-  content: "This is the first post",
+  content: "This is the first message",
   user: {
     id: 1,
     username: "user1",
@@ -35,13 +35,13 @@ const postWithoutAttachment = {
   },
 };
 
-const getPostWithReactions = () => {
+const getMessageWithReactions = () => {
   const oneMinute = 60 * 1000;
   const date = new Date(new Date().getTime() - oneMinute);
 
   return {
     id: 15,
-    content: 'Post content',
+    content: 'Message content',
     date: date.getTime(),
     user: {
       username: 'user5',
@@ -62,9 +62,9 @@ const getPostWithReactions = () => {
   }
 }
 
-const postWithAttachment = {
+const messageWithAttachment = {
   id: 8,
-  content: "This is the first post",
+  content: "This is the first message",
   user: {
     id: 1,
     username: "user1",
@@ -77,9 +77,9 @@ const postWithAttachment = {
   },
 };
 
-const postWithPDFttachment = {
+const messageWithPDFttachment = {
   id: 8,
-  content: "This is the first post",
+  content: "This is the first message",
   user: {
     id: 1,
     username: "user1",
@@ -93,27 +93,27 @@ const postWithPDFttachment = {
 };
 
 const setup = (
-  post = postWithoutAttachment,
+  message = messageWithoutAttachment,
   state = loggedInStateUser1
 ) => {
   const oneMinute = 60 * 1000;
   const date = new Date() - oneMinute;
-  post.date = date;
+  message.date = date;
   const store = createStore(authReducer, state);
   return render(
     <Provider store={store}>
       <MemoryRouter>
-        <PostView post={post} />
+        <MessageView message={message} />
       </MemoryRouter>
     </Provider>
   );
 };
 
-describe("PostView", () => {
+describe("MessageView", () => {
   describe("Layout", () => {
-    it("displays post content", () => {
+    it("displays message content", () => {
       const { queryByText } = setup();
-      expect(queryByText("This is the first post")).toBeInTheDocument();
+      expect(queryByText("This is the first message")).toBeInTheDocument();
     });
 
     it("displays users image", () => {
@@ -139,48 +139,48 @@ describe("PostView", () => {
     });
 
     it("displays file attachment image", () => {
-      const { container } = setup(postWithAttachment);
+      const { container } = setup(messageWithAttachment);
       const images = container.querySelectorAll("img");
       expect(images.length).toBe(2);
     });
 
     it("does not display file attachment when attachment type is not image", () => {
-      const { container } = setup(postWithPDFttachment);
+      const { container } = setup(messageWithPDFttachment);
       const images = container.querySelectorAll("img");
       expect(images.length).toBe(1);
     });
 
     it("sets the attachment path as source for file attachment image", () => {
-      const { container } = setup(postWithAttachment);
+      const { container } = setup(messageWithAttachment);
       const images = container.querySelectorAll("img");
       const attachmentImage = images[1];
       expect(attachmentImage.src).toContain(
-        "/images/attachments/" + postWithAttachment.attachment.name
+        "/images/attachments/" + messageWithAttachment.attachment.name
       );
     });
 
-    it("displays delete button when post owned by logged in user", () => {
+    it("displays delete button when message owned by logged in user", () => {
       const { container } = setup();
       expect(container.querySelector("button")).toBeInTheDocument();
     });
 
-    it("does not display delete button when post is not owned by logged in user", () => {
-      const { container } = setup(postWithoutAttachment, loggedInStateUser2);
+    it("does not display delete button when message is not owned by logged in user", () => {
+      const { container } = setup(messageWithoutAttachment, loggedInStateUser2);
       expect(container.querySelector("button")).not.toBeInTheDocument();
     });
 
     it("does not show the dropdown menu when not clicked", () => {
       const { queryByTestId } = setup();
-      const dropDownMenu = queryByTestId("post-action-dropdown");
+      const dropDownMenu = queryByTestId("message-action-dropdown");
       expect(dropDownMenu).not.toHaveClass("show");
     });
 
     it("shows the dropdown menu after clicking the indicator", () => {
       const { queryByTestId } = setup();
-      const indicator = queryByTestId("post-actions-indicator");
+      const indicator = queryByTestId("message-actions-indicator");
       fireEvent.click(indicator);
 
-      const dropDownMenu = queryByTestId("post-action-dropdown");
+      const dropDownMenu = queryByTestId("message-action-dropdown");
       expect(dropDownMenu).toHaveClass("show");
     });
   });

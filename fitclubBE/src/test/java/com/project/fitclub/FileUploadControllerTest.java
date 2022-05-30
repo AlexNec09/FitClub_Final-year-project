@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class FileUploadControllerTest {
 
-    private static final String API_1_0_POSTS_UPLOAD = "/api/1.0/posts/upload";
+    private static final String API_1_0_MESSAGES_UPLOAD = "/api/1.0/messages/upload";
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -112,7 +112,7 @@ public class FileUploadControllerTest {
 
 
     public <T> ResponseEntity<T> uploadFile(HttpEntity<?> requestEntity, Class<T> responseType) {
-        return testRestTemplate.exchange(API_1_0_POSTS_UPLOAD, HttpMethod.POST, requestEntity, responseType);
+        return testRestTemplate.exchange(API_1_0_MESSAGES_UPLOAD, HttpMethod.POST, requestEntity, responseType);
     }
 
     private HttpEntity<MultiValueMap<String, Object>> getRequestEntity() {

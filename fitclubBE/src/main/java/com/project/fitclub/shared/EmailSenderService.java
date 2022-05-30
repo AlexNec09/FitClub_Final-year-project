@@ -13,6 +13,8 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
+
+    // The subject line for the email.
     final String SUBJECT_EMAIL_CONFIRMATION = "One last step to complete your registration on FitClub platform";
 
     final String SUBJECT_CHANGE_EMAIL = "Change your email on FitClub platform";
@@ -22,6 +24,7 @@ public class EmailSenderService {
     final String SUBJECT_CHANGE_PASSWORD = "Change your password on FitClub platform";
 
 
+    // The email body for recipients with non-HTML email clients.
     final String TEXTBODY_EMAIL_CONFIRMATION = "Please verify your email address. "
             + "Thank you for your registration. To complete this process and be able to log in,"
             + " you need to confirm your email address by opening the following URL in your browser window: "
@@ -80,4 +83,38 @@ public class EmailSenderService {
 
         System.out.println("Email sent to: " + user.getEmail());
     }
+
+
+//    public boolean sendPasswordResetRequest(String firstName, String email, String token) {
+//        boolean returnValue = false;
+//
+//        String htmlBodyWithToken = PASSWORD_RESET_HTMLBODY.replace("$tokenValue", token);
+//        htmlBodyWithToken = htmlBodyWithToken.replace("$firstName", firstName);
+//
+//        String textBodyWithToken = PASSWORD_RESET_TEXTBODY.replace("$tokenValue", token);
+//        textBodyWithToken = textBodyWithToken.replace("$firstName", firstName);
+//
+//        SendEmailRequest request = new SendEmailRequest()
+//                // set destination
+//                .withDestination(new Destination().withToAddresses(email))
+//                // set messages
+//                .withMessage(new Message()
+//                        .withBody(new Body()
+//                                .withHtml(new Content()
+//                                        .withCharset("UTF-8").withData(htmlBodyWithToken))
+//                                .withText(new Content()
+//                                        .withCharset("UTF-8").withData(textBodyWithToken)))
+//                        .withSubject(new Content()
+//                                .withCharset("UTF-8").withData(PASSWORD_RESET_SUBJECT)))
+//                // set from
+//                .withSource(FROM);
+//
+//        SendEmailResult result = client.sendEmail(request);
+//        if (result != null && (result.getMessageId() != null && !result.getMessageId().isEmpty())) {
+//            returnValue = true;
+//        }
+//
+//        System.out.println("Email sent to: " + email);
+//        return returnValue;
+//    }
 }

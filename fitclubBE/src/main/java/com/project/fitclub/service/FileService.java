@@ -92,7 +92,7 @@ public class FileService {
     @Scheduled(fixedRate = 60 * 60 * 1000)
     public void cleanupStorage() {
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> oldFiles = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
+        List<FileAttachment> oldFiles = fileAttachmentRepository.findByDateBeforeAndMessageIsNull(oneHourAgo);
         for (FileAttachment file : oldFiles) {
             deleteAttachmentImage(file.getName());
             fileAttachmentRepository.deleteById(file.getId());

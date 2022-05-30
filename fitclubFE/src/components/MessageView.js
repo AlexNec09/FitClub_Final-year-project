@@ -7,16 +7,16 @@ import "./styles/DeleteButton.scss";
 import "./styles/TimeSpan.scss";
 import useClickTracker from "../shared/useClickTracker";
 
-const PostView = (props) => {
+const MessageView = (props) => {
   const actionArea = useRef();
   const dropDownVisible = useClickTracker(actionArea);
-  const { post, onClickDelete, onClickLike, onClickDislike } = props;
-  const { user, date, reactions } = post;
+  const { message, onClickDelete, onClickLike, onClickDislike } = props;
+  const { user, date, reactions } = message;
   const { username, displayName, image } = user;
 
   const relativeDate = format(date);
   const attachmentImageVisible =
-    post.attachment && post.attachment.fileType.startsWith("image");
+    message.attachment && message.attachment.fileType.startsWith("image");
 
   const ownedByLoggedInUser = user.id === props.loggedInUser.id;
 
@@ -50,12 +50,12 @@ const PostView = (props) => {
             <div className="dropdown">
               <span
                 className="btn btn-sm btn-light dropdown-toggle"
-                data-testid="post-actions-indicator"
+                data-testid="message-actions-indicator"
                 ref={actionArea}
               />
               <div
                 className={dropDownClass}
-                data-testid="post-action-dropdown"
+                data-testid="message-action-dropdown"
               >
                 <button
                   className="btn btn-outline-danger btn-sm w-100 d-block"
@@ -69,12 +69,12 @@ const PostView = (props) => {
         </div>
       </div>
 
-      <div className="ps-5 pt-2">{post.content}</div>
+      <div className="ps-5 pt-2">{message.content}</div>
       {attachmentImageVisible && (
         <div className="ps-5 pt-2">
           <img
             alt="attachment"
-            src={`/images/attachments/${post.attachment.name}`}
+            src={`/images/attachments/${message.attachment.name}`}
             className="img-fluid"
           />
         </div>
@@ -97,4 +97,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(PostView);
+export default connect(mapStateToProps)(MessageView);

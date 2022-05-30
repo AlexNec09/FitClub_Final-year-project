@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
-public class PostRequest {
+public class MessageRequest {
 
     @NotNull
     @Size(min = 10, max = 5000)

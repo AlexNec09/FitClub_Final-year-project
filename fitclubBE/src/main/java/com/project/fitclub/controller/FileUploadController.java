@@ -15,8 +15,8 @@ public class FileUploadController {
     @Autowired
     FileService fileService;
 
-    @PostMapping("/posts/upload")
-    FileAttachment uploadForPost(MultipartFile file) {
+    @PostMapping("/messages/upload")
+    FileAttachment uploadForMessage(MultipartFile file) {
         return fileService.saveAttachment(file);
     }
 }

@@ -40,17 +40,17 @@ export const updateUser = (userId, body, jwt) => {
   return axios.put("/api/1.0/users/" + userId, body, config);
 };
 
-export const postPost = (post, jwt) => {
+export const postMessage = (message, jwt) => {
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
   };
-  return axios.post("/api/1.0/posts", post, config);
+  return axios.post("/api/1.0/messages", message, config);
 };
 
-export const loadPosts = (username, jwt) => {
+export const loadMessages = (username, jwt) => {
   const basePath = username
-    ? `/api/1.0/users/${username}/posts`
-    : "/api/1.0/posts";
+    ? `/api/1.0/users/${username}/messages`
+    : "/api/1.0/messages";
 
   if (jwt != null) {
     const config = {
@@ -63,77 +63,77 @@ export const loadPosts = (username, jwt) => {
 
 };
 
-export const loadOldPosts = (postId, username, jwt) => {
+export const loadOldMessages = (messageId, username, jwt) => {
   const basePath = username
-    ? `/api/1.0/users/${username}/posts`
-    : "/api/1.0/posts";
+    ? `/api/1.0/users/${username}/messages`
+    : "/api/1.0/messages";
 
   if (jwt != null) {
     const config = {
       headers: { Authorization: `Bearer ${jwt}` }
     };
-    const path = `${basePath}/${postId}?direction=before&page=0&size=5&sort=id,desc`;
+    const path = `${basePath}/${messageId}?direction=before&page=0&size=5&sort=id,desc`;
     return axios.get(path, config);
   } else {
-    const path = `${basePath}/${postId}?direction=before&page=0&size=5&sort=id,desc`;
+    const path = `${basePath}/${messageId}?direction=before&page=0&size=5&sort=id,desc`;
     return axios.get(path);
   }
 
 };
 
-export const loadNewPosts = (postId, username, jwt) => {
+export const loadNewMessages = (messageId, username, jwt) => {
   const basePath = username
-    ? `/api/1.0/users/${username}/posts`
-    : "/api/1.0/posts";
+    ? `/api/1.0/users/${username}/messages`
+    : "/api/1.0/messages";
 
   if (jwt != null) {
     const config = {
       headers: { Authorization: `Bearer ${jwt}` }
     };
-    const path = `${basePath}/${postId}?direction=after&sort=id,desc`;
+    const path = `${basePath}/${messageId}?direction=after&sort=id,desc`;
     return axios.get(path, config);
   } else {
-    const path = `${basePath}/${postId}?direction=after&sort=id,desc`;
+    const path = `${basePath}/${messageId}?direction=after&sort=id,desc`;
     return axios.get(path);
   }
 };
 
-export const loadNewPostsCount = (postId, username, jwt) => {
+export const loadNewMessagesCount = (messageId, username, jwt) => {
   const basePath = username
-    ? `/api/1.0/users/${username}/posts`
-    : "/api/1.0/posts";
+    ? `/api/1.0/users/${username}/messages`
+    : "/api/1.0/messages";
 
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
   };
 
-  const path = `${basePath}/${postId}?direction=after&count=true`;
+  const path = `${basePath}/${messageId}?direction=after&count=true`;
   return axios.get(path, config);
 };
 
-export const postPostFile = (file, jwt) => {
+export const postMessageFile = (file, jwt) => {
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
   };
-  return axios.post("/api/1.0/posts/upload", file, config);
+  return axios.post("/api/1.0/messages/upload", file, config);
 };
 
-export const deletePost = (postId, jwt) => {
+export const deleteMessage = (messageId, jwt) => {
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
   };
-  return axios.delete("/api/1.0/posts/" + postId, config);
+  return axios.delete("/api/1.0/messages/" + messageId, config);
 };
 
 export const follow = (userid, isCallingForFollow = true) => {
   return axios.put(`/api/1.0/users/${userid}/${isCallingForFollow ? 'follow' : 'unfollow'}`)
 }
 
-export const postReaction = (id, reaction, jwt) => {
+export const messageReaction = (id, reaction, jwt) => {
   const config = {
     headers: { Authorization: `Bearer ${jwt}` }
   };
-  return axios.put(`/api/1.0/posts/${id}/${reaction === 'dislike' ? 'dislike' : 'like'}`, config);
+  return axios.put(`/api/1.0/messages/${id}/${reaction === 'dislike' ? 'dislike' : 'like'}`, config);
 }
 
 

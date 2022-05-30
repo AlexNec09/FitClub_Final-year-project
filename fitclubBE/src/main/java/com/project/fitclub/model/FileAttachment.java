@@ -21,5 +21,5 @@ public class FileAttachment {
     private String fileType;
 
     @OneToOne
-    private Post post;
+    private Message message;
 }

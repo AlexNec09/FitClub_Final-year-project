@@ -79,7 +79,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserIsValid_receiveSuccessPost() {
+    public void postUser_whenUserIsValid_receiveSuccessMessage() {
         User user = TestUtil.createValidUser();
 
         ResponseEntity<GenericResponse> response = postSignup(user, GenericResponse.class);
@@ -210,7 +210,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserHasNullUsername_receivePostOfNullErrorForUsername() {
+    public void postUser_whenUserHasNullUsername_receiveMessageOfNullErrorForUsername() {
         User user = TestUtil.createValidUser();
         user.setUsername(null);
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
@@ -219,7 +219,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserHasNullPassword_receiveGenericPostOfNullError() {
+    public void postUser_whenUserHasNullPassword_receiveGenericMessageOfNullError() {
         User user = TestUtil.createValidUser();
         user.setPassword(null);
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
@@ -228,7 +228,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserHasInvalidLengthUsername_receiveGenericPostOfSizeError() {
+    public void postUser_whenUserHasInvalidLengthUsername_receiveGenericMessageOfSizeError() {
         User user = TestUtil.createValidUser();
         user.setUsername("abc");
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
@@ -237,7 +237,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenUserHasInvalidPasswordPattern_receivePostOfPasswordPatternError() {
+    public void postUser_whenUserHasInvalidPasswordPattern_receiveMessageOfPasswordPatternError() {
         User user = TestUtil.createValidUser();
         user.setPassword("lowercase");
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
@@ -254,7 +254,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void postUser_whenAnotherUserHasSameUsername_receivePostOfDuplicateUsername() {
+    public void postUser_whenAnotherUserHasSameUsername_receiveMessageOfDuplicateUsername() {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser());
         User user = TestUtil.createValidUser();
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);

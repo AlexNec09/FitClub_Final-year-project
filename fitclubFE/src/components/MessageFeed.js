@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as apiCalls from "../api/apiCalls";
 import Spinner from "./Spinner";
-import PostView from "./PostView";
-import PostSubmit from "./PostSubmit";
+import MessageView from "./MessageView";
+import MessageSubmit from "./MessageSubmit";
 import ModalView from "./ModalView";
 import { connect } from "react-redux";
 import AuthNeeded from "./AuthNeeded";
@@ -11,49 +11,50 @@ import securityAlert from '../assets/exclamationSecurity.png';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-const PostFeed = (props) => {
+const MessageFeed = (props) => {
   const [page, setPage] = useState({ content: [] });
-  const [isLoadingPosts, setLoadingPosts] = useState(false);
+  const [isLoadingMessages, setLoadingMessages] = useState(true);
   const [isClosedModal, setClosedModal] = useState();
-  const [isLoadingOldPosts, setLoadingOldPosts] = useState(false);
-  const [isLoadingNewPosts, setLoadingNewPosts] = useState(false);
-  const [isDeletingPost, setDeletingPost] = useState(false);
-  const [newPostCount, setNewPostsCount] = useState(0);
-  const [postToBeDeleted, setPostToBeDeleted] = useState();
+  const [isLoadingOldMessages, setLoadingOldMessages] = useState(false);
+  const [isLoadingNewMessages, setLoadingNewMessages] = useState(false);
+  const [isDeletingMessage, setDeletingMessage] = useState(false);
+  const [newMessageCount, setNewMessagesCount] = useState(0);
+  const [messageToBeDeleted, setMessageToBeDeleted] = useState();
 
   const [hasFullAccess, setHasFullAccess] = useState(props.loggedInUser.isLoggedIn ? true : false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    const loadPosts = () => {
+    const loadMessages = () => {
       if (hasFullAccess) {
-        setLoadingPosts(true);
+        setLoadingMessages(true);
         apiCalls
-          .loadPosts(props.user, props.loggedInUser.jwt)
+          .loadMessages(props.user, props.loggedInUser.jwt)
           .then((response) => {
-            setLoadingPosts(false);
+            setLoadingMessages(false);
             setPage(response.data);
           })
           .catch((error) => {
-            setLoadingPosts(false);
+            setHasFullAccess(false);
+            setLoadingMessages(false);
           });
       }
     };
-    loadPosts();
+    loadMessages();
   }, [props.user, props.loggedInUser, hasFullAccess]);
 
   useEffect(() => {
     const checkCount = () => {
-      const posts = page.content;
-      let topPostId = 0;
-      if (posts.length > 0) {
-        topPostId = posts[0].id;
+      const messages = page.content;
+      let topMessageId = 0;
+      if (messages.length > 0) {
+        topMessageId = messages[0].id;
       }
       if (hasFullAccess) {
         apiCalls
-          .loadNewPostsCount(topPostId, props.user, props.loggedInUser.jwt)
+          .loadNewMessagesCount(topMessageId, props.user, props.loggedInUser.jwt)
           .then((response) => {
-            setNewPostsCount(response.data.count);
+            setNewMessagesCount(response.data.count);
           })
           .catch((error) => {
             if (props.user) {
@@ -69,7 +70,7 @@ const PostFeed = (props) => {
       // intervalRef.current = setInterval(checkCount, 50000);
 
       return function cleanup() {
-        if (isLoadingNewPosts) {
+        if (isLoadingNewMessages) {
           clearInterval(intervalRef.current);
           intervalRef.current = setInterval(checkCount, 50);
         }
@@ -77,116 +78,116 @@ const PostFeed = (props) => {
       };
     }
 
-  }, [props.user, props, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess]);
+  }, [props.user, props, page.content, isLoadingNewMessages, props.loggedInUser, hasFullAccess]);
 
   const onClickLoadMore = () => {
-    if (isLoadingOldPosts) {
+    if (isLoadingOldMessages) {
       return;
     }
-    const posts = page.content;
-    if (posts.length === 0) {
+    const messages = page.content;
+    if (messages.length === 0) {
       return;
     }
-    const postAtBottom = posts[posts.length - 1];
-    setLoadingOldPosts(true);
+    const messageAtBottom = messages[messages.length - 1];
+    setLoadingOldMessages(true);
     apiCalls
-      .loadOldPosts(postAtBottom.id, props.user, props.loggedInUser.jwt)
+      .loadOldMessages(messageAtBottom.id, props.user, props.loggedInUser.jwt)
       .then((response) => {
         setPage((previousPage) => ({
           ...previousPage,
           last: response.data.last,
           content: [...previousPage.content, ...response.data.content],
         }));
-        setLoadingOldPosts(false);
+        setLoadingOldMessages(false);
       })
       .catch((error) => {
-        setLoadingOldPosts(false);
+        setLoadingOldMessages(false);
       });
   };
 
   const onClickLoadNew = () => {
-    if (isLoadingNewPosts) {
+    if (isLoadingNewMessages) {
       return;
     }
-    const posts = page.content;
-    let topPostId = 0;
-    if (posts.length > 0) {
-      topPostId = posts[0].id;
+    const messages = page.content;
+    let topMessageId = 0;
+    if (messages.length > 0) {
+      topMessageId = messages[0].id;
     }
-    setLoadingNewPosts(true);
+    setLoadingNewMessages(true);
     clearInterval(intervalRef.current);
     intervalRef.current = null;
     apiCalls
-      .loadNewPosts(topPostId, props.user, props.loggedInUser.jwt)
+      .loadNewMessages(topMessageId, props.user, props.loggedInUser.jwt)
       .then((response) => {
         setPage((previousPage) => ({
           ...previousPage,
           content: [...response.data, ...previousPage.content],
         }));
-        setLoadingNewPosts(false);
-        setNewPostsCount(0);
+        setLoadingNewMessages(false);
+        setNewMessagesCount(0);
       })
       .catch((error) => {
-        setLoadingNewPosts(false);
+        setLoadingNewMessages(false);
       });
   };
 
   const onClickModalOk = () => {
-    setDeletingPost(true);
-    apiCalls.deletePost(postToBeDeleted.id, props.loggedInUser.jwt).then((response) => {
+    setDeletingMessage(true);
+    apiCalls.deleteMessage(messageToBeDeleted.id, props.loggedInUser.jwt).then((response) => {
       setPage((previousPage) => ({
         ...previousPage,
         content: previousPage.content.filter(
-          (post) => post.id !== postToBeDeleted.id
+          (message) => message.id !== messageToBeDeleted.id
         ),
       }));
-      setDeletingPost(false);
-      setPostToBeDeleted();
+      setDeletingMessage(false);
+      setMessageToBeDeleted();
       setClosedModal(false);
     });
   };
 
   const onClickModalCancel = () => {
-    setPostToBeDeleted();
+    setMessageToBeDeleted();
     setClosedModal(false);
   };
 
   const onReact = (currentPost, reaction) => {
-    apiCalls.postReaction(currentPost.id, reaction, props.loggedInUser.jwt).then(res => {
-      const posts = page.content.filter(post => {
-        if (post.id !== currentPost.id) {
-          return post;
+    apiCalls.messageReaction(currentPost.id, reaction, props.loggedInUser.jwt).then(res => {
+      const messages = page.content.filter(message => {
+        if (message.id !== currentPost.id) {
+          return message;
         }
 
-        const previousReaction = post.reactions.loggedUserReaction;
+        const previousReaction = message.reactions.loggedUserReaction;
 
         if (previousReaction === 'LIKE') {
-          post.reactions.likeCount -= 1;
+          message.reactions.likeCount -= 1;
         } else if (previousReaction === 'DISLIKE') {
-          post.reactions.dislikeCount -= 1;
+          message.reactions.dislikeCount -= 1;
         }
 
         const newReaction = reaction.toUpperCase();
         if (previousReaction === newReaction) {
-          post.reactions.loggedUserReaction = null;
+          message.reactions.loggedUserReaction = null;
         } else {
-          post.reactions.loggedUserReaction = newReaction;
+          message.reactions.loggedUserReaction = newReaction;
           if (newReaction === 'LIKE') {
-            post.reactions.likeCount += 1;
+            message.reactions.likeCount += 1;
           } else {
-            post.reactions.dislikeCount += 1;
+            message.reactions.dislikeCount += 1;
           }
         }
-        return post;
+        return message;
       })
       setPage((previousPage) => ({
         ...previousPage,
-        content: posts
+        content: messages
       }));
     });
   }
 
-  if (isLoadingPosts) {
+  if (isLoadingMessages) {
     return <Spinner />;
   }
 
@@ -196,28 +197,28 @@ const PostFeed = (props) => {
     </div>;
   }
 
-  if (page.content.length === 0 && newPostCount === 0 && hasFullAccess) {
+  if (page.content.length === 0 && newMessageCount === 0 && hasFullAccess) {
     return (
       <div className="container">
         {(props.user == null || props.loggedInUser.username === props.user) ?
           (<div className="pt-4">
             <Row>
               <Col xs={12} md={12} lg={12} xl={12}>
-                <PostSubmit />
+                <MessageSubmit />
               </Col>
             </Row>
           </div>
           ) : (<div className="pb-4 mb-3" />)}
         <div className="pb-5 mb-5">
-          <div className="card card-header text-center">There are no posts</div>
+          <div className="card card-header text-center">There are no messages</div>
         </div>
       </div>
     );
   }
-  const newPostCountMessage =
-    newPostCount === 1
-      ? "There is 1 new post"
-      : `There are ${newPostCount} new posts`;
+  const newMessageCountMessage =
+    newMessageCount === 1
+      ? "There is 1 new message"
+      : `There are ${newMessageCount} new messages`;
 
   return (
     <div>
@@ -225,33 +226,33 @@ const PostFeed = (props) => {
         <div>
           {(props.user == null || props.loggedInUser.username === props.user) &&
             (<div className="container">
-              <PostSubmit />
+              <MessageSubmit />
             </div>
             )}
         </div>
-        {(newPostCount > 0 && props.loggedInUser.isLoggedIn) && (
+        {(newMessageCount > 0 && props.loggedInUser.isLoggedIn) && (
           <div className="container pb-1">
             <div
               className="card card-header text-center"
               onClick={onClickLoadNew}
               style={{
-                cursor: isLoadingNewPosts ? "not-allowed" : "pointer",
+                cursor: isLoadingNewMessages ? "not-allowed" : "pointer",
               }}
             >
-              {isLoadingNewPosts ? <Spinner /> : newPostCountMessage}
+              {isLoadingNewMessages ? <Spinner /> : newMessageCountMessage}
             </div>
             {page.content.length === 0 && (<div className="pb-5 mb-5" />)}
           </div>
         )}
-        {page.content.map((post) => {
+        {page.content.map((message) => {
           return (
             <div className="container pb-1">
-              <PostView
-                key={post.id}
-                post={post}
-                onClickDelete={() => setPostToBeDeleted(post)}
-                onClickLike={() => onReact(post, 'like')}
-                onClickDislike={() => onReact(post, 'dislike')}
+              <MessageView
+                key={message.id}
+                message={message}
+                onClickDelete={() => setMessageToBeDeleted(message)}
+                onClickLike={() => onReact(message, 'like')}
+                onClickDislike={() => onReact(message, 'dislike')}
               />
             </div>
           );
@@ -262,25 +263,25 @@ const PostFeed = (props) => {
               className="card card-header text-center"
               onClick={onClickLoadMore}
               style={{
-                cursor: isLoadingOldPosts ? "not-allowed" : "pointer",
+                cursor: isLoadingOldMessages ? "not-allowed" : "pointer",
               }}
             >
-              {isLoadingOldPosts ? <Spinner /> : "View More Posts"}
+              {isLoadingOldMessages ? <Spinner /> : "View More Posts"}
             </div>
           </div>
         )}
         <ModalView
-          visible={postToBeDeleted && true}
+          visible={messageToBeDeleted && true}
           isClosed={isClosedModal}
           onClickCancel={onClickModalCancel}
           body={
-            postToBeDeleted &&
-            "Are you sure you want to remove this post? This cannot be undone."
+            messageToBeDeleted &&
+            "Are you sure you want to remove this message? This cannot be undone."
           }
-          title="Delete post"
+          title="Delete message"
           okButton="Delete Post"
           onClickOk={onClickModalOk}
-          pendingApiCall={isDeletingPost}
+          pendingApiCall={isDeletingMessage}
         />
       </div>) : (<div className="pt-4">
         {(!hasFullAccess && props.loggedInUser.isLoggedIn) &&
@@ -296,7 +297,7 @@ const PostFeed = (props) => {
                 </Col>
 
                 <Col xs={1} md={1} lg={1} xl={1}>
-                  <div className="d-flex justify-content-center securityPostSubmit">
+                  <div className="d-flex justify-content-center securityMessageSubmit">
                     <img className="m-auto" src={securityAlert} width="26" alt="SecurityAlert" />
                   </div>
                 </Col>
@@ -322,4 +323,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(PostFeed);
+export default connect(mapStateToProps)(MessageFeed);

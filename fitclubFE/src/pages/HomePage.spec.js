@@ -1,5 +1,10 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import HomePage from "./HomePage";
 import { Provider } from "react-redux";
@@ -30,7 +35,7 @@ const setup = (state = defaultState) => {
   );
 };
 
-apiCalls.loadPosts = jest.fn().mockResolvedValue({
+apiCalls.loadMessages = jest.fn().mockResolvedValue({
   data: {
     content: [],
     number: 0,
@@ -46,7 +51,7 @@ describe("HomePage", () => {
       expect(homePageDiv).toBeInTheDocument();
     });
 
-    it("does not display PostSubmit when user not logged in", () => {
+    it("does not display message submit when user not logged in", () => {
       const notLoggedInState = {
         id: 0,
         username: "",
