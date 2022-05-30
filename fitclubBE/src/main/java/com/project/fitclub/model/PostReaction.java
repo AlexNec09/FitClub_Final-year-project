@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class MessageReaction {
+public class PostReaction {
     @Id
     @GeneratedValue
     private long id;
@@ -17,5 +17,5 @@ public class MessageReaction {
     User user;
 
     @ManyToOne
-    Message message;
+    Post post;
 }

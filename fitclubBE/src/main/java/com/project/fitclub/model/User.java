@@ -22,7 +22,7 @@ import java.util.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 public class User extends DateAudit {
 
@@ -61,7 +61,7 @@ public class User extends DateAudit {
     private Boolean emailVerificationStatus = false;
 
     @OneToMany(mappedBy = "user")
-    List<Message> messages = new ArrayList<>();
+    List<Post> posts = new ArrayList<>();
 
     @ManyToMany
     Set<User> followedBy = new HashSet<>();

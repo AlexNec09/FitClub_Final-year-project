@@ -51,7 +51,6 @@ public class UserController {
 
     @PutMapping("/users/{id:[0-9]+}")
     @PreAuthorize("#id == principal.id")
-        // check if id is the same as the logged in user ID using SpEL
     UserVM updateUser(@PathVariable long id, @Valid @RequestBody(required = false) UserUpdateVM userUpdate) throws IOException {
         User updated = userService.update(id, userUpdate);
         return new UserVM(updated);
@@ -80,7 +79,6 @@ public class UserController {
         }
     }
 
-    // validated email page send token from #1 to this endpoint
     @GetMapping(path = "/users/email-verification/confirmationToken/{token}")
     public ResponseEntity verifyEmailTokenForEmailVerification(@PathVariable String token) {
         try {
@@ -149,8 +147,6 @@ public class UserController {
             return ResponseEntity.ok(Collections.singletonMap("result", "INVALID"));
         }
     }
-
-    //
 
     @PostMapping(path = "/users/email-verification/changePassword/{id:[0-9]+}")
     @PreAuthorize("#id == principal.id")

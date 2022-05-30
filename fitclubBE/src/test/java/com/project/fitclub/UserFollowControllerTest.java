@@ -132,7 +132,7 @@ public class UserFollowControllerTest {
     }
 
     @Test
-    public void putFollow_whenAuthorizedUserFollowsAnotherUser_returnsGenericResponseWithMessage() {
+    public void putFollow_whenAuthorizedUserFollowsAnotherUser_returnsGenericResponseWithPost() {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
@@ -236,7 +236,7 @@ public class UserFollowControllerTest {
     }
 
     @Test
-    public void putUnfollow_whenAuthorizedUserUnFollowsAnotherUser_returnsGenericResponseWithMessage() {
+    public void putUnfollow_whenAuthorizedUserUnFollowsAnotherUser_returnsGenericResponseWithPost() {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 

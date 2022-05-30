@@ -10,5 +10,5 @@ public interface FileAttachmentRepository extends JpaRepository<FileAttachment, 
 
     FileAttachment findByName(String name);
 
-    List<FileAttachment> findByDateBeforeAndMessageIsNull(Date date);
+    List<FileAttachment> findByDateBeforeAndPostIsNull(Date date);
 }

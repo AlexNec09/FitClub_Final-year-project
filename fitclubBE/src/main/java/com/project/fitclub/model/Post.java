@@ -12,7 +12,7 @@ import java.util.*;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Message {
+public class Post {
 
     @Id
     @GeneratedValue
@@ -32,9 +32,9 @@ public class Message {
     @EqualsAndHashCode.Include
     User user;
 
-    @OneToOne(mappedBy = "message", orphanRemoval = true)
+    @OneToOne(mappedBy = "post", orphanRemoval = true)
     private FileAttachment attachment;
 
-    @OneToMany(mappedBy = "message", orphanRemoval = true)
-    Set<MessageReaction> messageReactions = new HashSet<>();
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    Set<PostReaction> postReactions = new HashSet<>();
 }
