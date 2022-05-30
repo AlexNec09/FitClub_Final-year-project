@@ -29,7 +29,7 @@ apiCalls.getUser = jest.fn().mockResolvedValue({
   },
 });
 
-apiCalls.loadMessages = jest.fn().mockResolvedValue({
+apiCalls.loadPosts = jest.fn().mockResolvedValue({
   data: {
     content: [],
     number: 0,

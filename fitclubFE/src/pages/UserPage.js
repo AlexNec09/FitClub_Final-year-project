@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import * as apiCalls from "../api/apiCalls";
 import ProfileCard from "../components/ProfileCard";
 import { connect } from "react-redux";
-import MessageFeed from "../components/MessageFeed";
+import PostFeed from "../components/PostFeed";
 import Spinner from "../components/Spinner";
 import Tab from 'react-bootstrap/Tab';
 import Row from 'react-bootstrap/Row';
@@ -265,7 +265,7 @@ const UserPage = (props) => {
           </div>
           <div className="col">
             <div className="card card-header text-center">
-              There are no messages
+              There are no posts
             </div>
           </div>
         </div>
@@ -396,7 +396,7 @@ const UserPage = (props) => {
                   <div className="row">
 
                     <div className="col">
-                      <MessageFeed user={props.match.params.username} fromChildToParentCallback={handleCallback} />
+                      <PostFeed user={props.match.params.username} fromChildToParentCallback={handleCallback} />
 
                     </div>
 

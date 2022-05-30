@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 import configureStore from "../redux/configureStore";
 import axios from "axios";
 
-apiCalls.loadMessages = jest.fn().mockResolvedValue({
+apiCalls.loadPosts = jest.fn().mockResolvedValue({
   data: {
     content: [],
     number: 0,
@@ -313,7 +313,7 @@ describe("HomePage", () => {
       const editButtonAfterClickingSave = await findByText("Edit Profile");
       fireEvent.click(editButtonAfterClickingSave);
 
-      const saveButtonAfterSecondEdit = queryByText("Save");
+      const saveButtonAfterSecondEdit = await findByText("Save");
       expect(saveButtonAfterSecondEdit).not.toBeDisabled();
     });
 

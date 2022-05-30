@@ -77,93 +77,93 @@ describe("apiCalls", () => {
     });
   });
 
-  describe("postMessage", () => {
-    it("calls /api/1.0/messages", () => {
-      const mockPostMessage = jest.fn();
-      axios.post = mockPostMessage;
-      apiCalls.postMessage();
-      const path = mockPostMessage.mock.calls[0][0];
-      expect(path).toBe("/api/1.0/messages");
+  describe("postPost", () => {
+    it("calls /api/1.0/posts", () => {
+      const mockpostPost = jest.fn();
+      axios.post = mockpostPost;
+      apiCalls.postPost();
+      const path = mockpostPost.mock.calls[0][0];
+      expect(path).toBe("/api/1.0/posts");
     });
   });
 
-  describe("loadMessage", () => {
-    it("calls /api/1.0/messages?page=0&size=5&sort=id,desc when no param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadMessages();
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/messages?page=0&size=5&sort=id,desc"
+  describe("loadPost", () => {
+    it("calls /api/1.0/posts?page=0&size=5&sort=id,desc when no param provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadPosts();
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/posts?page=0&size=5&sort=id,desc"
       );
     });
 
-    it("calls /api/1.0/users/user1/messages?page=0&size=5&sort=id,desc when user param is provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadMessages("user1");
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/users/user1/messages?page=0&size=5&sort=id,desc"
-      );
-    });
-  });
-
-  describe("loadOldMessages", () => {
-    it("calls /api/1.0/messages/5?direction=before&page=0&size=5&sort=id,desc when messageId param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadOldMessages(5);
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/messages/5?direction=before&page=0&size=5&sort=id,desc"
-      );
-    });
-
-    it("calls /api/1.0/users/user1/messages/5?direction=before&page=0&size=5&sort=id,desc when messageId and username param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadOldMessages(5, "user1");
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/users/user1/messages/5?direction=before&page=0&size=5&sort=id,desc"
+    it("calls /api/1.0/users/user1/posts?page=0&size=5&sort=id,desc when user param is provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadPosts("user1");
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/users/user1/posts?page=0&size=5&sort=id,desc"
       );
     });
   });
 
-  describe("loadNewMessages", () => {
-    it("calls /api/1.0/messages/5?direction=after&sort=id,desc when messageId param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadNewMessages(5);
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/messages/5?direction=after&sort=id,desc"
+  describe("loadOldPosts", () => {
+    it("calls /api/1.0/posts/5?direction=before&page=0&size=5&sort=id,desc when postId param provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadOldPosts(5);
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/posts/5?direction=before&page=0&size=5&sort=id,desc"
       );
     });
 
-    it("calls /api/1.0/users/user1/messages/5?direction=after&sort=id,desc when messageId and username param provided", () => {
-      const mockGetMessages = jest.fn();
-      axios.get = mockGetMessages;
-      apiCalls.loadNewMessages(5, "user1");
-      expect(mockGetMessages).toBeCalledWith(
-        "/api/1.0/users/user1/messages/5?direction=after&sort=id,desc"
+    it("calls /api/1.0/users/user1/posts/5?direction=before&page=0&size=5&sort=id,desc when postId and username param provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadOldPosts(5, "user1");
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/users/user1/posts/5?direction=before&page=0&size=5&sort=id,desc"
       );
     });
   });
 
-  describe("postMessageFile", () => {
-    it("calls /api/1.0/messages/upload", () => {
-      const mockPostMessageFile = jest.fn();
-      axios.post = mockPostMessageFile;
-      apiCalls.postMessageFile();
-      const path = mockPostMessageFile.mock.calls[0][0];
-      expect(path).toBe("/api/1.0/messages/upload");
+  describe("loadNewPosts", () => {
+    it("calls /api/1.0/posts/5?direction=after&sort=id,desc when postId param provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadNewPosts(5);
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/posts/5?direction=after&sort=id,desc"
+      );
+    });
+
+    it("calls /api/1.0/users/user1/posts/5?direction=after&sort=id,desc when postId and username param provided", () => {
+      const mockgetPosts = jest.fn();
+      axios.get = mockgetPosts;
+      apiCalls.loadNewPosts(5, "user1");
+      expect(mockgetPosts).toBeCalledWith(
+        "/api/1.0/users/user1/posts/5?direction=after&sort=id,desc"
+      );
     });
   });
 
-  describe("deleteMessage", () => {
-    it("calls /api/1.0/messages/5 when messageId param provided as 5", () => {
+  describe("postPostFile", () => {
+    it("calls /api/1.0/posts/upload", () => {
+      const mockpostPostFile = jest.fn();
+      axios.post = mockpostPostFile;
+      apiCalls.postPostFile();
+      const path = mockpostPostFile.mock.calls[0][0];
+      expect(path).toBe("/api/1.0/posts/upload");
+    });
+  });
+
+  describe("deletePost", () => {
+    it("calls /api/1.0/posts/5 when postId param provided as 5", () => {
       const mockDelete = jest.fn();
       axios.delete = mockDelete;
-      apiCalls.deleteMessage(5);
+      apiCalls.deletePost(5);
       const path = mockDelete.mock.calls[0][0];
-      expect(path).toBe("/api/1.0/messages/5");
+      expect(path).toBe("/api/1.0/posts/5");
     });
   });
 
@@ -185,29 +185,29 @@ describe("apiCalls", () => {
     });
   });
 
-  describe('messageReaction', () => {
-    it('calls /api/1.0/messages/7/like when calling the messageReaction with 7 and like', () => {
+  describe('postReaction', () => {
+    it('calls /api/1.0/posts/7/like when calling the postReaction with 7 and like', () => {
       const mockPut = jest.fn();
       axios.put = mockPut;
 
-      apiCalls.messageReaction(7, 'like');
-      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/like');
+      apiCalls.postReaction(7, 'like');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/posts/7/like');
     });
 
-    it('calls /api/1.0/messages/7/dislike when calling the messageReaction with 7 and dislike', () => {
+    it('calls /api/1.0/posts/7/dislike when calling the postReaction with 7 and dislike', () => {
       const mockPut = jest.fn();
       axios.put = mockPut;
 
-      apiCalls.messageReaction(7, 'dislike');
-      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/dislike');
+      apiCalls.postReaction(7, 'dislike');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/posts/7/dislike');
     });
 
-    it('calls /api/1.0/messages/7/like when calling the messageReaction with 7 and random words', () => {
+    it('calls /api/1.0/posts/7/like when calling the postReaction with 7 and random words', () => {
       const mockPut = jest.fn();
       axios.put = mockPut;
 
-      apiCalls.messageReaction(7, 'this is something else');
-      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/messages/7/like');
+      apiCalls.postReaction(7, 'this is something else');
+      expect(mockPut.mock.calls[0][0]).toBe('/api/1.0/posts/7/like');
     });
   })
 });
