@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  30 MAY 2022 00:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  31 MAY 2022 11:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -655,7 +655,7 @@ Package biblatex Info: Reference segment=0 on input line 35.
 
 pdfTeX warning: pdflatex.exe (file ./images/Logo-UT-MI-SPOT-RO.pdf): PDF inclus
 ion: found PDF version <1.6>, but at most version <1.5> allowed
-<./images/Logo-UT-MI-SPOT-RO.pdf, id=135, 198.0198pt x 83.83319pt>
+<./images/Logo-UT-MI-SPOT-RO.pdf, id=151, 198.0198pt x 83.83319pt>
 File: ./images/Logo-UT-MI-SPOT-RO.pdf Graphic file (type pdf)
 <use ./images/Logo-UT-MI-SPOT-RO.pdf>
 Package pdftex.def Info: ./images/Logo-UT-MI-SPOT-RO.pdf  used on input line 5.
@@ -844,220 +844,235 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--67
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 72--74
+Underfull \hbox (badness 10000) in paragraph at lines 68--69
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 75--77
+Underfull \hbox (badness 10000) in paragraph at lines 77--79
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 78--80
-
- []
-
-[10]
 Underfull \hbox (badness 10000) in paragraph at lines 81--82
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 83--84
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 85--86
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 91--93
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 87--88
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 
  []
 
-<images//funct-app-web.png, id=251, 501.875pt x 444.66125pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 103--104
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
+
+ []
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 107--108
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 113--115
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--118
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--121
+
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 122--123
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--125
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 126--127
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 128--129
+
+ []
+
+<images//funct-app-web.png, id=281, 501.875pt x 444.66125pt>
 File: images//funct-app-web.png Graphic file (type png)
 <use images//funct-app-web.png>
-Package pdftex.def Info: images//funct-app-web.png  used on input line 91.
+Package pdftex.def Info: images//funct-app-web.png  used on input line 132.
 (pdftex.def)             Requested size: 256.0748pt x 226.88957pt.
-[11]
-Underfull \hbox (badness 10000) in paragraph at lines 96--98
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 137--139
 
  []
 
-<images//2level-arch.jpg, id=257, 463.13025pt x 200.54926pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+
+ []
+
+<images//2level-arch.jpg, id=288, 463.13025pt x 200.54926pt>
 File: images//2level-arch.jpg Graphic file (type jpg)
 <use images//2level-arch.jpg>
-Package pdftex.def Info: images//2level-arch.jpg  used on input line 104.
+Package pdftex.def Info: images//2level-arch.jpg  used on input line 148.
 (pdftex.def)             Requested size: 369.88582pt x 160.17032pt.
-[12
+[14
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.108 
+l.152 
        <./images//funct-app-web.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 117--119
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 123--124
+Underfull \hbox (badness 10000) in paragraph at lines 165--166
 
  []
 
-<images//3level-arch.png, id=264, 463.13025pt x 200.54926pt>
+<images//3level-arch.png, id=295, 463.13025pt x 200.54926pt>
 File: images//3level-arch.png Graphic file (type png)
 <use images//3level-arch.png>
-Package pdftex.def Info: images//3level-arch.png  used on input line 129.
+Package pdftex.def Info: images//3level-arch.png  used on input line 171.
 (pdftex.def)             Requested size: 369.88582pt x 160.17032pt.
-[13
+[15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2.2}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.133 
+l.175 
        <./images//2level-arch.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 140--142
+Underfull \hbox (badness 10000) in paragraph at lines 182--184
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 153--155
+Underfull \hbox (badness 10000) in paragraph at lines 195--197
 
  []
 
 
-Overfull \hbox (35.2803pt too wide) in paragraph at lines 157--158
+Overfull \hbox (35.2803pt too wide) in paragraph at lines 199--200
 []\OT1/cmr/m/n/12 Stratul des-ti-nat afi[]^^Uarii pa-gi-ni-lor web ges-tio-neaz
 ^^Ua afi[]area da-te-lor []i interac[]iunile
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 157--158
+Underfull \hbox (badness 10000) in paragraph at lines 199--200
 
  []
 
-[14
+[16
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.158 
+l.200 
        <./images//3level-arch.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 159--160
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--162
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 207--209
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 171--172
+Underfull \hbox (badness 10000) in paragraph at lines 213--214
 
  []
 
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 176--177
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 181--182
+[17]
+Underfull \hbox (badness 10000) in paragraph at lines 218--219
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 183--184
+Underfull \hbox (badness 10000) in paragraph at lines 223--224
 
  []
 
-<images//mvc-arch.png, id=282, 803.0pt x 501.875pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 225--226
+
+ []
+
+<images//mvc-arch.png, id=312, 803.0pt x 501.875pt>
 File: images//mvc-arch.png Graphic file (type png)
 <use images//mvc-arch.png>
-Package pdftex.def Info: images//mvc-arch.png  used on input line 187.
+Package pdftex.def Info: images//mvc-arch.png  used on input line 229.
 (pdftex.def)             Requested size: 270.30118pt x 168.94283pt.
-[16
+[18
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2.4}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.196 	\item[$-$]
+l.238 	\item[$-$]
                  Utilizatorul trimite cererea HTTP, o transmite server-ului ...
  <./images//mvc-arch.png>]
-Overfull \hbox (16.3641pt too wide) in paragraph at lines 196--197
+Overfull \hbox (16.3641pt too wide) in paragraph at lines 238--239
 []\OT1/cmr/m/n/12 Utilizatorul tri-mite ce-re-rea HTTP, o trans-mite server-ulu
 i de aplica[]ii
  []
 
 
-Overfull \hbox (4.13089pt too wide) in paragraph at lines 198--199
+Overfull \hbox (4.13089pt too wide) in paragraph at lines 240--241
 []\OT1/cmr/m/n/12 Modelul va efec-tua cal-cule sau pre-lucr^^Uari pe baza aces-
 tor informa[]ii
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 201--203
+Underfull \hbox (badness 10000) in paragraph at lines 243--245
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 211--212
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 213--215
-
- []
-
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 222--224
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 229--230
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 231--232
-
- []
-
-[18]
-Underfull \hbox (badness 10000) in paragraph at lines 238--240
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 242--243
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--247
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 248--249
+Underfull \hbox (badness 10000) in paragraph at lines 249--251
 
  []
 
@@ -1067,43 +1082,88 @@ Underfull \hbox (badness 10000) in paragraph at lines 252--253
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--255
+Underfull \hbox (badness 10000) in paragraph at lines 254--256
 
  []
 
 [19]
-Underfull \hbox (badness 10000) in paragraph at lines 261--262
+Underfull \hbox (badness 10000) in paragraph at lines 263--265
 
  []
 
 
-Overfull \hbox (2.82118pt too wide) in paragraph at lines 266--267
+Underfull \hbox (badness 10000) in paragraph at lines 270--271
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 272--273
+
+ []
+
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 279--281
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 283--284
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 287--288
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 289--290
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--294
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--296
+
+ []
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 302--303
+
+ []
+
+
+Overfull \hbox (2.82118pt too wide) in paragraph at lines 307--308
 []\OT1/cmr/m/n/12 Include un su-port ^^^Pncorporat ^^^Pmbog^^Ua[]it pen-tru dez
 vol-ta-rea Node.js
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 310--312
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 276--277
+Underfull \hbox (badness 10000) in paragraph at lines 317--318
 
  []
 
-[20]
-Overfull \hbox (6.1804pt too wide) in paragraph at lines 281--282
+[22]
+Overfull \hbox (6.1804pt too wide) in paragraph at lines 322--323
 []\OT1/cmr/m/n/12 Suport^^Ua com-ple-ta-rea in-te-li-gent^^Ua a co-du-lui ba-za
 t^^Ua pe con-text. Ofer^^Ua
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 285--287
+Underfull \hbox (badness 10000) in paragraph at lines 326--328
 
  []
 
-) [21]
+) [23]
 \openout2 = `./TeX_files/chapter03.aux'.
 
  (TeX_files/chapter03.tex
@@ -1143,7 +1203,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--17
 
  []
 
-[22
+[24
 
 
 
@@ -1153,7 +1213,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 42--43
 
  []
 
-[23]
+[25]
 Underfull \hbox (badness 10000) in paragraph at lines 44--45
 
  []
@@ -1168,12 +1228,64 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--51
 
  []
 
-[24]) [25]
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+
+ []
+
+
+Overfull \hbox (19.7451pt too wide) in paragraph at lines 56--57
+\OT1/cmr/m/n/12 s^^Ua ^^^Pnc^^Uarc^^Uam toate da-tele aces-tuia. []In documenta
+[]ia Spring, \OT1/cmtt/m/n/12 UserDetailsService
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+
+ []
+
+
+Overfull \hbox (25.5709pt too wide) in paragraph at lines 73--75
+\OT1/cmr/m/n/12 A[]adar, am creat clasa \OT1/cmtt/m/n/12 UserPrincipal \OT1/cmr
+/m/n/12 care im-ple-men-teaz^^Ua interfa[]a \OT1/cmtt/m/n/12 UserDetails
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--75
+
+ []
+
+[27]
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+
+ []
+
+
+Overfull \hbox (0.21527pt too wide) in paragraph at lines 82--83
+[][][][][][][][][][]  
+ []
+
+
+Overfull \hbox (41.72612pt too wide) in paragraph at lines 88--89
+[][][][][][][][][][][][][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--94
+
+ []
+
+) [28]
 \openout2 = `./TeX_files/chapter04.aux'.
 
  (TeX_files/chapter04.tex
 Capitolul 4.
-) [26
+) [29
 
 
 
@@ -1198,12 +1310,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--16
 
  []
 
-) [27
+) [30
 
 
 
 
-] [28] [29
+] [31] [32
 
 
 
@@ -1214,7 +1326,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--16
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Licenta.out' has not changed.
-(rerunfilecheck)             Checksum: C13CB9300C8FC52D27F8808945A06E8F;4898.
+(rerunfilecheck)             Checksum: 829E9E135DA822FD366FD6AE1E771772;5484.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                Licenta
@@ -1225,13 +1337,13 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 19645 strings out of 478582
- 345757 string characters out of 2844816
- 1014633 words of memory out of 3000000
- 37451 multiletter control sequences out of 15000+600000
+ 19712 strings out of 478582
+ 346809 string characters out of 2844816
+ 1014646 words of memory out of 3000000
+ 37487 multiletter control sequences out of 15000+600000
  479771 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,68p,1823b,2030s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 60i,8n,68p,1823b,2073s stack positions out of 10000i,1000n,20000p,200000b,80000s
  <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1
 200.pk> <C:\Users\Alex\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
 tcbx1200.pk><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
@@ -1251,9 +1363,9 @@ onts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (29 pages, 584187 bytes).
+Output written on Licenta.pdf (32 pages, 603278 bytes).
 PDF statistics:
- 475 PDF objects out of 1000 (max. 8388607)
- 113 named destinations out of 1000 (max. 500000)
- 290 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 538 PDF objects out of 1000 (max. 8388607)
+ 144 named destinations out of 1000 (max. 500000)
+ 322 words of extra memory for PDF output out of 10000 (max. 10000000)
 

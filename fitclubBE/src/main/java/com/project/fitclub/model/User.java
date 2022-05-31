@@ -22,7 +22,7 @@ import java.util.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 public class User extends DateAudit {
 
@@ -41,7 +41,7 @@ public class User extends DateAudit {
     @Size(min = 4, max = 255)
     String displayName;
 
-    @NaturalId(mutable=true)
+    @NaturalId(mutable = true)
     @Email
     @Size(min = 6, max = 50)
     @NotNull

@@ -65,7 +65,48 @@ Așadar, folosind Bootstrap, se pot crea dropdown-uri, alerte, pop-up-uri, navig
 
 CSS\footnote{Cascading Style Sheets} permite un control exact asupra aspectului elementelor HTML în browser, și astfel, se pot crea interfețe de utilizator reprezentative, fiecare pagină web putând avea un design unic. În CSS se poate defini dimensiunea, culoarea, poziția textului și a altor etichete HTML, în timp ce fișierele HTML definesc conținutul și organizarea acestuia.\newline
 
-HTML poate defini atât structura, cât și prezentarea, dar WWW\footnote{World Wide Web} recomandă utilizarea CSS, pentru a separa structura unui document HTML de prezentarea sa, deoarece în loc să se definească stilul fiecărui bloc de text și al fiecărui tabel în HTML-ul unei pagini web, CSS sprijină dezvoltatorii front-end să creeze un aspect uniform ce se poate aplica pe mai multe pagini ale unui site web, definindu-le o singură dată într-un fișier/document CSS, având extensia specifică ".css".
+HTML poate defini atât structura, cât și prezentarea, dar WWW\footnote{World Wide Web} recomandă utilizarea CSS, pentru a separa structura unui document HTML de prezentarea sa, deoarece în loc să se definească stilul fiecărui bloc de text și al fiecărui tabel în HTML-ul unei pagini web, CSS sprijină dezvoltatorii front-end să creeze un aspect uniform ce se poate aplica pe mai multe pagini ale unui site web, definindu-le o singură dată într-un fișier/document CSS, având extensia specifică ".css".\newline
+
+\section{Framework-uri în Java}
+Obiectivul unui framework este, în general, de a simplifica munca dezvoltatorilor, oferindu-le o arhitectură "gata de utilizare" care să le permită să nu înceapă de la zero la fiecare nou proiect. Se prezintă într-o varietate de forme care pot include unele sau toate următoarele:
+
+\begin{itemize}
+	\item{Un set de clase grupate de obicei sub formă de biblioteci pentru a furniza servicii mai mult sau mai puțin sofisticate.}
+	\item{Proiectare eficientă bazată pe modele de proiectare pentru a propune tot sau o parte din scheletul unei aplicații.}
+	\item{Standarde de dezvoltare}
+	\item{Diverse instrumente pentru a facilita dezvoltarea aplicației}
+	\newline
+\end{itemize}
+
+Aplicația FitClub folosește 2 framework-uri Java pe partea de server, și anume Spring Boot și Hibernate.\newline
+
+
+\subsection{Spring Boot}
+Conceptul fundamental al Spring este injectarea dependențelor.
+Acest framework a apărut ca răspuns la 3 factori de codare proastă, definiți în 1994 de Robert C. Martin, iar injectarea dependențelor este o soluție la această problemă:
+
+\begin{itemize}
+	\item{Rigiditate: este dificil să schimbi ceva, deoarece fiecare schimbare afectează prea mult funcționarea sistemului.}
+	\item{Fragilitate: o modificare face ca funcționalitățile deja implementate care ar trebui să funcționeze corect să funcționeze defectuos.}
+	\item{Imobilitate: este dificil de reutilizat codul într-o altă aplicație.}
+	\newline
+\end{itemize}
+
+Spring Boot este, în principiu, o extensie a cadrului Spring, care elimină configurațiile de tip boilerplate necesare pentru configurarea unei aplicații Spring. Acesta adoptă o viziune avizată a platformei Spring, care deschide calea pentru un ecosistem de dezvoltare mai rapid și mai eficient.\newline
+
+Așadar, pentru a crea o aplicație web folosind Spring Boot, avem nevoie de dependențe, unde folosim Maven pentru a le gestiona, aceasta fiind una dintre cele mai bine cunoscute caracteristici ale sale.\newline
+
+Nu există mari dificultăți în gestionarea dependențelor pentru un singur proiect, dar atunci când avem de-a face cu proiecte cu mai multe module și aplicații formate din zeci sau sute de module, Maven poate ajuta la menținerea unui nivel ridicat de control și stabilitate.\newline
+
+\subsection{Hibernate}
+
+Datele sunt cel mai adesea stocate în baze de date relaționale, astfel încât se recomandă utilizarea unui framework de mapare Obiect/Relațional pentru a asigura viteza, scalabilitatea și mentenabilitatea dezvoltărilor. Hibernate răspunde acestei nevoi și are un mare succes de mulți ani. Acest succes poate fi explicat prin arhitectura sa, care este perfect adaptabilă la orice tip de dezvoltare și prin suportul pentru majoritatea bazelor de date.\newline
+
+Hibernate este un framework de persistență utilizat pentru a gestiona persistența obiectelor Java într-o bază de date. Termenul de mapare\newline obiect/relațională (ORM) descrie tehnica de conectare a reprezentării obiectuale a datelor la reprezentarea relațională a acestora, pe baza unei scheme SQL.\newline
+
+În termeni concreți, Hibernate permite ca un obiect definit în Java să fie legat/mapat la o tabelă dintr-o bază de date, prin intermediul unui fișier de corespondență declarativ. Sistemul se poate ocupa de crearea tabelelor în conformitate cu fișierele de configurare și, de asemenea, de actualizarea tabelelor, dacă este necesar, atunci când unul dintre fișierele de configurare se modifică.\newline
+
+Hibernate are mai multe moduri de a efectua interogări. Este posibil să se exprime interogări în SQL sau în HQL\footnote{Hibernate Query Language: limbaj specific pentru limbajul propriu Hibernate}.\newline
 
 \section{Funcționarea unei aplicații web}
 
@@ -95,9 +136,12 @@ Figura 2.1 prezintă o imagine de ansamblu a acestui proces:\newline
 
 \textbf{Observație}: O resursă este identificată prin url (șir de caractere). Atunci când clientul dorește să ajungă la o resursă la distanță, acesta trimite o cerere HTTP în care menționează adresa URL a resursei.
 \newline
+
 \section{Arhitectura unei aplicații web}
 \subsection{Arhitectura pe două niveluri (client/server)}
-Arhitectura pe două niveluri numită și arhitectura "client-server" nu este deloc complicată. Pe de o parte se află clientul, iar pe de altă parte server-ul, așa cum este reprezentat și în Figura 2.2. Acest tip de arhitectură poate fi realizat pe orice tip de arhitectură hardware interconectată.
+Arhitectura pe două niveluri numită și arhitectura "client-server" nu este deloc complicată. Pe de o parte se află clientul, iar pe de altă parte server-ul, așa cum este reprezentat și în Figura 2.2.\newline
+
+Acest tip de arhitectură poate fi realizat pe orice tip de arhitectură hardware interconectată.
 
 \begin{figure}[H]
 	\begin{center}
@@ -105,8 +149,6 @@ Arhitectura pe două niveluri numită și arhitectura "client-server" nu este de
 		\caption{Arhitectura unei aplicații pe 2 niveluri}
 	\end{center}
 \end{figure}
-
-
 
 Punctele importante ale unei aplicații pe două niveluri:
 
@@ -201,7 +243,6 @@ Principiile arhitecturii MVC:
 	\item[$-$]Controller-ul primește pagina web pe care o va trimite utilizatorului, ca urmare a solicitării.
 	\newline
 \end{itemize}
-
 
 \section{React}
 

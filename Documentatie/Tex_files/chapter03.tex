@@ -51,5 +51,49 @@ Așadar, utilitatea acestei clase se rezumă la accesarea rapidă a căii unde s
 
 \subsection{Utilizarea JWT}
 
+Implementarea JWT este relevantă în cadrul configurării pentru autentificarea fără stare, folosind un token JWT. Pentru a personaliza Spring Security în acest sens, am adăugat configurări suplimentare în clasa de configurare prezentată anterior astfel încât să configurăm managerul de autentificare cu furnizorul corect.\newline
+
+Pentru ca utilizatorul să se poată autentifice cu succes pe site, avem nevoie să încărcăm toate datele acestuia. În documentația Spring, \code{UserDetailsService} este descrisă ca o interfață de bază care încarcă datele specifice utilizatorului. În cele mai multe cazuri de utilizare, furnizorii de autentificare extrag informațiile privind identitatea utilizatorului pe baza acreditărilor dintr-o bază de date și apoi efectuează validarea. Deoarece acest caz de utilizare este atât de comun, dezvoltatorii Spring au decis să îl extragă ca o interfață separată, care expune funcția unică \code{loadUserByUsername} acceptă numele de utilizator ca parametru și returnează obiectul de identitate al utilizatorului.\newline
+
+În implementarea acestei aplicații, am optat sa construiesc o clasă nouă, numită \code{CustomUserDetailsService} care să extindă această interfață, astfel încât să pot avea acces la anumite configurări suplimentare.\newline
+
+ \begin{lstlisting}[language=Java]
+	@Override
+	public UserDetails loadUserByUsername(String username)
+	throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found with username: " + username);
+		}
+		return UserPrincipal.create(user);
+	}
+\end{lstlisting}
+\bigskip
+
+După autentificare, ar putea fi necesar să verificăm credențialele utilizatorului, în cazul în care un hacker poate fura un token validat printr-un atac și îl poate injecta într-o cerere abuzivă. În acest context, Spring Security furnizează clasa \code{UsernamePasswordAuthenticationFilter} pentru a ajuta la efectuarea validării credențialelor, prin faptul că obținem acces la identitatea utilizatorului pentru a efectua autorizarea, iar extragerea acesteia are loc în cadrul filtrului JWT pe baza token-ului JWT furnizat.\newline
+Așadar, am creat clasa \code{UserPrincipal} care implementează interfața \code{UserDetails} pentru a facilita \code{UsernamePasswordAuthenticationFilter}.\newline
+
+După autentificarea și autorizarea credențialelor utilizatorului, aplicația trebuie să gestioneze excepțiile în timpul acestor procese. Pentru a face acest lucru posibil, am creat o clasă numită \code{JwtAuthenticationEntryPoint}  care să extindă \code{AuthenticationEntryPoint} și care suprascrie metoda \code{commence} pentru a personaliza mesajele de returnare.\newline
+
+\begin{lstlisting}[language=Java]
+	@Component
+	public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+		
+		private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+		@Override
+		public void commence(HttpServletRequest httpServletRequest,
+		HttpServletResponse httpServletResponse,
+		AuthenticationException e) throws IOException, ServletException {
+			logger.error("Responding with unauthorized error. Message - {}", e.getMessage());
+			httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		}
+	}
+\end{lstlisting}
+\bigskip
+În general, în cadrul acestei clase vor fi capturate excepții de tip token invalid (neautorizat) și credențiale invalide.\newline
+
+\subsection{Distribuirea postărilor}
+
+
 
 \label{chap:03}

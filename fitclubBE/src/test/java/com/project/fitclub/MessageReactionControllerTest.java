@@ -11,6 +11,7 @@ import com.project.fitclub.service.MessageService;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.GenericResponse;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -245,6 +246,12 @@ public class MessageReactionControllerTest {
     public void cleanupAfter() {
         messageReactionRepository.deleteAll();
         messageRepository.deleteAll();
+        userRepository.deleteAll();
+        testRestTemplate.getRestTemplate().getInterceptors().clear();
+    }
+
+    @BeforeEach
+    public void cleanupBefore() {
         userRepository.deleteAll();
         testRestTemplate.getRestTemplate().getInterceptors().clear();
     }
