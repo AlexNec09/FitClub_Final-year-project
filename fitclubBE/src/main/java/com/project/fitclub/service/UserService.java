@@ -6,8 +6,8 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.EmailRequest;
 import com.project.fitclub.security.payload.NewPasswordRequest;
-import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.shared.EmailSenderService;
 import com.project.fitclub.validation.verificationToken.VerificationToken;
 import com.project.fitclub.validation.verificationToken.VerificationTokenService;
@@ -194,7 +194,7 @@ public class UserService {
         return false;
     }
 
-    public boolean changeEmail(String email, UpdateEmailRequest updatedEmail) {
+    public boolean changeEmail(String email, EmailRequest updatedEmail) {
         try {
             User inDB = userRepository.findByEmail(email);
             inDB.setEmail(updatedEmail.getNewEmail());

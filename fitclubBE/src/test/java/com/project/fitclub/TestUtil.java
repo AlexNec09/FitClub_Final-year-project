@@ -1,9 +1,9 @@
 package com.project.fitclub;
 
-import com.project.fitclub.model.Message;
+import com.project.fitclub.model.Post;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.payload.LoginRequest;
-import com.project.fitclub.security.payload.MessageRequest;
+import com.project.fitclub.security.payload.PostRequest;
 
 public class TestUtil {
 
@@ -31,15 +31,15 @@ public class TestUtil {
         return userForLogin;
     }
 
-    public static Message createValidMessage() {
-        Message message = new Message();
-        message.setContent("test content for the test message");
-        return message;
+    public static Post createValidPost() {
+        Post post = new Post();
+        post.setContent("test content for the test post");
+        return post;
     }
 
-    public static MessageRequest createMessageRequest() {
-        MessageRequest messageRequest = new MessageRequest();
-        messageRequest.setContent("test content for the test message");
-        return messageRequest;
+    public static PostRequest createPostRequest() {
+        PostRequest postRequest = new PostRequest();
+        postRequest.setContent("test content for the test post");
+        return postRequest;
     }
 }

@@ -2,7 +2,7 @@ package com.project.fitclub;
 
 import com.project.fitclub.dao.FileAttachmentRepository;
 import com.project.fitclub.model.FileAttachment;
-import com.project.fitclub.model.Message;
+import com.project.fitclub.model.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,48 +25,48 @@ public class FileAttachmentRepositoryTest {
     FileAttachmentRepository fileAttachmentRepository;
 
     @Test
-    public void findByDateBeforeAndMessageIsNull_whenAttachmentsDateOlderThanOneHour_returnsAll() {
+    public void findByDateBeforeAndPostIsNull_whenAttachmentsDateOlderThanOneHour_returnsAll() {
         testEntityManager.persist(getOneHourOldFileAttachment());
         testEntityManager.persist(getOneHourOldFileAttachment());
         testEntityManager.persist(getOneHourOldFileAttachment());
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndMessageIsNull(oneHourAgo);
+        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
         assertThat(attachments.size()).isEqualTo(3);
     }
 
     @Test
-    public void findByDateBeforeAndMessageIsNull_whenAttachmentsDateOlderThanOneHourButHaveMessage_returnsNone() {
-        Message message1 = testEntityManager.persist(TestUtil.createValidMessage());
-        Message message2 = testEntityManager.persist(TestUtil.createValidMessage());
-        Message message3 = testEntityManager.persist(TestUtil.createValidMessage());
+    public void findByDateBeforeAndPostIsNull_whenAttachmentsDateOlderThanOneHourButHaveMessage_returnsNone() {
+        Post post1 = testEntityManager.persist(TestUtil.createValidPost());
+        Post post2 = testEntityManager.persist(TestUtil.createValidPost());
+        Post post3 = testEntityManager.persist(TestUtil.createValidPost());
 
-        testEntityManager.persist(getOneHourOldFileAttachmentWithMessage(message1));
-        testEntityManager.persist(getOneHourOldFileAttachmentWithMessage(message2));
-        testEntityManager.persist(getOneHourOldFileAttachmentWithMessage(message3));
+        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post1));
+        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post2));
+        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post3));
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndMessageIsNull(oneHourAgo);
+        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
         assertThat(attachments.size()).isEqualTo(0);
     }
 
     @Test
-    public void findByDateBeforeAndMessageIsNull_whenAttachmentsDateWithinOneHour_returnsNone() {
+    public void findByDateBeforeAndPostIsNull_whenAttachmentsDateWithinOneHour_returnsNone() {
         testEntityManager.persist(getFileAttachmentWithinOneHour());
         testEntityManager.persist(getFileAttachmentWithinOneHour());
         testEntityManager.persist(getFileAttachmentWithinOneHour());
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndMessageIsNull(oneHourAgo);
+        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
         assertThat(attachments.size()).isEqualTo(0);
     }
 
     @Test
-    public void findByDateBeforeAndMessageIsNull_whenSomeAttachmentsOldSomeNewAndSomeWithMessage_returnsAttachmentsWithOlderAndNoMessageAssigned() {
-        Message message1 = testEntityManager.persist(TestUtil.createValidMessage());
+    public void findByDateBeforeAndPostIsNull_whenSomeAttachmentsOldSomeNewAndSomeWithPost_returnsAttachmentsWithOlderAndNoMessageAssigned() {
+        Post post = testEntityManager.persist(TestUtil.createValidPost());
 
-        testEntityManager.persist(getOneHourOldFileAttachmentWithMessage(message1));
+        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post));
         testEntityManager.persist(getOneHourOldFileAttachment());
         testEntityManager.persist(getFileAttachmentWithinOneHour());
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndMessageIsNull(oneHourAgo);
+        List<FileAttachment> attachments = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
         assertThat(attachments.size()).isEqualTo(1);
     }
 
@@ -77,9 +77,9 @@ public class FileAttachmentRepositoryTest {
         return fileAttachment;
     }
 
-    private FileAttachment getOneHourOldFileAttachmentWithMessage(Message message) {
+    private FileAttachment getOneHourOldFileAttachmentWithPost(Post post) {
         FileAttachment fileAttachment = getOneHourOldFileAttachment();
-        fileAttachment.setMessage(message);
+        fileAttachment.setPost(post);
         return fileAttachment;
     }
 

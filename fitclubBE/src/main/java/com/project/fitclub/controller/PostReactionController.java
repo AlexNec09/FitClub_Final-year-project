@@ -3,7 +3,7 @@ package com.project.fitclub.controller;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.UserPrincipal;
-import com.project.fitclub.service.MessageReactionService;
+import com.project.fitclub.service.PostReactionService;
 import com.project.fitclub.shared.CurrentUser;
 import com.project.fitclub.shared.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/1.0")
-public class MessageReactionController {
+public class PostReactionController {
 
     @Autowired
-    MessageReactionService messageReactionService;
+    PostReactionService postReactionService;
 
     @Autowired
     UserRepository userRepository;
 
-    @PutMapping("/messages/{id:[0-9]+}/like")
+    @PutMapping("/posts/{id:[0-9]+}/like")
     GenericResponse handleLike(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
         User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
 
-        messageReactionService.like(id, currentUser);
+        postReactionService.like(id, currentUser);
         return new GenericResponse("You liked the post.");
     }
 
-    @PutMapping("/messages/{id:[0-9]+}/dislike")
+    @PutMapping("/posts/{id:[0-9]+}/dislike")
     GenericResponse handleDislike(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
         User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
 
-        messageReactionService.dislike(id, currentUser);
+        postReactionService.dislike(id, currentUser);
         return new GenericResponse("You disliked the post.");
     }
 

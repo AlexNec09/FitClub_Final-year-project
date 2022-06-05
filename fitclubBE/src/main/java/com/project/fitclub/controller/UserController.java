@@ -4,11 +4,10 @@ import com.project.fitclub.model.User;
 import com.project.fitclub.model.vm.UserUpdateVM;
 import com.project.fitclub.model.vm.UserVM;
 import com.project.fitclub.security.UserPrincipal;
+import com.project.fitclub.security.payload.EmailRequest;
 import com.project.fitclub.security.payload.NewPasswordRequest;
-import com.project.fitclub.security.payload.UpdateEmailRequest;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.CurrentUser;
-import com.project.fitclub.shared.GenericResponse;
 import com.project.fitclub.validation.verificationToken.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -116,7 +114,7 @@ public class UserController {
 
     @PostMapping(path = "/users/email-verification/changeEmailToken/{token}")
     public ResponseEntity verifyEmailTokenForChangeEmail(@PathVariable String token,
-                                                         @Valid @RequestBody(required = false) UpdateEmailRequest updatedEmail) {
+                                                         @Valid @RequestBody(required = false) EmailRequest updatedEmail) {
         try {
             User user = verificationTokenService.verifyChangeEmailToken(token);
             if (user != null) {
@@ -191,7 +189,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/users/recoverPassword")
-    public ResponseEntity<?> sendEmailToRecoverPassword(@Valid @RequestBody UpdateEmailRequest userEmail) {
+    public ResponseEntity<?> sendEmailToRecoverPassword(@Valid @RequestBody EmailRequest userEmail) {
         boolean isEmailValid = userService.sendRecoveryEmail(userEmail.getNewEmail());
         if (isEmailValid) {
             return new ResponseEntity(HttpStatus.OK);

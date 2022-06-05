@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
-public class UpdateEmailRequest {
+public class EmailRequest {
     @Size(min = 4, max = 255)
     @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
     @UniqueUsername

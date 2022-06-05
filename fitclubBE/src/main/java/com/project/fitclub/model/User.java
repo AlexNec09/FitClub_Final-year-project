@@ -9,10 +9,6 @@ import java.beans.Transient;
 
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -61,7 +57,7 @@ public class User extends DateAudit {
     private Boolean emailVerificationStatus = false;
 
     @OneToMany(mappedBy = "user")
-    List<Message> messages = new ArrayList<>();
+    List<Post> posts = new ArrayList<>();
 
     @ManyToMany
     Set<User> followedBy = new HashSet<>();
