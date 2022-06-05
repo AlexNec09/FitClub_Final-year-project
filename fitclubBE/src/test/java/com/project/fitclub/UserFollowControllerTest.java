@@ -3,12 +3,15 @@ package com.project.fitclub;
 import com.project.fitclub.dao.UserRepository;
 import com.project.fitclub.model.User;
 import com.project.fitclub.service.UserService;
+import com.project.fitclub.shared.EmailSenderService;
 import com.project.fitclub.shared.GenericResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,7 +132,7 @@ public class UserFollowControllerTest {
     }
 
     @Test
-    public void putFollow_whenAuthorizedUserFollowsAnotherUser_returnsGenericResponseWithErrorMessage() {
+    public void putFollow_whenAuthorizedUserFollowsAnotherUser_returnsGenericResponseWithPost() {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
@@ -233,7 +236,7 @@ public class UserFollowControllerTest {
     }
 
     @Test
-    public void putUnfollow_whenAuthorizedUserUnFollowsAnotherUser_returnsGenericResponseWithErrorMessage() {
+    public void putUnfollow_whenAuthorizedUserUnFollowsAnotherUser_returnsGenericResponseWithPost() {
         userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         User userToBeFollowed = userService.saveWithoutSendingEmail(TestUtil.createValidUser("target-user"));
 
@@ -245,7 +248,7 @@ public class UserFollowControllerTest {
 
     private void authenticate(String username) {
         testRestTemplate.getRestTemplate().getInterceptors()
-                .add(new BasicAuthenticationInterceptor(username, "P4ssword"));
+                .add(new BasicAuthenticationInterceptor(username, "P4ssword12@"));
     }
 
     public <T> ResponseEntity<T> follow(long userid, Class<T> responseType) throws RestClientException {

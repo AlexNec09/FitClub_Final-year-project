@@ -129,6 +129,6 @@ public class FileUploadControllerTest {
 
     private void authenticate() {
         testRestTemplate.getRestTemplate()
-                .getInterceptors().add(new BasicAuthenticationInterceptor("user1", "P4ssword"));
+                .getInterceptors().add(new BasicAuthenticationInterceptor("user1", "P4ssword12@"));
     }
 }

@@ -56,7 +56,7 @@ public class StaticResourceTest {
     @Test
     public void getStaticFile_whenImageExistInProfileUploadFolder_receiveOk() throws Exception {
         String fileName = "profile-picture.png";
-        File source = new ClassPathResource("profile.png").getFile(); // got the file from static resource
+        File source = new ClassPathResource("profile.png").getFile();
 
         File target = new File(appConfiguration.getFullProfileImagesPath() + "/" + fileName);
         FileUtils.copyFile(source, target);
@@ -67,7 +67,7 @@ public class StaticResourceTest {
     @Test
     public void getStaticFile_whenImageExistInAttachmentFolder_receiveOk() throws Exception {
         String fileName = "profile-picture.png";
-        File source = new ClassPathResource("profile.png").getFile(); // got the file from static resource
+        File source = new ClassPathResource("profile.png").getFile();
 
         File target = new File(appConfiguration.getFullAttachmentsPath() + "/" + fileName);
         FileUtils.copyFile(source, target);
@@ -84,7 +84,7 @@ public class StaticResourceTest {
     @Test
     public void getStaticFile_whenImageExistInAttachmentFolder_receiveOkWithCacheHeaders() throws Exception {
         String fileName = "profile-picture.png";
-        File source = new ClassPathResource("profile.png").getFile(); // get the file from static resource
+        File source = new ClassPathResource("profile.png").getFile();
 
         File target = new File(appConfiguration.getFullAttachmentsPath() + "/" + fileName);
         FileUtils.copyFile(source, target);
@@ -92,7 +92,7 @@ public class StaticResourceTest {
         MvcResult result = mockMvc.perform(get("/images/" + appConfiguration.getAttachmentsFolder() + "/" + fileName)).andReturn();
 
         String cacheControl = result.getResponse().getHeaderValue("Cache-Control").toString();
-        assertThat(cacheControl).containsIgnoringCase("max-age=31536000");  // cache the files for a year
+        assertThat(cacheControl).containsIgnoringCase("max-age=31536000");
     }
 
     @AfterEach

@@ -31,11 +31,11 @@ public class PostController {
     UserRepository userRepository;
 
     @GetMapping("/posts")
-    Page<?> getAllMessages(Pageable pageable, @CurrentUser UserPrincipal userPrincipal) {
+    Page<?> getAllPosts(Pageable pageable, @CurrentUser UserPrincipal userPrincipal) {
         if (userPrincipal != null) {
             return postService.getPostsForUser(pageable, userPrincipal.getId()).map(PostVM::new);
         }
-        return postService.getAllMessages(pageable).map(PostVM::new);
+        return postService.getAllPosts(pageable).map(PostVM::new);
     }
 
     @GetMapping("/users/{username}/posts")
@@ -44,7 +44,7 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    PostVM createMessage(@Valid @RequestBody Post post, @CurrentUser UserPrincipal userPrincipal) {
+    PostVM createPost(@Valid @RequestBody Post post, @CurrentUser UserPrincipal userPrincipal) {
         User user = userRepository.findByUsername(userPrincipal.getUsername());
         return new PostVM(postService.save(user, post));
     }
@@ -71,12 +71,12 @@ public class PostController {
         }
 
         if (count) {
-            long newMessagesCount = postService.countPostsAfter(id, username, user);
-            return ResponseEntity.ok(Collections.singletonMap("count", newMessagesCount));
+            long newPostsCount = postService.countPostsAfter(id, username, user);
+            return ResponseEntity.ok(Collections.singletonMap("count", newPostsCount));
         }
 
-        List<PostVM> newMessages = postService.getPostsAfter(id, username, user, pageable).stream()
+        List<PostVM> newPosts = postService.getPostsAfter(id, username, user, pageable).stream()
                 .map(PostVM::new).collect(Collectors.toList());
-        return ResponseEntity.ok(newMessages);
+        return ResponseEntity.ok(newPosts);
     }
 }

@@ -45,7 +45,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Page<Post> getAllMessages(Pageable pageable) {
+    public Page<Post> getAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
 
@@ -55,11 +55,11 @@ public class PostService {
     }
 
     public void deletePost(long id) {
-        Optional<Post> optionalMessage = postRepository.findById(id);
-        if (optionalMessage.isPresent()) {
-            Post foundMessage = optionalMessage.get();
-            if (foundMessage.getAttachment() != null) {
-                fileService.deleteAttachmentImage(foundMessage.getAttachment().getName());
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if (optionalPost.isPresent()) {
+            Post foundPost = optionalPost.get();
+            if (foundPost.getAttachment() != null) {
+                fileService.deleteAttachmentImage(foundPost.getAttachment().getName());
             }
         }
         postRepository.deleteById(id);

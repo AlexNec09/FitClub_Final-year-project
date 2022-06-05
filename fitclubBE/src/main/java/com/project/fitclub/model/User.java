@@ -5,10 +5,9 @@ import com.project.fitclub.validation.verificationToken.VerificationToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.beans.Transient;
-
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;

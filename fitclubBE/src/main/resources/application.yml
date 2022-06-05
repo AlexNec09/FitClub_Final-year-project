@@ -57,7 +57,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/testing9post
+    url: jdbc:mysql://localhost:3306/testing9
     username: root
     password: root
   jpa:

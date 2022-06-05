@@ -29,6 +29,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -555,7 +556,6 @@ public class PostControllerTest {
         User user2 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user2"));
         User user3 = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user3"));
         postService.save(myUser, TestUtil.createValidPost());
-
         postService.save(user2, TestUtil.createValidPost());
         postService.save(user3, TestUtil.createValidPost());
         follow(user2.getId(), headers, Object.class);
@@ -1055,9 +1055,9 @@ public class PostControllerTest {
 
         FileAttachment savedFile = fileService.saveAttachment(file);
 
-        PostRequest postRequest = TestUtil.createPostRequest();
-        postRequest.setAttachment(savedFile);
-        ResponseEntity<PostVM> result = postUserPost(postRequest, headers, PostVM.class);
+        PostRequest post = TestUtil.createPostRequest();
+        post.setAttachment(savedFile);
+        ResponseEntity<PostVM> result = postUserPost(post, headers, PostVM.class);
 
         long postId = result.getBody().getId();
 
@@ -1148,8 +1148,8 @@ public class PostControllerTest {
         return testRestTemplate.exchange(RequestEntity.get(new URI(API_1_0_POSTS)).headers(headers).build(), responseType);
     }
 
-    private <T> ResponseEntity<T> postUserPost(PostRequest postRequest, HttpHeaders headers, Class<T> responseType) throws URISyntaxException {
-        return testRestTemplate.exchange(RequestEntity.post(new URI(API_1_0_POSTS)).headers(headers).body(postRequest), responseType);
+    private <T> ResponseEntity<T> postUserPost(PostRequest post, HttpHeaders headers, Class<T> responseType) throws URISyntaxException {
+        return testRestTemplate.exchange(RequestEntity.post(new URI(API_1_0_POSTS)).headers(headers).body(post), responseType);
     }
 
     private ResponseEntity<UserPrincipal> authenticateUser(LoginRequest loggingUser) {

@@ -53,7 +53,7 @@ public class LoginControllerTest {
 
     @Test
     public void postLogin_withIncorrectCredentials_receiveUnauthorized() {
-        ResponseEntity<UserPrincipal> response = authenticateUser(new LoginRequest("test-invalid-user", "P4ssword"));
+        ResponseEntity<UserPrincipal> response = authenticateUser(new LoginRequest("test-invalid-user", "P4ssword12@"));
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 

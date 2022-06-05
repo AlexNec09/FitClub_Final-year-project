@@ -99,7 +99,7 @@ public class PostReactionControllerTest {
     }
 
     @Test
-    public void putLike_whenAuthorizedUserForKnownPost_returnsSuccessMessage() {
+    public void putLike_whenAuthorizedUserForKnownPost_returnsSuccessPost() {
         User user = userService.saveWithoutSendingEmail(TestUtil.createValidUser("user1"));
         authenticateUser("user1");
 
@@ -171,12 +171,14 @@ public class PostReactionControllerTest {
     }
 
     @Test
-    public void putDislike_whenAuthorizedUserForKnownPost_returnsSuccessMessage() {
+    public void putDislike_whenAuthorizedUserForKnownPost_returnsSuccessPost() {
         User inDB = userService.saveWithoutSendingEmail(TestUtil.createValidUser("test-user"));
         LoginRequest loggingUser = TestUtil.createLoginUser();
         authenticate(loggingUser);
 
         Post post = postService.save(inDB, TestUtil.createValidPost());
+
+        System.out.println(post.getId());
 
         String path = String.format(API_1_0_POSTS_DISLIKE, post.getId());
         ResponseEntity<GenericResponse> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, GenericResponse.class);
@@ -234,7 +236,7 @@ public class PostReactionControllerTest {
     }
 
     private void authenticateUser(String username) {
-        testRestTemplate.getRestTemplate().getInterceptors().add(new BasicAuthenticationInterceptor(username, "P4ssword"));
+        testRestTemplate.getRestTemplate().getInterceptors().add(new BasicAuthenticationInterceptor(username, "P4ssword12@"));
     }
 
     private ResponseEntity<UserPrincipal> authenticate(LoginRequest loggingUser) {

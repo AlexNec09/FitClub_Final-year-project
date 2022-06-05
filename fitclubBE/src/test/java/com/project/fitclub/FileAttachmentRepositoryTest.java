@@ -35,7 +35,7 @@ public class FileAttachmentRepositoryTest {
     }
 
     @Test
-    public void findByDateBeforeAndPostIsNull_whenAttachmentsDateOlderThanOneHourButHaveMessage_returnsNone() {
+    public void findByDateBeforeAndPostIsNull_whenAttachmentsDateOlderThanOneHourButHavePost_returnsNone() {
         Post post1 = testEntityManager.persist(TestUtil.createValidPost());
         Post post2 = testEntityManager.persist(TestUtil.createValidPost());
         Post post3 = testEntityManager.persist(TestUtil.createValidPost());
@@ -59,10 +59,10 @@ public class FileAttachmentRepositoryTest {
     }
 
     @Test
-    public void findByDateBeforeAndPostIsNull_whenSomeAttachmentsOldSomeNewAndSomeWithPost_returnsAttachmentsWithOlderAndNoMessageAssigned() {
-        Post post = testEntityManager.persist(TestUtil.createValidPost());
+    public void findByDateBeforeAndPostIsNull_whenSomeAttachmentsOldSomeNewAndSomeWithPost_returnsAttachmentsWithOlderAndNoPostAssigned() {
+        Post post1 = testEntityManager.persist(TestUtil.createValidPost());
 
-        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post));
+        testEntityManager.persist(getOneHourOldFileAttachmentWithPost(post1));
         testEntityManager.persist(getOneHourOldFileAttachment());
         testEntityManager.persist(getFileAttachmentWithinOneHour());
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));

@@ -12,7 +12,7 @@ public class TestUtil {
         user.setUsername("test-user");
         user.setDisplayName("test-display");
         user.setEmail("test.email@mail.com");
-        user.setPassword("P4ssword");
+        user.setPassword("P4ssword12@");
         user.setImage("profile-image.png");
         return user;
     }
@@ -27,7 +27,7 @@ public class TestUtil {
     public static LoginRequest createLoginUser() {
         LoginRequest userForLogin = new LoginRequest();
         userForLogin.setUsername("test-user");
-        userForLogin.setPassword("P4ssword");
+        userForLogin.setPassword("P4ssword12@");
         return userForLogin;
     }
 
