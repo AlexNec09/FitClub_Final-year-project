@@ -1,7 +1,7 @@
 package com.project.fitclub.shared;
 
 import com.project.fitclub.model.User;
-import com.project.fitclub.validation.verificationToken.VerificationToken;
+import com.project.fitclub.model.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,19 +1,16 @@
-package com.project.fitclub.validation.verificationToken;
+package com.project.fitclub.service;
 
 import com.project.fitclub.dao.UserRepository;
-import com.project.fitclub.model.FileAttachment;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.shared.EmailSenderService;
+import com.project.fitclub.model.VerificationToken;
+import com.project.fitclub.dao.VerificationTokenRepository;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -58,6 +55,7 @@ public class VerificationTokenService {
         verificationTokenRepository.deleteById(verificationToken.getId());
     }
 
+    @Transactional
     public User verifyChangeEmailToken(String token) {
         boolean isTokenValid = jwtTokenProvider.validateToken(token);
 
@@ -66,6 +64,7 @@ public class VerificationTokenService {
             changeEmailToken.setEmailToken(null);
             User userDB = changeEmailToken.getUser();
             if (changeEmailToken.getPasswordToken() == null) {
+                System.out.println("entered here");
                 deleteTokenById(changeEmailToken);
                 userDB.setVerificationToken(null);
             }
@@ -74,6 +73,7 @@ public class VerificationTokenService {
         return null;
     }
 
+    @Transactional
     public User verifyChangePasswordToken(String token) {
         boolean isTokenValid = jwtTokenProvider.validateToken(token);
 

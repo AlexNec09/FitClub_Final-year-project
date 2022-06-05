@@ -49,15 +49,13 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public String generateVerificationToken(String publicUserId) {
-        String token = Jwts.builder()
-                .setSubject(publicUserId)
+    public String generateVerificationToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-        return token;
     }
-
 
     public boolean validateToken(String authToken) {
         try {

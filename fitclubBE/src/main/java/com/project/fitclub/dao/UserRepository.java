@@ -1,7 +1,7 @@
 package com.project.fitclub.dao;
 
 import com.project.fitclub.model.User;
-import com.project.fitclub.validation.verificationToken.VerificationToken;
+import com.project.fitclub.model.VerificationToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

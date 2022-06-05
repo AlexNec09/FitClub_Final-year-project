@@ -8,7 +8,7 @@ import com.project.fitclub.security.payload.NewPasswordRequest;
 import com.project.fitclub.security.payload.EmailRequest;
 import com.project.fitclub.service.UserService;
 import com.project.fitclub.shared.CurrentUser;
-import com.project.fitclub.validation.verificationToken.VerificationTokenService;
+import com.project.fitclub.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

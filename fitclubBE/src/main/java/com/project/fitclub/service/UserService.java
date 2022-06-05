@@ -9,8 +9,7 @@ import com.project.fitclub.security.UserPrincipal;
 import com.project.fitclub.security.payload.NewPasswordRequest;
 import com.project.fitclub.security.payload.EmailRequest;
 import com.project.fitclub.shared.EmailSenderService;
-import com.project.fitclub.validation.verificationToken.VerificationToken;
-import com.project.fitclub.validation.verificationToken.VerificationTokenService;
+import com.project.fitclub.model.VerificationToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -196,9 +195,14 @@ public class UserService {
 
     public boolean changeEmail(String email, EmailRequest updatedEmail) {
         try {
-            User inDB = userRepository.findByEmail(email);
-            inDB.setEmail(updatedEmail.getNewEmail());
-            userRepository.save(inDB);
+            User userInDB = userRepository.findByEmail(email);
+            VerificationToken newToken = new VerificationToken(userInDB);
+            newToken.setEmailToken(jwtTokenProvider.generateVerificationToken(userInDB.getUsername()));
+            userInDB.setVerificationToken(newToken);
+            userInDB.setEmail(updatedEmail.getNewEmail());
+            userInDB.setEmailVerificationStatus(false);
+            userRepository.save(userInDB);
+            emailSender.verifyEmail(userInDB);
             return true;
         } catch (RuntimeException e) {
             e.printStackTrace();

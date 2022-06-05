@@ -1,7 +1,6 @@
 package com.project.fitclub.model;
 
 import com.project.fitclub.validation.UniqueUsername;
-import com.project.fitclub.validation.verificationToken.VerificationToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

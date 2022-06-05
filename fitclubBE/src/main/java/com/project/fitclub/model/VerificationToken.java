@@ -1,4 +1,4 @@
-package com.project.fitclub.validation.verificationToken;
+package com.project.fitclub.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.fitclub.model.User;
