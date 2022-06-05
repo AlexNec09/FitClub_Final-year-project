@@ -36,9 +36,9 @@ const MessageView = (props) => {
         />
         <div className="flex-fill m-auto ps-2">
           <div>
-            <Link to={`/${username}`} className="list-group-item-action">
+            <Link to={`/${username}`} className="custom-link-for-user">
               <h6 className="d-inline">
-                {displayName}@{username}
+                {displayName}
               </h6>
             </Link>
             <span className="brsmaller"></span>

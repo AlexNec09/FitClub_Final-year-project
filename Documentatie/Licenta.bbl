@@ -34,5 +34,35 @@
     \endverb
     \field{journaltitle}{ReactJS}
   \endentry
+
+  \entry{.hibernate}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Hibernate}
+    \verb{url}
+    \verb https://www.springboottutorial.com/hibernate-jpa-tutorial-with-spring
+    \verb -boot-starter-jpa#:~:text=Hibernate%20understands%20the%20mappings%20
+    \verb that,a%20lock%20in%20to%20Hibernate.
+    \endverb
+    \field{journaltitle}{Hibernate}
+  \endentry
+
+  \entry{.springjpa}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Advanced Spring JPA}
+    \verb{url}
+    \verb https://spring.io/blog/2011/04/26/advanced-spring-data-jpa-specificat
+    \verb ions-and-querydsl/
+    \endverb
+    \field{journaltitle}{Advanced Spring JPA}
+  \endentry
+
+  \entry{.reacthooks}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{React Hooks}
+    \verb{url}
+    \verb https://reactjs.org/docs/hooks-reference.html
+    \endverb
+    \field{journaltitle}{React Hooks}
+  \endentry
 \enddatalist
 \endinput

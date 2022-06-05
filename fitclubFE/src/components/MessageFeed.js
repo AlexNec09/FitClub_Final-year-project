@@ -38,6 +38,8 @@ const MessageFeed = (props) => {
             setHasFullAccess(false);
             setLoadingMessages(false);
           });
+      } else {
+        setLoadingMessages(false);
       }
     };
     loadMessages();

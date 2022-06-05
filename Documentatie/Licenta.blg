@@ -11,6 +11,12 @@ Reallocating 'name_of_file' (item size: 1) to 26 items.
 A level-1 auxiliary file: ./TeX_files/chapter01.aux
 Reallocating 'name_of_file' (item size: 1) to 26 items.
 A level-1 auxiliary file: ./TeX_files/chapter02.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: ./TeX_files/chapter03.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: ./TeX_files/chapter04.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: ./TeX_files/chapter05.aux
 Reallocating 'glb_str_end' (item size: 4) to 20 items.
 Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
 Reallocating 'global_strs' (item size: 1) to 4000000 items.
@@ -31,44 +37,44 @@ Database file #2: ./references.bib
 Biblatex version: 3.17
 Reallocating 'wiz_functions' (item size: 4) to 9000 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
-You've used 3 entries,
+You've used 6 entries,
             6399 wiz_defined-function locations,
-            1212 strings with 9181 characters,
-and the built_in function-call counts, 4346 in all, are:
-= -- 140
+            1224 strings with 9632 characters,
+and the built_in function-call counts, 8627 in all, are:
+= -- 242
 > -- 70
-< -- 19
-+ -- 51
-- -- 32
-* -- 117
-:= -- 416
+< -- 46
++ -- 54
+- -- 44
+* -- 252
+:= -- 491
 add.period$ -- 0
-call.type$ -- 3
-change.case$ -- 4
+call.type$ -- 6
+change.case$ -- 10
 chr.to.int$ -- 42
-cite$ -- 4
-duplicate$ -- 417
-empty$ -- 589
+cite$ -- 10
+duplicate$ -- 1029
+empty$ -- 1324
 format.name$ -- 0
-if$ -- 986
+if$ -- 1988
 int.to.chr$ -- 0
-int.to.str$ -- 2
+int.to.str$ -- 5
 missing$ -- 0
-newline$ -- 38
+newline$ -- 68
 num.names$ -- 0
-pop$ -- 689
+pop$ -- 1652
 preamble$ -- 1
-purify$ -- 4
+purify$ -- 10
 quote$ -- 0
-skip$ -- 203
+skip$ -- 392
 stack$ -- 0
-substring$ -- 167
-swap$ -- 119
-text.length$ -- 38
+substring$ -- 197
+swap$ -- 299
+text.length$ -- 65
 text.prefix$ -- 0
 top$ -- 1
-type$ -- 90
+type$ -- 192
 warning$ -- 0
-while$ -- 68
+while$ -- 74
 width$ -- 0
-write$ -- 36
+write$ -- 63

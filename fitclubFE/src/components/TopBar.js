@@ -72,8 +72,8 @@ const TopBar = (props) => {
     <div className="bg-white shadow-sm mb-2 sticky-header">
       <div className="container">
         <nav className="navbar navbar-light navbar-expand">
-          <Link to="/" className="navbar-brand">
-            <img src={logo} width="60" alt="FitClub" /> FitClub
+          <Link to="/" className="navbar-brand pt-1">
+            <img src={logo} width="35" alt="FitClub" className="pb-1" /> FitClub
           </Link>
           {links}
         </nav>

@@ -49,7 +49,7 @@ public class User extends DateAudit {
 
     @NotNull
     @Size(min = 8, max = 255)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{fitclub.constraints.password.Pattern.message}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^\\w\\d]).*$", message = "{fitclub.constraints.password.Pattern.message}")
     String password;
 
     String image;

@@ -652,3 +652,22 @@ input:-webkit-autofill:active {
   background: rgb(92, 96, 132);
   transition: opacity 0.25s ease-out;
 }
+
+
+.custom-link-for-user {
+  color: #495057;
+  position: 'absolute';
+  width: '0';
+  height: '2px';
+  bottom: '-3px';
+  left: '50%';
+  transform: 'translate(-50%,0%)';
+  transition: 'all 0.3s ease-in-out';
+  text-decoration: none;
+}
+
+.custom-link-for-user:hover {
+  color: #2f3439;
+  width: '100%';
+  text-decoration: underline;
+}

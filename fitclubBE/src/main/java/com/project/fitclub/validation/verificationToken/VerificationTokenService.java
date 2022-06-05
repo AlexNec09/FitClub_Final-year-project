@@ -1,12 +1,23 @@
 package com.project.fitclub.validation.verificationToken;
 
 import com.project.fitclub.dao.UserRepository;
+import com.project.fitclub.model.FileAttachment;
 import com.project.fitclub.model.User;
 import com.project.fitclub.security.JwtTokenProvider;
 import com.project.fitclub.shared.EmailSenderService;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
 
 @Service
+@EnableScheduling
 public class VerificationTokenService {
 
     VerificationTokenRepository verificationTokenRepository;
@@ -116,5 +127,30 @@ public class VerificationTokenService {
             e.printStackTrace();
         }
         return returnValue;
+    }
+
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    @Transactional
+    public void cleanExpiredTokenRecords() {
+        List<VerificationToken> allTokens = verificationTokenRepository.findAll();
+        for (VerificationToken tokenRecord : allTokens) {
+            String emailToken = tokenRecord.getEmailToken();
+            String passwordToken = tokenRecord.getPasswordToken();
+            User userDB = tokenRecord.getUser();
+            if (emailToken != null) {
+                if (passwordToken != null) {
+                    if (!jwtTokenProvider.validateToken(emailToken) && !jwtTokenProvider.validateToken(passwordToken)) {
+                        deleteTokenById(tokenRecord);
+                        userDB.setVerificationToken(null);
+                    }
+                } else if (!jwtTokenProvider.validateToken(emailToken)) {
+                    deleteTokenById(tokenRecord);
+                    userDB.setVerificationToken(null);
+                }
+            } else if (!jwtTokenProvider.validateToken(passwordToken)) {
+                deleteTokenById(tokenRecord);
+                userDB.setVerificationToken(null);
+            }
+        }
     }
 }

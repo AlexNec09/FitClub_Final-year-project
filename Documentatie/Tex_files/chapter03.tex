@@ -3,7 +3,7 @@ Aplicația FitClub este bazată pe doua mari module:
 
 \paragraph{•  RESTful API Web Service pe partea de server -}Acesta este creierul aplicației în sine unde se fac operațiile CRUD și accesăm API-uri înainte de a returna date structurate aplicației client-side.
 
-\paragraph{•  Partea de client care interacționează cu Web Service -}Se realizează apeluri către Web Service-ul descris anterior, și se conectează elementele de UI pentru a accepta datele pe care ar trebui să le vadă fiecare tip de utilizator.\newline
+\paragraph{•  Aplicația client-side -}Se realizează apeluri către Web Service-ul descris anterior, și se conectează elementele de UI pentru a accepta datele pe care ar trebui să le vadă fiecare tip de utilizator.\newline
 
 \section{Implementarea server-ului web}
 
@@ -43,7 +43,7 @@ Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-uri
 
 În contextul folosirii JSON Web Token, am personalizat și modul în care aplicația va gestiona excepțiile ce vor rezulta din punctul de intrare pentru autentificare, definit în cadrul clasei \code{JwtAuthenticationEntryPoint}. Pentru a oferi un context, acest punct de intrare pentru autentificare gestionează excepțiile care trebuie aruncate atunci când un utilizator încearcă să acceseze o resursă care necesită autentificare, cum ar fi posibilitatea de a vedea postările unui alt utilizator.\newline
 
-În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un REST API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea și de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
+În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un REST API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea și de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, pot conține informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
 
 De asemenea, în cadrul fișierului de configurări, am ales sa evit injectarea directa a valorilor, și am creat o clasă denumita \code{AppConfiguration} pentru aceste proprietăți personalizate. Presupunând că este necesară o proprietate pe care dorim să o numim \code{uploadsPath} în cadrul aplicației, atunci, pentru ca Spring să o poată recunoaște în fișierul de configurări denumit \code{application.yml}, o vom scrie prin unirea cuvintelor cu liniuță, adica \code{uploads-path}.
 Pentru această clasă, trebuie, de asemenea, să folosim adnotarea \code{@ConfigurationProperties}, care este necesară pentru a lega proprietățile externe de acest obiect și putem, de asemenea, să definim un prefix pentru aceste proprietăți personalizate, cum ar fi "fitclub". Concret, în fișierul de configurări \code{application.yml}, valoarea setată prin \code{fitclub.uploads-path} va seta așadar valoarea proprietății personalizate din clasă.\newline 
@@ -53,9 +53,9 @@ Așadar, utilitatea acestei clase se rezumă la accesarea rapidă a căii unde s
 
 Implementarea JWT este relevantă în cadrul configurării pentru autentificarea fără stare, folosind un token JWT. Pentru a personaliza Spring Security în acest sens, am adăugat configurări suplimentare în clasa de configurare prezentată anterior astfel încât să configurăm managerul de autentificare cu furnizorul corect.\newline
 
-Pentru ca utilizatorul să se poată autentifice cu succes pe site, avem nevoie să încărcăm toate datele acestuia. În documentația Spring, \code{UserDetailsService} este descrisă ca o interfață de bază care încarcă datele specifice utilizatorului. În cele mai multe cazuri de utilizare, furnizorii de autentificare extrag informațiile privind identitatea utilizatorului pe baza acreditărilor dintr-o bază de date și apoi efectuează validarea. Deoarece acest caz de utilizare este atât de comun, dezvoltatorii Spring au decis să îl extragă ca o interfață separată, care expune funcția unică \code{loadUserByUsername} acceptă numele de utilizator ca parametru și returnează obiectul de identitate al utilizatorului.\newline
+Pentru ca utilizatorul să se poată autentifice cu succes pe site, avem nevoie să încărcăm toate datele acestuia. În documentația Spring,\newline \code{UserDetailsService} este descrisă ca o interfață de bază care încarcă datele specifice utilizatorului. În cele mai multe cazuri de utilizare, furnizorii de autentificare extrag informațiile privind identitatea utilizatorului pe baza credențialelor dintr-o bază de date și apoi efectuează validarea. Deoarece acest caz de utilizare este atât de comun, dezvoltatorii Spring au decis să îl extragă ca o interfață separată, care expune funcția unică \code{loadUserByUsername} ce acceptă numele de utilizator ca parametru și returnează obiectul de identitate al utilizatorului.\newline
 
-În implementarea acestei aplicații, am optat sa construiesc o clasă nouă, numită \code{CustomUserDetailsService} care să extindă această interfață, astfel încât să pot avea acces la anumite configurări suplimentare.\newline
+În implementarea acestei aplicații, am optat sa construiesc o clasă nouă, numită \code{CustomUserDetailsService} care să extindă interfața\newline \code{UserDetailsService}, astfel încât să pot obține acces la anumite configurări suplimentare.\newline
 
  \begin{lstlisting}[language=Java]
 	@Override
@@ -93,7 +93,354 @@ După autentificarea și autorizarea credențialelor utilizatorului, aplicația 
 În general, în cadrul acestei clase vor fi capturate excepții de tip token invalid (neautorizat) și credențiale invalide.\newline
 
 \subsection{Distribuirea postărilor}
+Un utilizator poate să distribuie postări, iar acestea apar pe pagina principală doar acelor utilizatori pe care îl urmăresc.\newline
 
+Posibilitatea de a vedea postările anumitor utilizatori este definită astfel:\newline
 
+\begin{lstlisting}[language=Java]
+	public Page<Post> getPostsForUser(Pageable pageable, Long id) {
+		User forUser = userService.getById(id);
+		Set<User> users = forUser.getFollows();
+		users.add(forUser);
+		return postRepository.findByUserInOrderByIdDesc(users, pageable);
+	}
+\end{lstlisting}
+\bigskip
+Se identifică utilizatorul autentificat pe site, și apoi, folosind caracteristicile colecției de obiecte \code{Set} unde fiecare obiect este unic, adăugăm toți utilizatorii pe care acesta îi urmărește. Folosind acest set, vom căuta mai departe postările ce aparțin acestor utilizatori, folosindu-ne de o instanță a clasei care reprezintă o abstractizare a persistenței datelor si este responsabilă pentru efectuarea de operații CRUD, sortarea și paginarea datelor, care, în fragmentul de cod prezentat anterior, este denumită \code{postRepository}.\newline
+
+Pentru a identifica pe cine urmărește un utilizator, am conceput o relație "many-to-many" între entitatea denumită \code{User} și ea însăși, putând stabili așadar o legătură a unei astfel de instanțe cu mai multe instanțe de același tip.\newline
+
+O postare suportă posibilitatea de a adăuga o imagine ca atașament, iar acest lucru necesită adăugarea de noi configurări, motiv pentru care am creat clasa \code{WebConfiguration} ce va fi verificată de Spring pentru configurațiile web, cum ar fi setarea de static resources sau setarea interceptorilor care vor intercepta cererile HTTP primite de pe partea de client.\newline
+
+\begin{lstlisting}[language=Java]
+	    @Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/images/**")
+		.addResourceLocations("file:" + appConfiguration.getUploadPath() + "/")
+		.setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS));
+	}
+\end{lstlisting}
+\bigskip
+De asemenea, a fost adăugată și configurarea pentru a salva resursele deja încărcate pe pagină în cache, pentru a îmbunătăți rapiditatea și performanța site-ului la următoarea accesare, iar prin\newline \code{registry.addResourceHandler("/images/**")}, înțelegem că orice începe cu "images" va fi servit de această configurație.\newline
+
+Am tratat și cazul în care utilizatorul adaugă un atașament, însă nu dorește să trimită postarea. În acest caz, fișierele încărcate de mai mult de o oră vor fi șterse automat. Acest lucru este posibil prin faptul că se stochează data și ora încărcării fișierului și, dacă fișierul atașat are cel puțin o oră și nu are o postare atribuită, atunci va fi eliminat.\newline
+
+\begin{lstlisting}[language=Java]
+	@Scheduled(fixedRate = 60 * 60 * 1000)
+	public void cleanupStorage() {
+		Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
+		List<FileAttachment> oldFiles = fileAttachmentRepository.
+				findByDateBeforeAndPostIsNull(oneHourAgo);
+		for (FileAttachment file : oldFiles) {
+			deleteAttachmentImage(file.getName());
+			fileAttachmentRepository.deleteById(file.getId());
+		}
+	}
+\end{lstlisting}
+\bigskip
+
+Acesta este serviciul de clean-up periodic din cadrul clasei \code{FileService}, configurat să ruleze la o oră. Pentru ca acest serviciu să ruleze periodic, este necesară adăugarea adnotării \code{@EnableScheduling} pentru clasa precizată anterior, și apoi, adăugarea adnotării \code{@Scheduled} metodei care va rula periodic, denumită \code{cleanupStorage}. Pentru această adnotare, am fixat parametrul "fixedRate" corespunzător pentru a rula la fiecare 60 de minute, cu valoarea exprimată in milisecunde.\newline
+
+\textbf{Observație}: Serviciul de clean-up nu va afecta însă imaginile de profil ale utilizatorilor, care, în esență, nu au nicio postare atribuită. Aceste imagini nu vor fi tratate ca un \code{FileAttachment}, așa cum sunt tratate imaginile descrise anterior, ci se vor reține în atributul \code{image} din cadrul entității \code{User}, folosind valorile acestora exprimate într-un Base64 String.\newline
+
+\subsection{Afișarea postărilor}
+
+Aplicația este configurată să afișeze un număr inițial de 10 postări pe pagină. Totodată, aplicația permite încărcarea pe pagină atât a postărilor vechi ale utilizatorilor, cât și a celor noi. Inițial, am avut un număr mare de interogări pentru a căuta diverse tipuri de postări, fie postări noi, vechi sau specifice unui utilizator, însă aceste interogări nu se diferențiau decât prin câțiva parametrii între ele. Pentru a face căutarea postărilor mai eficientă, am folosit următoarea metodă: în loc să creez o nouă metodă pentru fiecare diferență de parametrii, am generat interogări dinamice folosind JPA\cite{.springjpa}, adică am folosit \code{Specifications}, iar noile interogări s-au bazat pe acești parametrii.\newline
+
+\begin{lstlisting}[language=Java]
+	    private Specification<Post> getPostsAfter(long id) {
+		return (root, query, cb) -> {
+			query.orderBy(cb.desc(root.get("id")));
+			return cb.greaterThan(root.get("id"), id);
+		};
+	}
+	
+	private Specification<Post> getPostsBefore(long id) {
+		return (root, query, cb) -> {
+			query.orderBy(cb.desc(root.get("id")));
+			return cb.lessThan(root.get("id"), id);
+		};
+	}
+\end{lstlisting}
+\bigskip
+
+În aceste două exemple, unde am folosit \code{Specifications}, am tratat două situații care apar frecvent atunci când un utilizator navighează pe site.\newline 
+
+Primul exemplu se rezumă la identificarea postărilor noi. Se consideră o postare nouă, daca aceasta are "id-ul", reținut in baza de date, mai mare decât cea mai recentă postare ce se afișează pe pagină, al cărei id îl primim ca parametru în cadrul metodei numite \code{getPostsAfter}. A se avea în vedere faptul că ordinea afișării acestor postări este descrescătoare, în funcție de id.\newline
+
+Al doilea exemplu se rezumă la identificarea postărilor vechi. Această căutare funcționează similar cu cea din primul exemplu, doar că în acest caz, se vor identifica doar acele postări care au "id-ul" mai mic decât ultima postare afișată pe pagină, deoarece, așa cum am spus anterior, ordinea afișării acestor postări este descrescătoare, în funcție de id.\newline
+
+De asemenea, aceeasi funcționalitate este prezentă și pe pagina de utilizator, afișând pentru fiecare utilizator doar postările care îi aparțin, cu posibilitatea de a încărca postări mai vechi, și de vedea în timp real dacă apare o postare nouă din partea acestuia.\newline
+
+\subsection{Ștergerea postărilor}
+
+Un utilizator autentificat are posibilitatea de a-și șterge una sau mai multe postări. În acest sens, a fost tratată situația de a nu i se permite utilizatorului autentificat pe site să șteargă postările unui alt utilizator. Rezolvarea acestei situații se rezumă la extragerea postărilor din baza de date pentru care se vor identifica utilizatorii care le-au trimis și care vor fi comparați ulterior cu utilizatorul autentificat.\newline
+
+\begin{lstlisting}[language=Java]
+	@DeleteMapping("/posts/{id:[0-9]+}")
+	@PreAuthorize
+		("@postSecurityService.isAllowedToDelete(#userPrincipal,#id)")
+	GenericResponse deletePost(@CurrentUser UserPrincipal userPrincipal, @PathVariable long id) {
+		postService.deletePost(id);
+		return new GenericResponse("Post removed!");
+	}
+\end{lstlisting}
+\bigskip
+
+Această logică nu poate fi acoperită printr-o singură expresie Spring, motiv pentru care am implementat această funcționalitate într-o metodă dintr-o clasă separată numită \code{PostSecurityService}, apelând așadar această metodă, folosind o expresie Spring.\newline
+
+\begin{lstlisting}[language=Java]
+	public boolean isAllowedToDelete(UserPrincipal userPrincipal, long postId) {
+		Optional<Post> optionalPost = postRepository.findById(postId);
+		if (optionalPost.isPresent()) {
+			Post inDB = optionalPost.get();
+			return inDB.getUser().getId() == userPrincipal.getId();
+		}
+		return false;
+	}
+\end{lstlisting}
+\bigskip
+
+Parametrii acestei metode sunt \code{userPrincipal}, prin care se identifică utilizatorul autentificat, și, de asemenea, \code{postId}, ce reprezintă id-ul postării ce se dorește a fi ștearsă. Se face așadar, validarea dintre "id-ul" utilizatorului căruia îi aparține postarea, și cel al utilizatorului autentificat, și se trimite răspunsul corespunzător.\newline
+
+\subsection{Reacțiile utilizatorului la o postare}
+
+Aplicația permite 2 tipuri de reacții la o postare și anume, utilizatorul poate să aprecieze sau să nu aprecieze postarea. Astfel, am declarat un enum cu aceste doua valori (LIKE, DISLIKE), iar pentru a gestiona o astfel de cerere trimisă de un utilizator, am folosit adnotarea \code{@PutMapping} care acționează ca o prescurtare pentru \code{@RequestMapping(method = RequestMethod.PUT)}.\newline
+
+Această metodă este utilizată pentru a modifica/actualiza o resursă din baza de date, utilizatorul trimițând date care actualizează întreaga resursă. În acest sens, PUT este similară cu POST în sensul că poate crea resurse, însă, PUT poate să suprascrie întreaga entitate dacă aceasta există deja sau să creeaze o nouă resursă, dacă nu există.\newline
+
+\begin{lstlisting}[language=Java]
+	private void react(Reaction reaction, long id, User user) {
+		Post inDB = postService.getPost(id);
+		PostReaction reactionInDB = postReactionRepository.findByPostAndUser(inDB, user);
+		if (reactionInDB == null) {
+			PostReaction postReaction = new PosteReaction();
+			postReaction.setReaction(reaction);
+			postReaction.setPost(inDB);
+			postReaction.setUser(user);
+			postReactionRepository.save(postReaction);
+		} else if (reactionInDB.getReaction() == reaction) {
+			postReactionRepository.delete(reactionInDB);
+		} else {
+			reactionInDB.setReaction(reaction);
+			postReactionnRepository.save(reactionInDB);
+		}
+	}
+\end{lstlisting}
+\bigskip
+
+Pentru a avea o mai bună evidență a tuturor reacțiilor, am creat o noua entitate, numită \code{PostReaction} Astfel, se identifică postarea corespunzătoare, si se creează o nouă înregistrare de tipul PostReaction, setând postarea identificată anterior, reacția propriu-zisă, dar și utilizatorul care a reacționat la acea postare. De asemenea, au fost tratate anumite situații de excepție, ce pot apărea în cadrul acestui sistem de reacții:
+
+\begin{itemize}
+	\addtolength{\itemindent}{1cm}
+	\item[$-$]Utilizatorul dorește să retragă o reacție, caz în care se va șterge această înregistrare din baza de date.
+	\item[$-$]Utilizatorul a reacționat deja la o postare și dorește să își modifice reacția, situație în care reacția sa veche va fi înlocuită de cea nouă.
+	\newline
+\end{itemize}
+
+\subsection{Tratarea excepțiilor și a erorilor de validare}
+
+În cadrul aplicației, pot apărea diverse excepții și erori pentru diverse acțiuni pe care utilizatorul dorește să le facă. De exemplu, în momentul înregistrării, acesta poate introduce un username invalid. Un username se consideră dacă nu respectă regula impusă bazată pe mărimea minimă și maximă acceptată sau dacă este deja folosit de către un alt utilizator. Totodată, în cazul în care dorește să își modifice imaginea de profil, și vom presupune că încarcă un fișier de tip text, atunci nu i se va permite să facă o astfel de schimbare.\newline
+
+Pentru a gestiona toate aceste situații de excepție, am creat o nouă clasă numită \code{ExceptionHandlerAdvice} și am folosit o adnotare în cadrul acesteia prin care Spring ne permite să colectăm și să gestionăm aceste excepții, numită \code{@RestControllerAdvice}.\newline
+
+\begin{lstlisting}[language=Java]
+	@ExceptionHandler({MethodArgumentNotValidException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	ApiError handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+		ApiError apiError = new ApiError(400, "Validation error", request.getServletPath());
+		
+		BindingResult result = exception.getBindingResult();
+		
+		Map<String, String> validationErrors = new HashMap<>();
+		for (FieldError fieldError : result.getFieldErrors()) {
+			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
+		}
+		apiError.setValidationErrors(validationErrors);
+		return apiError;
+	}
+\end{lstlisting}
+\bigskip
+
+Așadar, în cadrul metodei \code{handleValidationException}, se vor colecta aceste excepții, adăugând atât câmpul care a generat excepția, dar și mesajul aferent, acestea fiind utile în aplicația client-side, deoarece, folosind și o interfață prietenoasă cu utilizatorul, acestuia i se vor afișa mesaje clare și sugestive pentru a-l sprijini să finalizeze ceea ce a dorit să facă pe site.\newline
+
+\section{Implementarea aplicației client-side}
+
+\subsection{Starea componentelor în React}
+
+În cadrul aplicației client-side, am folosit preponderent, componente care rețin o stare, precum "PostFeed.js" sau "PostSubmit.js", dar și componente funcționale, care sunt în esență, funcții JavaScript, precum "Spinner.js". Aceste componente funcționale pot fi folosite în cadrul componentelor care rețin o stare, acestea având și un nivel de complexitate mai ridicat.\newline
+
+Pentru a gestiona starea componentelor în React, am folosit o bibliotecă JavaScript open-source, numită React Redux. React utilizează Redux în vederea construirii interfeței cu utilizatorul. Acesta permite componentelor React să citească date dintr-un Redux Store și să transmită acțiuni către Store pentru a actualiza datele. Redux joacă un rol important în dezvoltarea aplicației, oferind o modalitate eficientă de gestionare a stării printr-un model de flux de date unidirecțional.\newline
+
+\begin{lstlisting}[language=Java]
+	let localStorageData = localStorage.getItem('fitClub-auth');
+	let persistedState = {
+		id: 0, username: '', displayName: '', image: '', password: '',
+		isLoggedIn: false, jwt: '',
+	};
+	if (localStorageData) {
+		try { persistedState = JSON.parse(localStorageData);
+			apiCalls.setAuthorizationHeader(persistedState);
+		} catch (error) { }
+	}
+	
+	const middleWare = addLogger ? applyMiddleware(thunk, logger) : applyMiddleware(thunk)
+	const store = createStore(authReducer, persistedState, middleWare);
+	store.subscribe(() => { 
+		localStorage.setItem('fitClub-auth', JSON.stringify(store.getState()));
+		apiCalls.setAuthorizationHeader(store.getState());
+	});
+\end{lstlisting}
+\bigskip
+
+În fragmentul de cod de mai sus, am prezentat componenta funcțională \code{configureStore.js} care creează instanța specifică Redux Store în cadrul aplicației și se ocupă de funcționalitatea de actualizare a stocării locale pentru orice modificare a stării sale interne.\newline
+
+\subsection{React Hooks}
+
+În cadrul componentelor funcționale, putem folosi React Hooks\cite{.reacthooks} și putem obține același comportament în privința actualizării stării în cadrul componentelor funcționale ca și în cazul componentelor de clasă. Așadar, se va returna tot ce ține de JSX, variabile și alte operații logice în interiorul acestei funcții, întrucât variabilele și operațiile logice se vor declara folosind \code{const}.\newline
+
+De asemenea, React Hooks introduce utilizarea unor valori de stare pentru fiecare dintre variabile, la începutul definirii componentei funcționale, folosind \code{useState}.\newline
+Concret, \code{useState} returnează o listă și în această listă există 2 elemente: primul este valoarea reținută în stare, și al doilea este funcția de actualizare a acestei valori. Putem obține aceste variabile prin "object destructuring", aceasta fiind o caracteristică JavaScript utilizată pentru a extrage proprietăți din obiecte și a le lega de variabile.\newline
+Exemplu: \code{const [username, setUsername] = useState('');}\newline
+
+Dacă nu furnizăm nicio valoare pentru \code{useState}, atunci aceasta va fi nedefinită (\code{undefined}) în mod implicit.\newline
+
+\begin{lstlisting}[language=Java]
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [apiError, setApiError] = useState();
+	const [pendingApiCall, setPendingApiCall] = useState(false);
+	
+	const onClickLogin = () => {
+		const body = {
+			username,
+			password,
+		};
+		setPendingApiCall(true);
+		props.actions
+		.postLogin(body)
+		.then((response) => {
+			setPendingApiCall(false);
+			props.history.push("/");
+		})
+		.catch((error) => {
+			if (error.response) {
+				setPendingApiCall(false);
+				setApiError(error.response.data.message);
+			}
+		});
+	};
+\end{lstlisting}
+\bigskip
+
+React Hooks permite accesarea variabilelor de stare să fie accesate fără a folosi \code{this.state}, deoarece acestea sunt variabilele funcției ce reprezintă totodată, întreaga componentă funcțională. Având în vedere acest lucru, transmiterea datelor sau a proprietăților de la o altă componentă se va face prin intermediul unui parametru de funcție.\newline
+Exemplu: \code{export const LoginPage = (props) => [...]}.\newline
+
+De asemenea, prin intermediul React Hooks, putem defini o logică de stare personalizată pentru a îmbunătăți performanța aplicației, folosind un "Hook" numit \code{useReducer}.\newline
+
+\begin{lstlisting}[language=Java]
+	const reducer = (state, action) => {
+		if (action.type === "update-success") {
+			return {
+				...state,
+				inEditMode: false,
+				image: undefined,
+				originalDisplayName: undefined,
+				pendingUpdateCall: false,
+				user: {
+					...state.user,
+					image: action.payload,
+				},
+			};
+		}
+	  return state;
+  };
+\end{lstlisting}
+\bigskip
+
+De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imaginii necesită 15 randări ale paginii folosind o implementare fără React Hooks, iar cu \code{useReducer}, au fost necesare doar 9 randări pentru ca întreaga operațiune să fie finalizată.\newline
+
+\subsection{Ciclul de viață al componentelor în React}
+
+În React, ciclul de viață al unei componentei este împărțit în patru faze:
+
+\begin{itemize}
+	\addtolength{\itemindent}{1cm}
+	\item[$-$]Faza inițială
+	\item[$-$]Faza de montare (Mounting)
+	\item[$-$]Faza de actualizare (Updating)
+	\item[$-$]Faza de demontare (Unmounting)
+	\newline
+\end{itemize}
+
+Deoarece am introdus anterior React Hooks, aplicația folosește astfel alternative mai moderne pentru a satisface cele patru faze ale ciclului de viață al unei componente care pot fi considerate, așadar, ca o modificare a componentei.\newline
+
+În acest context, aplicația folosește un "Hook", numit \code{useEffect}, cu scopul de a înlocui metodele corespunzătoare ciclului de viață (\code{componentDidMount}, \code{componentWillUnmount}, \code{componentDidUpdate}).\newline
+
+\code{useEffect} primește 2 parametri: primul este funcția de apelare, iar pentru cel de-al doilea parametru se transmite matricea de variabile (numită listă de dependențe). Aceste variabile vor fi verificate de React înainte de a rula funcția \code{callback}. Dacă interacțiunea utilizatorului cu aplicația client-side provoacă modificări ale acestor variabile, atunci operația logică definită în cadrul Hook-ului \code{useEffect} va fi executată din nou.\newline
+
+Revenind la fragmentul de cod anterior, unde am prezentat o parte din LoginPage (pagina de autentificare), adăugam următoarea secvență de cod:\newline
+
+\begin{lstlisting}[language=Java]
+	  useEffect(() => {
+		setApiError();
+	}, [username, password]);
+\end{lstlisting}
+\bigskip
+
+Atunci când un utilizator introduce credențiale invalide, i se va afișa un mesaj prin care să i se semnaleze acest lucru. Reprezentarea acestui mesaj în cadrul JSX se face prin intermediul valorii de stare \code{apiError}, iar funcționalitatea dorită este ca acest mesaj să dispară atunci când utilizatorul introduce noi credențiale, fiind nevoie, așadar, să se apeleze funcția de actualizare a valorii de stare.\newline
+
+Deci, pentru a rula \code{setApiError} și a seta valoarea de stare \code{apiError} ca \code{undefined}, aplicația trebuie să detecteze modificările câmpurilor aferente numelui de utilizator și al parolei. Astfel, ori de câte ori are loc o modificare pentru aceste câmpuri, se va declanșa apelarea acestei funcții de actualizare.\newline
+
+Așadar, \code{useEffect} urmărește modificările pentru aceste valori de stare, și, pe baza acestor modificări, aplicația identifică interacțiunile utilizatorului și câmpurile pe care le modifică, astfel încât se va elimina mesajul de eroare de pe pagină.\newline
+
+\subsection{Reîmprospătarea fluxului de postări}
+
+Aplicația actualizează periodic fluxul de postări noi pentru un utilizator, atât timp cât sesiunea acestuia nu a expirat. Inițial, după ce pagina s-a încărcat cu succes si a afișat postările celor pe care îi urmărește utilizatorul autentificat, se identifică ID-ul celei mai recente postări. În cazul în care nu există nicio postare de afișat, acest ID va avea valoarea 0 în mod implicit.\newline
+
+În urma apelării endpoint-ului prin care se obține numărul de postări noi, se verifică dacă această valoare este mai mare decât 0, iar în caz afirmativ, se va afișa o notificare pe pagină cu care utilizatorul poate să interacționeze.\newline
+
+\begin{lstlisting}[language=Java]
+	  useEffect(() => {
+		const checkCount = () => {
+			const posts = page.content;
+			let topPostId = 0;
+			if (posts.length > 0) {
+				topPostId = posts[0].id;
+			}
+			if (hasFullAccess) {
+				apiCalls
+				.loadNewPostsCount(topPostId, props.user, props.loggedInUser.jwt)
+				.then((response) => {
+					setNewPostsCount(response.data.count);
+				})
+				.catch((error) => {
+					if (props.user) {
+						props.fromChildToParentCallback(true);
+					}
+					setHasFullAccess(false);
+				})
+			}
+		};
+		if (hasFullAccess) {
+			intervalRef.current = setInterval(checkCount, 1500);
+			return function cleanup() {
+				if (isLoadingNewPosts) {
+					clearInterval(intervalRef.current);
+					intervalRef.current = setInterval(checkCount, 50);
+				}
+				clearInterval(intervalRef.current);
+			};
+		}
+		
+	}, [props.user, props, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess]);
+\end{lstlisting}
+\bigskip
+
+În fragmentul de cod de mai sus, se setează un interval de 1500 milisecunde (1 secundă și jumătate), pentru a se apela în mod repetat metoda definită în \code{useEffect} prin care se obține numărul de postări noi pentru un utilizator.\newline
+
+Setarea acestui interval se face folosind o funcție JavaScript, numită \code{setInterval} care primește ca parametrii funcția care se dorește a fi apelată periodic și intervalul propriu-zis, exprimat în milisecunde.\newline
+
+De asemenea, în cazul în care sesiunea utilizatorului expiră, iar apelarea endpoint-ului de verificare a postărilor noi va produce o eroare, atunci nu se va mai putea apela funcția \code{setInterval} pentru a seta un nou interval, și astfel, utilizatorul va fi nevoit să se autentifice din nou pe site pentru a avea acces la aceste resurse.\newline
 
 \label{chap:03}
