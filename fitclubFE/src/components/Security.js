@@ -85,7 +85,7 @@ class Security extends Component {
                                 </div>
                             </Col>
                             <Col xs={1} md={1} lg={1} xl={1}>
-                                <div className="d-flex justify-content-center securityMessageSubmit mt-1">
+                                <div className="d-flex justify-content-center securityPostSubmit mt-1">
                                     <img className="m-auto" src={exclamationSecurity} width="32" alt="SecurityAlert" />
                                 </div>
                             </Col>
@@ -100,7 +100,7 @@ class Security extends Component {
                                 </div>
                             </Col>
                             <Col xs={1} md={1} lg={1} xl={1}>
-                                <div className="d-flex justify-content-center securityMessageSubmit mt-1">
+                                <div className="d-flex justify-content-center securityPostSubmit mt-1">
                                     <img className="m-auto" src={exclamationSecurity} width="32" alt="SecurityAlert" />
                                 </div>
                             </Col>
@@ -115,7 +115,7 @@ class Security extends Component {
                                 </div>
                             </Col>
                             <Col xs={1} md={1} lg={1} xl={1}>
-                                <div className="d-flex justify-content-center securityMessageSubmit mt-1">
+                                <div className="d-flex justify-content-center securityPostSubmit mt-1">
                                     <img className="m-auto" src={exclamationSecurity} width="32" alt="SecurityAlert" />
                                 </div>
                             </Col>

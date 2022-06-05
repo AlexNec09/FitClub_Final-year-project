@@ -35,7 +35,7 @@ const setup = (state = defaultState) => {
   );
 };
 
-apiCalls.loadMessages = jest.fn().mockResolvedValue({
+apiCalls.loadPosts = jest.fn().mockResolvedValue({
   data: {
     content: [],
     number: 0,
@@ -51,7 +51,7 @@ describe("HomePage", () => {
       expect(homePageDiv).toBeInTheDocument();
     });
 
-    it("does not display message submit when user not logged in", () => {
+    it("does not display PostSubmit when user not logged in", () => {
       const notLoggedInState = {
         id: 0,
         username: "",

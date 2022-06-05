@@ -1,7 +1,7 @@
 import React from "react";
 import UserList from "../components/UserList";
 import { connect } from "react-redux";
-import MessageFeed from "../components/MessageFeed";
+import PostFeed from "../components/PostFeed";
 import { Link } from 'react-router-dom';
 import FeedPage from '../assets/FeedPage.png';
 import Users from '../assets/Users.png';
@@ -66,7 +66,7 @@ class HomePage extends React.Component {
 
                     {/* Feed Page */}
                     <Tab.Pane eventKey="first">
-                      <MessageFeed />
+                      <PostFeed />
                     </Tab.Pane>
 
                     {/* Users */}
