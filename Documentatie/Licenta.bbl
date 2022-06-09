@@ -35,15 +35,46 @@
     \field{journaltitle}{ReactJS}
   \endentry
 
+  \entry{.javaframework}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Development frameworks}
+    \verb{url}
+    \verb https://ieeexplore.ieee.org/abstract/document/1381270
+    \endverb
+    \field{year}{2005}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{.javaspringbook}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Spring Microservices in Action}
+    \verb{url}
+    \verb https://books.google.ro/books?id=_qUuEAAAQBAJ&printsec=frontcover#v=o
+    \verb nepage&q&f=false
+    \endverb
+    \field{year}{2021}
+  \endentry
+
   \entry{.hibernate}{misc}{}
     \field{labeltitlesource}{title}
     \field{title}{Hibernate}
     \verb{url}
     \verb https://www.springboottutorial.com/hibernate-jpa-tutorial-with-spring
     \verb -boot-starter-jpa#:~:text=Hibernate%20understands%20the%20mappings%20
-    \verb that,a%20lock%20in%20to%20Hibernate.
+    \verb that,a%20lock%20in%20to%20Hibernate
     \endverb
     \field{journaltitle}{Hibernate}
+  \endentry
+
+  \entry{.springbootbook}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Spring Boot}
+    \verb{url}
+    \verb https://books.google.ro/books?hl=en&lr=&id=IzkzEAAAQBAJ&oi=fnd&pg=PT1
+    \verb 1&dq=dependency+spring++book&ots=kILEX6rmDZ&sig=1XEkf8UbeypFhalETbjvO
+    \verb p4cQUk&redir_esc=y#v=onepage&q=dependency%20spring%20%20book&f=false
+    \endverb
+    \field{year}{2015}
   \endentry
 
   \entry{.springjpa}{misc}{}
@@ -54,6 +85,29 @@
     \verb ions-and-querydsl/
     \endverb
     \field{journaltitle}{Advanced Spring JPA}
+  \endentry
+
+  \entry{.springjpabook}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Optimize Java persistence performance in spring boot
+  applications}
+    \verb{url}
+    \verb https://books.google.ro/books?hl=en&lr=&id=dIvgDwAAQBAJ&oi=fnd&pg=PR5
+    \verb &dq=java+spring+book+list&ots=ouKs0V44w6&sig=t79XpKL_htDHvBtD4LO7Zfle
+    \verb aDQ&redir_esc=y#v=onepage&q=java%20spring%20book%20list&f=false
+    \endverb
+    \field{year}{2020}
+  \endentry
+
+  \entry{.reactreduxbook}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{React Quickly: Painless web apps with React, JSX, Redux}
+    \verb{url}
+    \verb https://books.google.ro/books?hl=en&lr=&id=_TgzEAAAQBAJ&oi=fnd&pg=PT2
+    \verb 3&dq=react+book&ots=aE4O-uFt7R&sig=GjICrC5VouK-81Elq2pZjk46kUE&redir_
+    \verb esc=y#v=onepage&q=react%20book&f=false
+    \endverb
+    \field{year}{2017}
   \endentry
 
   \entry{.reacthooks}{misc}{}

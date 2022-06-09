@@ -10,7 +10,7 @@ Aplicația FitClub este bazată pe doua mari module:
 \subsection{Securitatea aplicației}
 \lstset{frame=tb}
 
-Pentru a spori securitatea, am configurat manual comportamentul prin care Spring Security interacționează cu aplicația. Implementarea corespunzătoare se află în clasa \code{SecurityConfiguration}, unde am suprascris metoda \code{configure} din care putem accesa obiectul corespunzător HttpSecurity care este obiectul de configurare utilizat de Spring Security, și în acest mod, putem să-i modificăm comportamentul. În mod implicit, Spring Security permite CSRF\footnote{Cross-site request forgery}, care este la bază un token generat de back-end care caută acest token pentru a fi adăugat la cererile ulterioare de tip POST sau PUT generate de client. Am decis să nu folosesc acest token, deoarece aplicația folosește JWT.\newline
+Pentru a spori securitatea, am configurat manual comportamentul prin care Spring Security\cite{.springbootbook} interacționează cu aplicația. Implementarea corespunzătoare se află în clasa \code{SecurityConfiguration}, unde am suprascris metoda \code{configure} din care putem accesa obiectul corespunzător HttpSecurity care este obiectul de configurare utilizat de Spring Security, și în acest mod, putem să-i modificăm comportamentul. În mod implicit, Spring Security permite CSRF\footnote{Cross-site request forgery}, care este la bază un token generat de back-end care caută acest token pentru a fi adăugat la cererile ulterioare de tip POST sau PUT generate de client. Am decis să nu folosesc acest token, deoarece aplicația folosește JWT.\newline
 
 Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-urile necesare pentru a evita cazul în care Spring să respingă cererile ulterioare, returnând codul 403 FORBIDDEN.\newline
 În acest caz, am folosit \code{http.authorizeRequests().antMatchers()} pentru a aplica autorizația la una sau mai multe căi, reprezentate prin tipul de cerere (HTTPMethod) și URL-ul corespunzător, pe care le specific în \code{antMatchers()}.\newline
@@ -205,7 +205,7 @@ Parametrii acestei metode sunt \code{userPrincipal}, prin care se identifică ut
 
 \subsection{Reacțiile utilizatorului la o postare}
 
-Aplicația permite 2 tipuri de reacții la o postare și anume, utilizatorul poate să aprecieze sau să nu aprecieze postarea. Astfel, am declarat un enum cu aceste doua valori (LIKE, DISLIKE), iar pentru a gestiona o astfel de cerere trimisă de un utilizator, am folosit adnotarea \code{@PutMapping} care acționează ca o prescurtare pentru \code{@RequestMapping(method = RequestMethod.PUT)}.\newline
+Aplicația permite 2 tipuri de reacții la o postare și anume, utilizatorul poate să aprecieze sau să nu aprecieze postarea. Astfel, am declarat un enum cu aceste doua valori (LIKE, DISLIKE), iar pentru a gestiona o astfel de cerere trimisă de un utilizator, am folosit adnotarea \code{@PutMapping}. Această adnotare acționează ca o prescurtare, adnotarea echivalentă acesteia fiind: \code{@RequestMapping(method = RequestMethod.PUT)}.\newline
 
 Această metodă este utilizată pentru a modifica/actualiza o resursă din baza de date, utilizatorul trimițând date care actualizează întreaga resursă. În acest sens, PUT este similară cu POST în sensul că poate crea resurse, însă, PUT poate să suprascrie întreaga entitate dacă aceasta există deja sau să creeaze o nouă resursă, dacă nu există.\newline
 
@@ -238,9 +238,84 @@ Pentru a avea o mai bună evidență a tuturor reacțiilor, am creat o noua enti
 	\newline
 \end{itemize}
 
+\subsection{Revizuirea credențialelor de securitate}
+
+Utilizatorul are posibilitatea, în orice moment, după ce a finalizat înregistrarea cu succes, să își poată revizui credențialele de securitate, adică numele de utilizator și parola pe care le folosește în momentul autentificării.\newline
+
+Aplicația dispune, așadar, de  doua acțiuni pe care utilizatorul le poate face, una fiind destinată actualizării adresei de email, și cealaltă fiind folosită pentru schimbarea parolei.\newline
+
+În acest caz, aplicația folosește un sistem prin care asigură securitatea contului utilizatorului, fără de care, în cazul unui atacator, credențialele utilizatorului ar putea fi ușor modificate, iar contul acestuia ar fi compromis.\newline
+
+Astfel, fiecare dintre cele doua acțiuni va genera un token valid pentru 24 de ore, ce va transmis printr-un mail către adresa de email furnizată de către utilizator în momentul înregistrării. Dacă utilizatorul a fost într-adevăr cel care a dorit să facă această revizuire, atunci link-ul ce conține token-ul descris anterior, îl va conduce către o pagină de unde va putea să introducă datele actualizate.\newline
+
+Simpla accesare a link-ului, fără a propaga schimbări în baza de date, nu va anula token-ul pentru utilizări ulterioare. Totuși, schimbarea cu succes, fie a adresei de email, fie a parolei, va anula acel token, și nu va mai putea fi folosit ulterior.\newline
+
+\textbf{Observație}: Utilizatorul poate opta, de asemenea, să trimită ambele acțiuni în același timp, și așadar, va primi două mail-uri, însă dacă actualizarea adresei de email se va face prima, această acțiune va determina anularea token-ului generat în scopul schimbării parolei, deoarece aparține încă de vechea adresă, ceea ce îl face lipsit de actualitate.\newline
+
+\begin{lstlisting}[language=Java]
+	public boolean changeEmail(String email, EmailRequest updatedEmail) {
+		try {
+			User userInDB = userRepository.findByEmail(email);
+			VerificationToken newToken = new VerificationToken(userInDB);
+			newToken.setEmailToken(
+					jwtTokenProvider.generateVerificationToken(
+				   userInDB.getUsername()));
+			userInDB.setVerificationToken(newToken);
+			userInDB.setEmail(updatedEmail.getNewEmail());
+			userInDB.setEmailVerificationStatus(false);
+			userRepository.save(userInDB);
+			emailSender.verifyEmail(userInDB);
+			return true;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+\end{lstlisting}
+\bigskip
+
+Atunci când utilizatorul solicită o schimbare a credențialelor, este necesar să identificăm înregistrarea corespunzătoare acestuia în baza de date. După aceea, se generează un token pe baza acestei înregistrări, folosind metoda \code{generateVerificationToken} din cadrul clasei \code{JwtTokenProvider}.\newline
+
+Clasa \code{JwtTokenProvider} este responsabilă pentru gestionarea token-ilor, care acoperă factori precum generarea, verificarea validității și tratarea excepțiilor ce pot apărea în cadrul folosirii JWT.\newline
+
+De asemenea, actualizarea adresei de email va provoca și schimbarea valorii atributului \code{emailVerificationStatus}, care este un \code{boolean} ce va fi setat ca fiind \code{false}, și care este utilizat pentru a verifica dacă adresa de email a utilizatorului este sau nu confirmată. Așa cum am prezentat anterior, un utilizator va avea acces limitat la resursele disponibile dacă nu are adresa de email confirmată.\newline
+
+Așadar, imediat după actualizarea adresei de email, utilizatorul va primi un nou mail pe adresa actualizată în care va trebui să acceseze link-ul aferent pentru a-și confirma noua adresă și a avea din nou acces la toate resursele disponibile.\newline
+
+
+\subsection{Afișarea listei cu utilizatori}
+
+Posibilitatea de a vedea lista cu utilizatorii deja înregistrați, care au, de asemenea, adresa de email confirmată este disponibilă oricărui tip de utilizator, fie autentificat sau anonim, cu mențiunea că unui utilizator anonim nu îi este permis să poată căuta un utilizator specific, în funcție de numele complet sau numele de utilizator.\newline
+
+\begin{lstlisting}[language=Java]
+	@GetMapping("/users/find/{searchText}")
+	Page<UserVM> getUsers(@PathVariable String searchText, Pageable page) {
+		return userService.findAll(searchText, page).map(UserVM::new);
+	}
+\end{lstlisting}
+\bigskip
+
+În cadrul acestei metode, se folosește adnotarea \code{@PathVariable} pentru a prelua parametrul ce va veni din solicitarea utilizatorului după ce acesta a introdus în câmpul de căutare ceea ce dorește sau mai exact, pe cine dorește să caute.\newline
+
+În cadrul aplicației client-side, acest câmp de căutare este un câmp de text editabil ce afișează un buton de căutare, un buton de ștergere și, dacă nu a fost introdus nimic, se afișează, de asemenea, și un indiciu de text.\newline
+
+Se apelează apoi o altă metodă responsabilă cu căutarea efectivă și returnarea rezultatelor, folosind o interogare. Fiind vorba de utilizatori, vom declara o nouă interogare în cadrul clasei care este responsabilă pentru efectuarea de operații CRUD pentru entitatea \code{User}, și anume: \code{UserRepository}.\newline
+
+Pentru această interogare, am folosit adnotarea Spring Data JPA \code{@Query}\cite{.springjpabook} care declară interogări direct în cadrul \code{UserRepository}.\newline
+
+\begin{lstlisting}[language=Java]
+	@Query("FROM User u WHERE u.displayName LIKE %:searchText% OR u.username LIKE %:searchText% ORDER BY u.username, u.displayName ASC")
+	Page<User> findAllUsers(@Param("searchText") String searchText, Pageable page);
+\end{lstlisting}
+\bigskip
+
+În mod implicit, Spring Data JPA va utiliza legarea parametrilor pe bază de poziție. Acest lucru face ca metodele de interogare să fie puțin predispuse la erori de refactorizare în ceea ce privește poziția parametrilor. Pentru a rezolva această problemă, am folosit adnotarea \code{@Param} pentru a da parametrului de metodă \code{searchText} un nume concret și pentru a lega acest nume în interogarea propriu-zisă.\newline
+
+În situația în care utilizatorul nu a introdus nimic în câmpul de căutare, atunci parametrul \code{searchText}, fiind un String, va avea valoarea implicită \code{""}, ceea ce nu va afecta rezultatul interogării, și se vor afișa, așadar, toți utilizatorii înregistrați care au, de asemenea, adresa de email confirmată.\newline
+
 \subsection{Tratarea excepțiilor și a erorilor de validare}
 
-În cadrul aplicației, pot apărea diverse excepții și erori pentru diverse acțiuni pe care utilizatorul dorește să le facă. De exemplu, în momentul înregistrării, acesta poate introduce un username invalid. Un username se consideră dacă nu respectă regula impusă bazată pe mărimea minimă și maximă acceptată sau dacă este deja folosit de către un alt utilizator. Totodată, în cazul în care dorește să își modifice imaginea de profil, și vom presupune că încarcă un fișier de tip text, atunci nu i se va permite să facă o astfel de schimbare.\newline
+În cadrul aplicației, pot apărea diverse excepții și erori pentru diverse acțiuni pe care utilizatorul dorește să le facă. De exemplu, în momentul înregistrării, acesta poate introduce un nume de utilizator invalid. Un nume de utilizator se consideră invalid dacă nu respectă regulile impuse bazate pe mărimea minimă și maximă acceptată sau dacă este deja folosit de către un alt utilizator. Totodată, în cazul în care dorește să își modifice imaginea de profil, și vom presupune că încarcă un fișier de tip text, atunci nu i se va permite să facă o astfel de schimbare, și i se va afișa un mesaj pe pagină în legătură cu acest lucru.\newline
 
 Pentru a gestiona toate aceste situații de excepție, am creat o nouă clasă numită \code{ExceptionHandlerAdvice} și am folosit o adnotare în cadrul acesteia prin care Spring ne permite să colectăm și să gestionăm aceste excepții, numită \code{@RestControllerAdvice}.\newline
 
@@ -270,13 +345,13 @@ Așadar, în cadrul metodei \code{handleValidationException}, se vor colecta ace
 
 În cadrul aplicației client-side, am folosit preponderent, componente care rețin o stare, precum "PostFeed.js" sau "PostSubmit.js", dar și componente funcționale, care sunt în esență, funcții JavaScript, precum "Spinner.js". Aceste componente funcționale pot fi folosite în cadrul componentelor care rețin o stare, acestea având și un nivel de complexitate mai ridicat.\newline
 
-Pentru a gestiona starea componentelor în React, am folosit o bibliotecă JavaScript open-source, numită React Redux. React utilizează Redux în vederea construirii interfeței cu utilizatorul. Acesta permite componentelor React să citească date dintr-un Redux Store și să transmită acțiuni către Store pentru a actualiza datele. Redux joacă un rol important în dezvoltarea aplicației, oferind o modalitate eficientă de gestionare a stării printr-un model de flux de date unidirecțional.\newline
+Pentru a gestiona starea componentelor în React, am folosit o bibliotecă JavaScript open-source, numită React Redux\cite{.reactreduxbook}. React utilizează Redux în vederea construirii interfeței cu utilizatorul. Acesta permite componentelor React să citească date dintr-un Redux Store și să transmită acțiuni către Store pentru a actualiza datele. Redux joacă un rol important în dezvoltarea aplicației, oferind o modalitate eficientă de gestionare a stării printr-un model de flux de date unidirecțional.\newline
 
 \begin{lstlisting}[language=Java]
 	let localStorageData = localStorage.getItem('fitClub-auth');
 	let persistedState = {
 		id: 0, username: '', displayName: '', image: '', password: '',
-		isLoggedIn: false, jwt: '',
+		isLoggedIn: false, jwt: '' 
 	};
 	if (localStorageData) {
 		try { persistedState = JSON.parse(localStorageData);
@@ -358,7 +433,7 @@ De asemenea, prin intermediul React Hooks, putem defini o logică de stare perso
 \end{lstlisting}
 \bigskip
 
-De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imaginii necesită 15 randări ale paginii folosind o implementare fără React Hooks, iar cu \code{useReducer}, au fost necesare doar 9 randări pentru ca întreaga operațiune să fie finalizată.\newline
+De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imaginii de profil necesită 15 randări ale paginii folosind o implementare fără React Hooks, iar cu \code{useReducer}, au fost necesare doar 9 randări pentru ca întreaga operațiune să fie finalizată.\newline
 
 \subsection{Ciclul de viață al componentelor în React}
 
@@ -373,13 +448,13 @@ De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imagin
 	\newline
 \end{itemize}
 
-Deoarece am introdus anterior React Hooks, aplicația folosește astfel alternative mai moderne pentru a satisface cele patru faze ale ciclului de viață al unei componente care pot fi considerate, așadar, ca o modificare a componentei.\newline
+Deoarece am introdus anterior React Hooks, aplicația folosește astfel, alternative mai moderne pentru a satisface cele patru faze ale ciclului de viață al unei componente care pot fi considerate, așadar, ca o modificare a componentei.\newline
 
 În acest context, aplicația folosește un "Hook", numit \code{useEffect}, cu scopul de a înlocui metodele corespunzătoare ciclului de viață (\code{componentDidMount}, \code{componentWillUnmount}, \code{componentDidUpdate}).\newline
 
 \code{useEffect} primește 2 parametri: primul este funcția de apelare, iar pentru cel de-al doilea parametru se transmite matricea de variabile (numită listă de dependențe). Aceste variabile vor fi verificate de React înainte de a rula funcția \code{callback}. Dacă interacțiunea utilizatorului cu aplicația client-side provoacă modificări ale acestor variabile, atunci operația logică definită în cadrul Hook-ului \code{useEffect} va fi executată din nou.\newline
 
-Revenind la fragmentul de cod anterior, unde am prezentat o parte din LoginPage (pagina de autentificare), adăugam următoarea secvență de cod:\newline
+Revenind la fragmentul de cod anterior, unde am prezentat o parte din funcționalitatea paginii de autentificare, adăugam următoarea secvență de cod:\newline
 
 \begin{lstlisting}[language=Java]
 	  useEffect(() => {

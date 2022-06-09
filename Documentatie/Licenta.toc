@@ -43,15 +43,17 @@
 \contentsline {subsection}{\numberline {3.1.4}Afișarea postărilor}{31}{subsection.3.1.4}%
 \contentsline {subsection}{\numberline {3.1.5}Ștergerea postărilor}{32}{subsection.3.1.5}%
 \contentsline {subsection}{\numberline {3.1.6}Reacțiile utilizatorului la o postare}{33}{subsection.3.1.6}%
-\contentsline {subsection}{\numberline {3.1.7}Tratarea excepțiilor și a erorilor de validare}{34}{subsection.3.1.7}%
-\contentsline {section}{\numberline {3.2}Implementarea aplicației client-side}{35}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Starea componentelor în React}{35}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}React Hooks}{36}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Ciclul de viață al componentelor în React}{38}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Reîmprospătarea fluxului de postări}{39}{subsection.3.2.4}%
-\contentsline {chapter}{\numberline {4}Ghid de utilizare al aplicației}{42}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Autentificarea}{42}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Înregistrarea}{43}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Navigarea pe site}{46}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Accesarea nepermisă a aplicației}{51}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Concluzii}{53}{chapter.5}%
+\contentsline {subsection}{\numberline {3.1.7}Revizuirea credențialelor de securitate}{34}{subsection.3.1.7}%
+\contentsline {subsection}{\numberline {3.1.8}Afișarea listei cu utilizatori}{36}{subsection.3.1.8}%
+\contentsline {subsection}{\numberline {3.1.9}Tratarea excepțiilor și a erorilor de validare}{37}{subsection.3.1.9}%
+\contentsline {section}{\numberline {3.2}Implementarea aplicației client-side}{38}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Starea componentelor în React}{38}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}React Hooks}{39}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Ciclul de viață al componentelor în React}{41}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Reîmprospătarea fluxului de postări}{42}{subsection.3.2.4}%
+\contentsline {chapter}{\numberline {4}Ghid de utilizare a aplicației}{45}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Autentificarea}{45}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Înregistrarea}{46}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Navigarea pe site}{49}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Accesarea nepermisă a aplicației}{54}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Concluzii}{56}{chapter.5}%
