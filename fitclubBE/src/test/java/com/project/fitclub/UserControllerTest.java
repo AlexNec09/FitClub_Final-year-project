@@ -242,7 +242,7 @@ public class UserControllerTest {
         user.setPassword("lowercase");
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
         Map<String, String> validationErrors = response.getBody().getValidationErrors();
-        assertThat(validationErrors.get("password")).isEqualTo("Password must have at least one uppercase, one lowercase letter and one number!");
+        assertThat(validationErrors.get("password")).isEqualTo("Password should have at least one uppercase, one lowercase letter and one special character!");
     }
 
     @Test

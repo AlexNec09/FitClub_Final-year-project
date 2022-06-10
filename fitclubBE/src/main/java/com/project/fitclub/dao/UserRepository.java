@@ -18,10 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findById(Long id);
 
-    @Query("FROM User u WHERE u.displayName LIKE %:searchText% OR u.username LIKE %:searchText% ORDER BY u.username, u.displayName ASC")
+    @Query("FROM User u WHERE u.emailVerificationStatus = true AND (u.displayName LIKE %:searchText% OR u.username LIKE %:searchText%) ORDER BY u.username, u.displayName ASC")
     Page<User> findAllUsers(@Param("searchText") String searchText, Pageable page);
 
-    User findUserByVerificationToken(VerificationToken verificationToken);
-
-    Page<User> findByUsernameNot(String username, Pageable page);
+    Page<User> findByUsernameNotAndEmailVerificationStatusIsTrue(String username, Pageable page);
 }

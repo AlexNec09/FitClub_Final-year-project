@@ -76,9 +76,9 @@ public class UserService {
 
     public Page<User> getUsers(UserPrincipal loggedInUser, Pageable pageable) {
         if (loggedInUser != null) {
-            return userRepository.findByUsernameNot(loggedInUser.getUsername(), pageable);
+            return userRepository.findByUsernameNotAndEmailVerificationStatusIsTrue(loggedInUser.getUsername(), pageable);
         }
-        return userRepository.findAll(pageable);
+        return userRepository.findAllUsers("", pageable);
     }
 
     public User getByUsername(String username) {
