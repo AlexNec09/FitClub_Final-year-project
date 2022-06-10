@@ -9,7 +9,7 @@ import useClickTracker from "../shared/useClickTracker";
 import ReactPlayer from 'react-player';
 
 function checkForValidLink(url) {
-  var p = /^(?:http[s]?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|twitch\.tv\/|soundcloud\.com\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+  var p = /^(?:http[s]?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|soundcloud\.com\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
   return (url.match(p)) ? true : false;
 }
 
@@ -32,41 +32,47 @@ const PostView = (props) => {
   }
 
   let postContent = post.content;
-  let externalLink;
-  var ifPostContainContainYouTubeVideo = postContent.includes("youtube.com/watch");
-  var ifPostContainContainSoundCloudVideo = postContent.includes("soundcloud.com/");
-  var ifPostContainContainTwitchVideo = postContent.includes("twitch.tv/");
+  const postContentExtractedWords = postContent.split(/\s+/g);
+  let wordsFromPost = "";
+  let postContentPrel = [];
 
-  if (ifPostContainContainSoundCloudVideo || ifPostContainContainTwitchVideo || ifPostContainContainYouTubeVideo) {
-    const postContentExtractedWords = postContent.split(/\s+/g);
-    let linkPrefix;
-    if (ifPostContainContainSoundCloudVideo) {
-      linkPrefix = "soundcloud.com/";
-    } else if (ifPostContainContainTwitchVideo) {
-      linkPrefix = "twitch.tv/";
-    } else {
-      linkPrefix = "youtube.com/watch"
-    }
-
-    if (postContentExtractedWords.length === 1) {
-      externalLink = postContent;
-    }
-    else {
-      externalLink = postContentExtractedWords.find(word => {
-        if (word.includes(linkPrefix) && (word.startsWith("https://") || word.startsWith("http://"))) {
-          return word;
+  for (const word of postContentExtractedWords) {
+    const linkAfterBreakLine = word.split(/\s+/g);
+    if (linkAfterBreakLine.length === 1) {
+      if (!word.startsWith("https://") && !word.startsWith("http://") && !checkForValidLink(word)) {
+        if (wordsFromPost === "") {
+          wordsFromPost = wordsFromPost.concat(word);
+        } else {
+          wordsFromPost = wordsFromPost.concat(" ", word);
         }
-        return null;
-      });
-    }
-
-    if (externalLink !== null && checkForValidLink(externalLink)) {
-      postContent = postContent.replace(externalLink, '');
+      } else {
+        if (wordsFromPost !== "") {
+          postContentPrel.push(wordsFromPost);
+          wordsFromPost = "";
+        }
+        postContentPrel.push(word);
+      }
     } else {
-      ifPostContainContainTwitchVideo = false;
-      ifPostContainContainYouTubeVideo = false;
-      ifPostContainContainSoundCloudVideo = false;
+      for (const word of linkAfterBreakLine) {
+        if (!word.startsWith("https://") && !word.startsWith("http://") && !checkForValidLink(word)) {
+          if (wordsFromPost === "") {
+            wordsFromPost = wordsFromPost.concat(word);
+          } else {
+            wordsFromPost = wordsFromPost.concat(" ", word);
+          }
+          wordsFromPost += "\n";
+        } else {
+          if (wordsFromPost !== "") {
+            postContentPrel.push(wordsFromPost);
+            wordsFromPost = "";
+          }
+          postContentPrel.push(word);
+        }
+      }
     }
+  }
+  if (wordsFromPost !== "") {
+    postContentPrel.push(wordsFromPost);
   }
 
   return (
@@ -114,42 +120,40 @@ const PostView = (props) => {
       </div>
 
       <div className="ps-5 pt-2 pe-4 me-3" style={{ whiteSpace: 'pre-wrap' }}>
-        {postContent}
+        {postContentPrel.map(function (word) {
+          return (
+            <div>
+              {(word.includes("soundcloud.com/") && (word.startsWith("https://") || word.startsWith("http://"))) && (
+                <div className="mb-2">
+                  <div className='player-wrapper mt-3'>
+                    <ReactPlayer
+                      className='react-player-sound-cloud'
+                      url={word}
+                      width='100%'
+                      height='100%'
+                    />
+                  </div>
+                </div>)}
 
-        {ifPostContainContainYouTubeVideo && (
-          <div className='player-wrapper mt-3'>
-            <ReactPlayer
-              className='react-player'
-              url={externalLink}
-              width='100%'
-              height='100%'
-            />
-          </div>
-        )}
+              {(word.includes("youtube.com/watch") && (word.startsWith("https://") || word.startsWith("http://"))) && (
+                <div className="mb-2">
+                  <div className='player-wrapper mt-3'>
+                    <ReactPlayer
+                      className='react-player'
+                      url={word}
+                      width='100%'
+                      height='100%'
+                    />
+                  </div>
+                </div>)}
 
-        {ifPostContainContainSoundCloudVideo && (
-          <div className='player-wrapper mt-3'>
-            <ReactPlayer
-              className='react-player-sound-cloud'
-              url={externalLink}
-              width='100%'
-              height='100%'
-            />
-          </div>
-        )}
-
-        {ifPostContainContainTwitchVideo && (
-          <div className='player-wrapper mt-3'>
-            <ReactPlayer
-              className='react-player'
-              url={externalLink}
-              width='100%'
-              height='100%'
-            />
-          </div>
-        )}
-
+              {!(word.startsWith("https://") || word.startsWith("http://")) &&
+                (<div className="pt-1"> {word} </div>)}
+            </div>
+          );
+        })}
       </div>
+
       {attachmentImageVisible && (
         <div className="ps-5 pt-2">
           <img

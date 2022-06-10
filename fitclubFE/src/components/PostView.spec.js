@@ -185,3 +185,5 @@ describe("PostView", () => {
     });
   });
 });
+
+console.error = () => { };
