@@ -15,7 +15,7 @@ class AuthNeeded extends Component {
                         <img className="m-auto pl-3" src={authImage} width="270" alt="UnauthorizedAccess" />
                     </div>
                     {/* <i className="fas fa-exclamation-triangle fa-5x icon-exclamation" /> */}
-                    <h5 className="display-5 pt-2 text-unauthorized-access-header">
+                    <h5 className="pt-2 text-unauthorized-access-header">
                         Unauthorized to see this content!
                     </h5>
 

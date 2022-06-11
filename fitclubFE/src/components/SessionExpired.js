@@ -16,7 +16,7 @@ class SessionExpired extends Component {
                         <div className="login-logo">
                             <img className="m-auto pl-3" src={authImage} width="270" alt="UnauthorizedAccess" />
                         </div>
-                        <h5 className="display-6 pt-2 text-unauthorized-access-header">
+                        <h5 className="pt-2 text-unauthorized-access-header">
                             Unauthorized to see this content!
                         </h5>
 

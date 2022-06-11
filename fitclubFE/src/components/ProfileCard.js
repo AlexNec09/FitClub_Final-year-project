@@ -20,7 +20,7 @@ const ProfileCard = (props) => {
             </div>
             <div className='card-body text-center'>
                 {!props.inEditMode && <div>
-                    <h5 className="display-6 text-unauthorized-access-header">
+                    <h5 className="text-unauthorized-access-user">
                         {username}
                     </h5>
                     <h4 data-testid="displayNameTestId">{displayName}</h4>

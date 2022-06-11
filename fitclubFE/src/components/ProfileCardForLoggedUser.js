@@ -190,7 +190,7 @@ const ProfileCardForLoggedUser = (props) => {
 
                                 <h5 className="text-center text-success font-weight-bold pt-4 text-center success-text-resend">
                                     <span className="far fa-check-circle fa-lg fa-1.5x"></span>
-                                    <span className="fs-4">&nbsp;Email address confirmed!</span>
+                                    <span className="address-confirmed-text">&nbsp;Email address confirmed!</span>
                                 </h5>
                             )}
                         </div>
