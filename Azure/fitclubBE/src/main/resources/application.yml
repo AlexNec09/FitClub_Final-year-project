@@ -1,0 +1,76 @@
+spring:
+  profiles:
+    active:
+      - dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  jpa:
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+
+  mail:
+    host: smtp.gmail.com
+    username: fitclub.by.alexnec@gmail.com
+    password: kwwierdeowlqmjjf
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+jwt:
+  secret: FitClubJWTSecretKey
+  expirationInMs: 60480000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  datasource:
+    url: jdbc:mysql://some-server.mysql.database.azure.com:3306/fitclubdb?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: alexnec@fitclubmysqldb
+    password: Dadada12@
+fitclub:
+  upload-path: uploads-prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://fitclubmysqldb.mysql.database.azure.com:3306/fitclubdb?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: alexnec@fitclubmysqldb
+    password: Dadada12@
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+fitclub:
+  upload-path: uploads-dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+fitclub:
+  upload-path: uploads-test

@@ -1,0 +1,36 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+// @import "node_modules/bootstrap/scss/bootstrap";
+// @import "functions";
+// @import "variables";
+// @import "utilities";
+
+$enable-negative-margins: true;
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/utilities";
+
+$font-sizes: (
+  1: 12rem,
+  2: 10rem,
+  3: 7rem,
+  4: 5rem,
+  5: 3rem,
+  6: 1rem,
+  7: 0.85rem,
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "font-size":
+      map-merge(
+        map-get($utilities, "font-size"),
+        (
+          values: $font-sizes,
+        )
+      ),
+  )
+);
+
+@import "bootstrap";

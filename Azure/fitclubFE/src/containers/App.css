@@ -1,0 +1,703 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+a#left-tabs-example-tab-first.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+  border-radius: 30px 30px 30px 30px;
+  margin: 0px !important;
+  padding: 0px !important;
+  transition: all .45s;
+}
+
+a#left-tabs-example-tab-second.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+  border-radius: 30px 30px 30px 30px;
+  margin: 0px !important;
+  padding: 0px !important;
+  transition: all .45s;
+}
+
+a#left-tabs-example-tab-third.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+  border-radius: 30px 30px 30px 30px;
+  margin: 0px !important;
+  padding: 0px !important;
+  transition: all .45s;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  background: rgb(0, 180, 250) !important;
+  border-radius: 30px 30px 30px 30px;
+  transition: all .25s;
+}
+
+a#left-tabs-example-tab-first.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+}
+
+a#left-tabs-example-tab-second.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+}
+
+a#left-tabs-example-tab-third.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+}
+
+a#left-tabs-example-tab-fourth.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+}
+
+a#left-tabs-example-tab-fifth.nav-link.active {
+  background: rgb(0, 180, 250) !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: #2f2f2f !important;
+  background-color: #fcd001d1 !important;
+  /* border-radius: 12px; */
+}
+
+.my-nav-item {
+  color: gray !important;
+  /* text-decoration: none; */
+  background-color: transparent;
+}
+
+.textUserList {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.spanUser {
+  font-weight: 500;
+  padding-top: 1rem;
+}
+
+.display-name {
+  font-size: 1.1rem;
+}
+
+.player-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+.mix-cloud {
+  position: relative;
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.react-player-sound-cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* remove youtube wrapper */
+.ytrp_rb_fg_like {
+  display: none;
+  bottom: 0px;
+  left: 0px;
+  height: 3px;
+  background: rgb(39, 147, 230);
+}
+
+.ytrp_wrapper {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 0.2s ease 0s;
+}
+
+.relativeDate-HoaxView {
+  font-size: 15px;
+}
+
+
+.text-button-confirmation {
+  font-size: 16px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-weight: lighter !important;
+}
+
+.email-button {
+  background-color: #ffd930 !important;
+  width: 37% !important;
+  border-color: rgba(0, 0, 0, 0.041) !important;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+  padding: 15px !important;
+}
+
+.email-button:hover {
+  background-color: #fde475 !important;
+  transition: all .3s !important;
+}
+
+.card-confirmation {
+  margin-top: 50px !important;
+  padding: 30px !important;
+
+}
+
+.text-span {
+  font-size: 20px;
+  color: rgb(240, 180, 0);
+}
+
+.mail-icon {
+  color: rgb(250, 189, 7);
+  font-size: 1.55em;
+}
+
+.text-confirmation {
+  font-size: 20px !important;
+}
+
+.confirmation-header {
+  font-size: 37px;
+  /* font-weight: lighter; */
+  font-weight: initial;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+}
+
+.textConfirmation {
+  font-size: 19px;
+}
+
+.editProfileButton {
+  color: rgb(0, 0, 0) !important;
+  border-color: transparent !important;
+  background-color: #FFD92F !important;
+
+  font-weight: 200 !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+.editProfileButton:hover {
+  background-color: #fde475 !important;
+  transition: all .3s;
+}
+
+.invalid-feedback-forprofileCard {
+  font-size: 80%;
+  color: #dc3545;
+}
+
+.clickable-text {
+  font-size: 16px;
+  margin-bottom: 4px !important;
+
+}
+
+.notClickable-text {
+  font-size: 16px;
+  margin-bottom: 4px !important;
+}
+
+.personalInfo {
+  padding-top: 50px !important;
+}
+
+.editProfile {
+  background-color: #FFD92F !important;
+  width: 46% !important;
+  border-color: rgba(0, 0, 0, 0.041) !important;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.editProfile:hover {
+  background-color: #fde475 !important;
+  transition: all .3s;
+}
+
+.text-login-page {
+  font-size: 89%;
+}
+
+.text-button-confirmation {
+  font-size: 16px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-weight: lighter !important;
+}
+
+.text-resend {
+  animation: animateMovieinfo 1s !important;
+}
+
+.text-login-card-bottom {
+  font-size: 15px;
+}
+
+.text-unauthorized-access-header {
+  font-size: 3rem;
+  font-weight: lighter;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.text-unauthorized-access-user {
+  font-size: 2.4rem;
+  font-weight: lighter;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.text-unauthorized-access-body {
+  font-size: 23px;
+}
+
+.verticalLineSecurity {
+  border-left: thick solid #FFD930 !important;
+  border-top: 1px solid #fde475 !important;
+  border-right: 1px solid #fde475 !important;
+  border-bottom: 1px solid #fde475 !important;
+}
+
+.textSecurityTop {
+  font-size: 14px !important;
+}
+
+.notFoundAddressLine {
+  border-left: thick solid #cd0000 !important;
+  border-top: 2px solid #e34444 !important;
+  border-right: 2px solid #e34444 !important;
+  border-bottom: 2px solid #e34444 !important;
+}
+
+.notFoundAddressText {
+  font-size: 16px !important;
+}
+
+.securityPostSubmit {
+  opacity: 0.23;
+  padding-top: 5px;
+  padding-right: 0px;
+  margin: 6px;
+}
+
+
+.verticalLine {
+  border-left: thick solid #FFD930 !important;
+  border-top: thick solid transparent !important;
+  border-right: thick solid transparent !important;
+  border-bottom: thick solid transparent !important;
+}
+
+.text-security-changes {
+  font-size: 1.4rem !important;
+  font-weight: 300 !important;
+}
+
+.form-control-user-input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+  outline: none !important;
+  border-bottom: 0.1em solid #19160b26 !important;
+  box-shadow: none !important;
+}
+
+.invalid-input {
+  position: absolute;
+  margin-top: 27px !important;
+}
+
+.containerSecurityChanges {
+  /* width:31% !important; */
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}
+
+.arrowIcon-button {
+  opacity: 0.9;
+}
+
+.not-on-fitclub {
+  color: rgb(80, 87, 94);
+  cursor: pointer;
+  /* margin-left: 5px; */
+  font-weight: bold;
+}
+
+.contact-form {
+  width: 30% !important;
+  margin: auto !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* Exclamation mark of User not found! */
+.icon-exclamation {
+  color: #F7A600;
+  text-shadow: 0 0 3px #000;
+}
+
+/* Exclamation mark of User not found! */
+.icon-exclamation-login-error {
+  margin-top: 3px;
+  color: rgb(209, 0, 0);
+  /* color: rgb(221, 221, 221); */
+  text-shadow: 0 0 3px rgb(255, 255, 255);
+}
+
+.login-img {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.custom-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  max-width: 100%;
+
+}
+
+.custom-row-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  font-size: 1.3rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  box-shadow: inset 0px -3px 0px 0px rgba(187, 187, 187, 0.2);
+  transition: box-shadow 0.2s ease-in;
+}
+
+.custom-row-input:focus {
+  box-shadow: inset 0px -3px 0px 0px rgba(34, 193, 195, 0.7);
+  outline: none;
+}
+
+.custom-row-input::-webkit-input-placeholder {
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-input:hover::-webkit-input-placeholder,
+.custom-row-input:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.custom-row-label {
+  align-self: start;
+  padding-left: 1rem;
+  padding-bottom: 0.5rem;
+  color: rgba(187, 187, 187, 0.9);
+}
+
+.custom-row-button {
+  border-radius: 25px;
+  width: 65%;
+  height: 40px;
+  font-size: 1.2rem;
+  color: white;
+  font-weight: 700;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgba(0, 90, 205, 1) 0%, rgba(0, 50, 255, 1) 100%);
+  border: 0px;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-button:disabled {
+  background: rgb(34, 193, 195);
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-button:hover {
+  opacity: 0.8;
+}
+
+.forgot-password {
+  color: rgb(134, 110, 122);
+  cursor: pointer;
+  font-weight: bold;
+  align-self: flex-end;
+}
+
+.background-login-image {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10 10 10px;
+  top: 0;
+  position: absolute;
+  background-position: bottom, center !important;
+  overflow-y: auto;
+
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.363) 0%,
+      rgba(255, 241, 241, 0) 0%, rgb(255, 255, 255) 100%),
+    url(../assets/user-signup-login-background.png) no-repeat center / cover;
+}
+
+
+.input-form {
+  max-width: 500px;
+  min-width: 300px;
+  max-height: 700px;
+  width: 30%;
+  height: 60%;
+  margin: 100px auto;
+  background-color: #FFFFFF;
+  border-radius: 25px;
+}
+
+.headerTitle {
+  text-align: center;
+  font-family: 'open sans', sans-serif;
+  padding: 1rem 0;
+  margin: 0;
+  font-size: 2rem;
+}
+
+.info-label {
+  align-self: start;
+  padding-left: 1.5rem;
+  color: rgba(89, 85, 85, 0.9);
+}
+
+.card-body {
+  border-radius: 10px 0 0 10px;
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 0.75rem !important;
+  background: inherit;
+}
+
+.card-home {
+  border: 0px !important;
+}
+
+
+.sticky-menu {
+  position: sticky !important;
+  top: 50px !important;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.sticky-header {
+  position: sticky !important;
+  top: 1px !important;
+  z-index: 2;
+}
+
+.background-image {
+  flex: 1;
+  margin: auto;
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.363) 0%,
+      rgba(255, 241, 241, 0) 0%, rgb(255, 255, 255) 100%),
+    url(../assets/feed-userpage-background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100%;
+  border-radius: 10px 10 10 10px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  position: fixed;
+  overflow-y: scroll;
+}
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+
+.custom-row-email-button {
+  border-radius: 25px;
+  width: 42%;
+  height: 40px;
+  font-size: 1.14rem;
+  color: rgb(250, 231, 231);
+  font-weight: 700;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgb(36, 20, 102) 0%, rgb(47, 84, 235) 100%);
+  /* background: linear-gradient(90deg, rgb(46, 91, 149) 0%, rgb(40, 77, 226) 100%); */
+
+  border: 0px;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-email-button:hover {
+  opacity: 0.85;
+}
+
+.custom-row-email-button:disabled {
+  background: rgb(92, 96, 132);
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-edit-button {
+  border-radius: 25px;
+  width: 40%;
+  height: 40px;
+  font-size: 1.1rem;
+  color: rgb(254, 231, 231);
+  font-weight: 600;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgba(0, 90, 205, 1) 0%, rgba(0, 50, 255, 1) 100%);
+  border: 0px;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-edit-button:hover {
+  opacity: 0.8;
+}
+
+.custom-row-edit-button:disabled {
+  background: rgb(34, 193, 195);
+  transition: opacity 0.25s ease-out;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.custom-row-follow-button {
+  border-radius: 25px;
+  width: 35%;
+  height: 35px;
+  font-size: 1rem;
+  color: rgb(254, 231, 231);
+  font-weight: 600;
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgba(0, 90, 205, 1) 0%, rgba(0, 50, 255, 1) 100%);
+  border: 0px;
+  transition: opacity 0.25s ease-out;
+}
+
+.custom-row-follow-button:hover {
+  opacity: 0.8;
+}
+
+.custom-row-follow-button:disabled {
+  background: rgb(92, 96, 132);
+  transition: opacity 0.25s ease-out;
+}
+
+
+.custom-link-for-user {
+  color: #495057;
+  position: 'absolute';
+  width: '0';
+  height: '2px';
+  bottom: '-3px';
+  left: '50%';
+  transform: 'translate(-50%,0%)';
+  transition: 'all 0.3s ease-in-out';
+  text-decoration: none;
+}
+
+.custom-link-for-user:hover {
+  color: #2f3439;
+  width: '100%';
+  text-decoration: underline;
+}
+
+
+.player-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.react-player-sound-cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.address-confirmed-text {
+  width: 40%;
+  height: 40px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
