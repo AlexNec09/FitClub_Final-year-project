@@ -25,7 +25,7 @@ class App extends Component {
 
             {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/" component={HomePage} />
               : <Route exact path="/verification/confirmationEmail" component={ResendConfirmationEmail} />}
-            <Route exact path="/" component={ResendConfirmationEmail} />
+            {!this.props.loggedInUser.emailVerificationStatus && (<Route exact path="/" component={ResendConfirmationEmail} />)}
             <Route exact path="/forgotPassword" component={RecoverPasswordPage} />
             {(!this.props.loggedInUser.isLoggedIn && (this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined)) && <Route exact path="/login" component={LoginPage} />}
             <Route exact path="/verification/changeEmail" component={ChangeEmailPage} />

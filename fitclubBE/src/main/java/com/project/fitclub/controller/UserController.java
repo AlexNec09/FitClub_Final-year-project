@@ -76,6 +76,21 @@ public class UserController {
         }
     }
 
+    @PostMapping(path = "/users/email-verification-check/confirmation/{id:[0-9]+}")
+    @PreAuthorize("#id == principal.id")
+    public ResponseEntity<?> checkEmailConfirmation(@PathVariable long id) {
+        try {
+            boolean isSaveToDBAndSentWithSuccess = userService.checkEmailStatusById(id);
+            if (!isSaveToDBAndSentWithSuccess) {
+                return ResponseEntity.ok(Collections.singletonMap("result", "Not confirmed yet!"));
+            } else {
+                throw new Exception("Email already confirmed!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
+        }
+    }
+
     @GetMapping(path = "/users/email-verification/confirmationToken/{token}")
     public ResponseEntity verifyEmailTokenForEmailVerification(@PathVariable String token) {
         try {

@@ -144,6 +144,13 @@ export const resendEmailVerification = (id, jwt) => {
   return axios.post(`/api/1.0/users/email-verification/confirmation/${id}`, config);
 };
 
+export const checkEmailVerification = (id, jwt) => {
+  const config = {
+    headers: { Authorization: `Bearer ${jwt}` }
+  };
+  return axios.post(`/api/1.0/users/email-verification-check/confirmation/${id}`, config);
+};
+
 // confirm token
 export const confirmationToken = (token) => {
   return axios.get(`/api/1.0/users/email-verification/confirmationToken/${token}`);

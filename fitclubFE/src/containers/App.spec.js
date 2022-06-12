@@ -161,7 +161,7 @@ describe("App", () => {
   });
 
   it("shows the HomePage when clicking the logo", () => {
-    const { queryByTestId, container } = setup("/login");
+    const { queryByTestId, container } = setup("/auth/login");
     const logo = container.querySelector("img");
     fireEvent.click(logo);
     expect(queryByTestId("homepage")).toBeInTheDocument();
