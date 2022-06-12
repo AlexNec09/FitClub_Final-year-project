@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.httpBasic().authenticationEntryPoint(new BasicAuthenticationEntryPoint());
 
-        http.cors().and().
+        http.
                 authorizeRequests().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
@@ -55,7 +55,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/images/**", "/api/1.0/users/find/{search}", "/api/1.0/login", "/api/1.0/auth/**").permitAll()
+                .antMatchers("/images/**", "/api/1.0/users/find/{search}", "/api/1.0/login", "/api/1.0/auth/**",
+                        "https://fitclub-by-alexnec.azurewebsites.net/api/1.0/users/email-verification/confirmationToken/{token}", "https://fitclub-by-alexnec.azurewebsites.net/api/1.0/users/email-verification/changeEmailToken/{token}",
+                        "https://fitclub-by-alexnec.azurewebsites.net/api/1.0/users/email-verification/passwordReset/{token}", "https://fitclub-by-alexnec.azurewebsites.net/api/1.0/users/isValidToken/{tokenIdentifier}/{token}").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/users/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/1.0/users/{username}/posts").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/1.0/posts/upload").authenticated()
@@ -64,6 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/1.0/posts/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/posts/{id:[0-9]+}/like").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/1.0/posts/{id:[0-9]+}/dislike").authenticated()
+                .antMatchers("https://fitclub-by-alexnec.azurewebsites.net/api/1.0/users/email-verification/confirmationToken/{token}").authenticated()
                 .antMatchers("/api/1.0/users/{id:[0-9]+}/follow", "/api/1.0/users/{id:[0-9]+}/unfollow").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/1.0/posts/{id:[0-9]+}").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/1.0/posts/**").authenticated()
