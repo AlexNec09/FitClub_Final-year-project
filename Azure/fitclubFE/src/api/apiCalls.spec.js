@@ -173,7 +173,7 @@ describe("apiCalls", () => {
       const mockFollow = jest.fn();
       axios.put = mockFollow;
 
-      apiCalls.follow('5');
+      apiCalls.follow('5', true, "test-jwt-token");
       expect(mockFollow).toBeCalledWith(API_URL + '/users/5/follow');
     });
 
@@ -181,7 +181,7 @@ describe("apiCalls", () => {
       const mockUnfollow = jest.fn();
       axios.put = mockUnfollow;
 
-      apiCalls.follow('5', false);
+      apiCalls.follow('5', false, "test-jwt-token");
       expect(mockUnfollow).toBeCalledWith(API_URL + '/users/5/unfollow');
     });
   });

@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.httpBasic().authenticationEntryPoint(new BasicAuthenticationEntryPoint());
 
-        http.
+        http.cors().and().
                 authorizeRequests().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
