@@ -154,6 +154,14 @@ public class UserService {
         return false;
     }
 
+    public boolean checkEmailStatusById(long id) {
+        User userDB = userRepository.findById(id).get();
+        if (userDB.getEmailVerificationStatus()) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean checkTokenValidity(String tokenIdentifier, String token) {
         switch (tokenIdentifier) {
             case "undefined":

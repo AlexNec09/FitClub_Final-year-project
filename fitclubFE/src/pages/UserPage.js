@@ -223,7 +223,7 @@ const UserPage = (props) => {
 
   const onToggleFollow = () => {
     dispatch({ type: "follow-op-init" });
-    apiCalls.follow(state.user.id, !state.user.followed)
+    apiCalls.follow(state.user.id, !state.user.followed, token)
       .then((response) => {
         dispatch({ type: "user-follow", payload: state.user });
         const updatedUser = { ...state.user };

@@ -125,8 +125,11 @@ export const deletePost = (postId, jwt) => {
   return axios.delete("/api/1.0/posts/" + postId, config);
 };
 
-export const follow = (userid, isCallingForFollow = true) => {
-  return axios.put(`/api/1.0/users/${userid}/${isCallingForFollow ? 'follow' : 'unfollow'}`)
+export const follow = (userId, isCallingForFollow = true, jwt) => {
+  const config = {
+    headers: { Authorization: `Bearer ${jwt}` }
+  };
+  return axios.put(`/api/1.0/users/${userId}/${isCallingForFollow ? 'follow' : 'unfollow'}`, config)
 }
 
 export const postReaction = (id, reaction, jwt) => {

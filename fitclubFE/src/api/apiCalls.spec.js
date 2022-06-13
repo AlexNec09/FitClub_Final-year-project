@@ -172,16 +172,16 @@ describe("apiCalls", () => {
       const mockFollow = jest.fn();
       axios.put = mockFollow;
 
-      apiCalls.follow('5');
-      expect(mockFollow).toBeCalledWith('/api/1.0/users/5/follow');
+      apiCalls.follow('5', true, "test-jwt-token");
+      expect(mockFollow.mock.calls[0][0]).toBe('/api/1.0/users/5/follow');
     });
 
     it('calls /api/1.0/users/5/unfollow when calling the follow with 5 as user id and false for isCallingForFollow', () => {
       const mockUnfollow = jest.fn();
       axios.put = mockUnfollow;
 
-      apiCalls.follow('5', false);
-      expect(mockUnfollow).toBeCalledWith('/api/1.0/users/5/unfollow');
+      apiCalls.follow('5', false, "test-jwt-token");
+      expect(mockUnfollow.mock.calls[0][0]).toBe('/api/1.0/users/5/unfollow');
     });
   });
 

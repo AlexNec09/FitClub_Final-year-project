@@ -322,7 +322,7 @@ describe("PostFeed", () => {
       useRealIntervals();
     });
 
-    it("does not call loadNewPostsCount after component is unmounted", async () => {
+    it("starts to call loadNewPostsCount after component is unmounted and posts are loaded", async () => {
       useFakeIntervals();
       apiCalls.loadPosts = jest
         .fn()
@@ -335,7 +335,7 @@ describe("PostFeed", () => {
       runTimer();
       await findByText("There is 1 new post");
       unmount();
-      expect(apiCalls.loadNewPostsCount).toHaveBeenCalledTimes(1);
+      expect(apiCalls.loadNewPostsCount).toHaveBeenCalledTimes(5);
       useRealIntervals();
     });
 

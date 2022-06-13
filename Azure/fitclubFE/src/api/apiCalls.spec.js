@@ -174,7 +174,7 @@ describe("apiCalls", () => {
       axios.put = mockFollow;
 
       apiCalls.follow('5', true, "test-jwt-token");
-      expect(mockFollow).toBeCalledWith(API_URL + '/users/5/follow');
+      expect(mockFollow.mock.calls[0][0]).toBe(API_URL + '/users/5/follow');
     });
 
     it('calls /api/1.0/users/5/unfollow when calling the follow with 5 as user id and false for isCallingForFollow', () => {
@@ -182,7 +182,7 @@ describe("apiCalls", () => {
       axios.put = mockUnfollow;
 
       apiCalls.follow('5', false, "test-jwt-token");
-      expect(mockUnfollow).toBeCalledWith(API_URL + '/users/5/unfollow');
+      expect(mockUnfollow.mock.calls[0][0]).toBe(API_URL + '/users/5/unfollow');
     });
   });
 
