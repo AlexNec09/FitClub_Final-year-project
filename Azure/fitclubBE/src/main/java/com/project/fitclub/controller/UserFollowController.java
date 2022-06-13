@@ -30,22 +30,18 @@ public class UserFollowController {
     UserRepository userRepository;
 
     @PutMapping("/users/{id:[0-9]+}/follow")
-    public ResponseEntity<?> handleFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
-        if (id != userPrincipal.getId()) {
-            userService.follow(id, userPrincipal.getId());
-            return ResponseEntity.ok(Collections.singletonMap("result", "You followed this user."));
-        } else {
-            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
-        }
+    @PreAuthorize("#id != principal.id")
+    GenericResponse handleFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
+        userService.follow(id, userPrincipal.getId());
+        return new GenericResponse("You followed this user.");
     }
 
     @PutMapping("/users/{id:[0-9]+}/unfollow")
-    public ResponseEntity<?> handleUnFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
-        if (id != userPrincipal.getId()) {
-            userService.unfollow(id, userPrincipal.getId());
-            return ResponseEntity.ok(Collections.singletonMap("result", "You unfollowed this user."));
-        } else {
-            return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
-        }
+    @PreAuthorize("#id != principal.id")
+    GenericResponse handleUnFollow(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
+        User currentUser = userRepository.findByUsername(userPrincipal.getUsername());
+        userService.unfollow(id, currentUser.getId());
+        return new GenericResponse("You unfollowed this user.");
     }
+
 }
