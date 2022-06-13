@@ -14,6 +14,7 @@ import Row from 'react-bootstrap/Row';
 const PostFeed = (props) => {
   const [page, setPage] = useState({ content: [] });
   const [isLoadingPosts, setLoadingPosts] = useState(true);
+  const [hasLoadedPosts, setHasLoadedPosts] = useState(false);
   const [isClosedModal, setClosedModal] = useState();
   const [isLoadingOldPosts, setLoadingOldPosts] = useState(false);
   const [isLoadingNewPosts, setLoadingNewPosts] = useState(false);
@@ -32,6 +33,7 @@ const PostFeed = (props) => {
           .loadPosts(props.user, props.loggedInUser.jwt)
           .then((response) => {
             setLoadingPosts(false);
+            setHasLoadedPosts(true);
             setPage(response.data);
           })
           .catch((error) => {
@@ -52,7 +54,7 @@ const PostFeed = (props) => {
       if (posts.length > 0) {
         toppostId = posts[0].id;
       }
-      if (hasFullAccess) {
+      if (hasFullAccess && hasLoadedPosts) {
         apiCalls
           .loadNewPostsCount(toppostId, props.user, props.loggedInUser.jwt)
           .then((response) => {
@@ -79,7 +81,7 @@ const PostFeed = (props) => {
       };
     }
 
-  }, [props.user, props, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess]);
+  }, [props.user, props, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess, hasLoadedPosts]);
 
   const onClickLoadMore = () => {
     if (isLoadingOldPosts) {

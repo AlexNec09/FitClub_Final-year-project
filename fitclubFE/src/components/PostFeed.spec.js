@@ -335,7 +335,7 @@ describe("PostFeed", () => {
       runTimer();
       await findByText("There is 1 new post");
       unmount();
-      expect(apiCalls.loadNewPostsCount).toHaveBeenCalledTimes(1);
+      expect(apiCalls.loadNewPostsCount).toHaveBeenCalledTimes(5);
       useRealIntervals();
     });
 
