@@ -247,6 +247,7 @@ describe("App", () => {
       image: "image1.png",
       password: "P4ssword",
       isLoggedIn: true,
+      isTokenValid: true,
     });
   });
 

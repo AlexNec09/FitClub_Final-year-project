@@ -99,12 +99,13 @@ public class UserController {
             if (isVerified) {
                 System.out.println("SUCCESS");
                 return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
+            } else {
+                throw new Exception("Token expired!");
             }
         } catch (Exception e) {
             System.out.println("FAILING");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @PostMapping(path = "/users/email-verification/changeEmail/{id:[0-9]+}")

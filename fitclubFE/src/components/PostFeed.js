@@ -1,17 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useReducer, useState, useRef } from "react";
 import * as apiCalls from "../api/apiCalls";
 import Spinner from "./Spinner";
 import PostView from "./PostView";
 import PostSubmit from "./PostSubmit";
 import ModalView from "./ModalView";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import AuthNeeded from "./AuthNeeded";
 import SessionExpired from "./SessionExpired";
 import securityAlert from '../assets/exclamationSecurity.png';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+export const changeTokenValidity = () => {
+  return {
+    type: 'token-has-expired',
+    payload: false
+  };
+};
+
 const PostFeed = (props) => {
+  const dispatch = useDispatch();
   const [page, setPage] = useState({ content: [] });
   const [isLoadingPosts, setLoadingPosts] = useState(true);
   const [hasLoadedPosts, setHasLoadedPosts] = useState(false);
@@ -37,6 +45,7 @@ const PostFeed = (props) => {
             setPage(response.data);
           })
           .catch((error) => {
+            dispatch(changeTokenValidity());
             setHasFullAccess(false);
             setLoadingPosts(false);
           });
@@ -64,6 +73,7 @@ const PostFeed = (props) => {
             if (props.user) {
               props.fromChildToParentCallback(true);
             }
+            dispatch(changeTokenValidity());
             setHasFullAccess(false);
           })
       }
