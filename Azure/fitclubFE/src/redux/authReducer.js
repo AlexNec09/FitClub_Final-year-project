@@ -4,7 +4,8 @@ const initialState = {
     displayName: '',
     image: '',
     password: '',
-    isLoggedIn: false
+    isLoggedIn: false,
+    isTokenValid: false,
 };
 
 export default function authReducer(state = initialState, action) {
@@ -13,13 +14,20 @@ export default function authReducer(state = initialState, action) {
     } else if (action.type === 'login-success') {
         return {
             ...action.payload,
-            isLoggedIn: true
+            isLoggedIn: true,
+            isTokenValid: true,
         };
     } else if (action.type === 'update-success') {
         return {
             ...state,
             displayName: action.payload.displayName,
             image: action.payload.image
+        };
+    }
+    else if (action.type === 'token-has-expired') {
+        return {
+            ...state,
+            isTokenValid: action.payload,
         };
     }
     else if (action.type === 'confirmation-token') {

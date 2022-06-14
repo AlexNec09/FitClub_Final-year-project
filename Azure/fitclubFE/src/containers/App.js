@@ -13,7 +13,6 @@ import ChangeEmailPage from '../pages/ChangeEmailPage';
 import PasswordResetPage from '../pages/PasswordResetPage';
 import RecoverPasswordPage from '../pages/RecoverPasswordPage';
 
-
 class App extends Component {
   render() {
     return (
@@ -27,12 +26,14 @@ class App extends Component {
               : <Route exact path="/verification/confirmationEmail" component={ResendConfirmationEmail} />}
             {!this.props.loggedInUser.emailVerificationStatus && (<Route exact path="/" component={ResendConfirmationEmail} />)}
             <Route exact path="/forgotPassword" component={RecoverPasswordPage} />
-            {(!this.props.loggedInUser.isLoggedIn && (this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined)) && <Route exact path="/login" component={LoginPage} />}
+            {(this.props.loggedInUser.isTokenValid === false || this.props.loggedInUser.emailVerificationStatus === false || this.props.loggedInUser.emailVerificationStatus === undefined) && (<Route exact path="/login" component={LoginPage} />)}
             <Route exact path="/verification/changeEmail" component={ChangeEmailPage} />
             <Route exact path="/verification/passwordReset" component={PasswordResetPage} />
 
             {!this.props.loggedInUser.isLoggedIn && <Route exact path="/signup" component={UserSignupPage} />}
-            {this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined ? <Route exact path="/:username" component={UserPage} /> : <Redirect to="/" />}
+
+            {(this.props.loggedInUser.isLoggedIn && this.props.loggedInUser.isTokenValid === true && this.props.loggedInUser.username !== "login") && <Route exact path="/:username" component={UserPage} />}
+            {(this.props.loggedInUser.isTokenValid === false || (this.props.loggedInUser.isTokenValid === true && this.props.loggedInUser.username === "login")) && (this.props.loggedInUser.emailVerificationStatus === true || this.props.loggedInUser.emailVerificationStatus === undefined) ? <Route exact path="/:username" component={UserPage} /> : <Redirect to="/" />}
             <Redirect from="/verification/confirmationEmail" exact to="/" />
             <Route component={HomePage} />
 
