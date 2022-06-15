@@ -118,5 +118,27 @@
     \endverb
     \field{journaltitle}{React Hooks}
   \endentry
+
+  \entry{.reactbeginners}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{React.js for the Visual Learner}
+    \verb{url}
+    \verb https://leanpub.com/reactjsforthevisuallearner/read#leanpub-auto-chap
+    \verb ter-10--reacting-to-what-weve-learned
+    \endverb
+    \field{year}{2018}
+  \endentry
+
+  \entry{.reactmodern}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{React and React Native: A complete hands-on guide to modern
+  web development with React.js}
+    \verb{url}
+    \verb https://books.google.ro/books?hl=en&lr=&id=XCLhDwAAQBAJ&oi=fnd&pg=PP1
+    \verb &dq=react+js+useReducer&ots=Bu8tWzwwiP&sig=-rBhqWDg7wq_F8Z5bKuApkiCen
+    \verb 8&redir_esc=y#v=onepage&q=react%20js%20useReducer&f=false
+    \endverb
+    \field{year}{2020}
+  \endentry
 \enddatalist
 \endinput

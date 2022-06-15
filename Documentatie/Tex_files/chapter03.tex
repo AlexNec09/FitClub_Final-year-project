@@ -304,7 +304,7 @@ Se apelează apoi o altă metodă responsabilă cu căutarea efectivă și retur
 Pentru această interogare, am folosit adnotarea Spring Data JPA \code{@Query}\cite{.springjpabook} care declară interogări direct în cadrul \code{UserRepository}.\newline
 
 \begin{lstlisting}[language=Java]
-	@Query("FROM User u WHERE u.displayName LIKE %:searchText% OR u.username LIKE %:searchText% ORDER BY u.username, u.displayName ASC")
+	@Query("FROM User u WHERE u.emailVerificationStatus = true AND (u.displayName LIKE %:searchText% OR u.username LIKE %:searchText%) ORDER BY u.username, u.displayName ASC")
 	Page<User> findAllUsers(@Param("searchText") String searchText, Pageable page);
 \end{lstlisting}
 \bigskip
@@ -351,7 +351,7 @@ Pentru a gestiona starea componentelor în React, am folosit o bibliotecă JavaS
 	let localStorageData = localStorage.getItem('fitClub-auth');
 	let persistedState = {
 		id: 0, username: '', displayName: '', image: '', password: '',
-		isLoggedIn: false, jwt: '' 
+		isLoggedIn: false, isTokenValid: false, jwt: '' 
 	};
 	if (localStorageData) {
 		try { persistedState = JSON.parse(localStorageData);
@@ -412,6 +412,7 @@ React Hooks permite accesarea variabilelor de stare să fie accesate fără a fo
 Exemplu: \code{export const LoginPage = (props) => [...]}.\newline
 
 De asemenea, prin intermediul React Hooks, putem defini o logică de stare personalizată pentru a îmbunătăți performanța aplicației, folosind un "Hook" numit \code{useReducer}.\newline
+\newline
 
 \begin{lstlisting}[language=Java]
 	const reducer = (state, action) => {
@@ -437,7 +438,7 @@ De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imagin
 
 \subsection{Ciclul de viață al componentelor în React}
 
-În React, ciclul de viață al unei componentei este împărțit în patru faze:
+În React\cite{.reactbeginners}, ciclul de viață al unei componentei este împărțit în patru faze:
 
 \begin{itemize}
 	\addtolength{\itemindent}{1cm}
@@ -448,7 +449,7 @@ De exemplu, pentru pagina de utilizator, schimbarea numelui complet și a imagin
 	\newline
 \end{itemize}
 
-Deoarece am introdus anterior React Hooks, aplicația folosește astfel, alternative mai moderne pentru a satisface cele patru faze ale ciclului de viață al unei componente care pot fi considerate, așadar, ca o modificare a componentei.\newline
+Deoarece am introdus anterior React Hooks, aplicația folosește astfel, alternative mai moderne\cite{.reactmodern} pentru a satisface cele patru faze ale ciclului de viață al unei componente care pot fi considerate, așadar, ca o modificare a componentei.\newline
 
 În acest context, aplicația folosește un "Hook", numit \code{useEffect}, cu scopul de a înlocui metodele corespunzătoare ciclului de viață (\code{componentDidMount}, \code{componentWillUnmount}, \code{componentDidUpdate}).\newline
 
