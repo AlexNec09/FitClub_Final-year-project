@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  15 JUN 2022 23:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  15 JUN 2022 23:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -729,6 +729,11 @@ ver, am ales framework-
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 10--11
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 12--13
 
  []
 
@@ -2060,7 +2065,7 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 Here is how much of TeX's memory you used:
  20399 strings out of 478582
  359975 string characters out of 2844816
- 1030826 words of memory out of 3000000
+ 1030830 words of memory out of 3000000
  37874 multiletter control sequences out of 15000+600000
  479771 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2084,7 +2089,7 @@ onts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (61 pages, 3255168 bytes).
+Output written on Licenta.pdf (61 pages, 3255180 bytes).
 PDF statistics:
  1114 PDF objects out of 1200 (max. 8388607)
  429 named destinations out of 1000 (max. 500000)
