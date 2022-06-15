@@ -66,6 +66,27 @@
     \field{journaltitle}{Hibernate}
   \endentry
 
+  \entry{.azure}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Azure for developers overview}
+    \verb{url}
+    \verb https://docs.microsoft.com/en-us/azure/developer/intro/azure-develope
+    \verb r-overview
+    \endverb
+    \field{journaltitle}{Introduction to Azure for Developers}
+  \endentry
+
+  \entry{.azurebook}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{title}{Microsoft Azure - Planning, Deploying, and Managing Your Data
+  Center in the Cloud}
+    \verb{url}
+    \verb https://link.springer.com/book/10.1007/978-1-4842-1043-7?noAccess=tru
+    \verb e
+    \endverb
+    \field{year}{2015}
+  \endentry
+
   \entry{.springbootbook}{misc}{}
     \field{labeltitlesource}{title}
     \field{title}{Spring Boot}

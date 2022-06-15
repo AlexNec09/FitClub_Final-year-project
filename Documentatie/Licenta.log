@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  15 JUN 2022 22:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  15 JUN 2022 23:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1213,7 +1213,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 342--343
 
  []
 
-) [24]
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--343
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 344--345
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 346--347
+
+ []
+
+[24]) [25]
 \openout2 = `./TeX_files/chapter03.aux'.
 
  (TeX_files/chapter03.tex
@@ -1241,7 +1256,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--17
 
  []
 
-[25
+[26
 
 
 
@@ -1251,7 +1266,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 42--43
 
  []
 
-[26]
+[27]
 Underfull \hbox (badness 10000) in paragraph at lines 44--45
 
  []
@@ -1266,7 +1281,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--51
 
  []
 
-[27]
+[28]
 Underfull \hbox (badness 10000) in paragraph at lines 54--55
 
  []
@@ -1292,7 +1307,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 73--75
 
  []
 
-[28]
+[29]
 Underfull \hbox (badness 10000) in paragraph at lines 76--77
 
  []
@@ -1317,7 +1332,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 96--97
 
  []
 
-[29]
+[30]
 Underfull \hbox (badness 10000) in paragraph at lines 98--99
 
  []
@@ -1342,7 +1357,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 124--125
 
  []
 
-[30]
+[31]
 Underfull \hbox (badness 10000) in paragraph at lines 126--127
 
  []
@@ -1362,7 +1377,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 148--149
 
  []
 
-[31]
+[32]
 Underfull \hbox (badness 10000) in paragraph at lines 167--168
 
  []
@@ -1377,7 +1392,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 171--172
 
  []
 
-[32]
+[33]
 Underfull \hbox (badness 10000) in paragraph at lines 173--174
 
  []
@@ -1397,7 +1412,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 204--205
 
  []
 
-[33]
+[34]
 Underfull \hbox (badness 10000) in paragraph at lines 208--209
 
  []
@@ -1407,7 +1422,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 210--211
 
  []
 
-[34]
+[35]
 Underfull \hbox (badness 10000) in paragraph at lines 237--239
 
  []
@@ -1448,7 +1463,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 253--254
 
  []
 
-[35]
+[36]
 Underfull \hbox (badness 10000) in paragraph at lines 277--278
 
  []
@@ -1474,7 +1489,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 283--284
 
  []
 
-[36]
+[37]
 Underfull \hbox (badness 10000) in paragraph at lines 288--289
 
  []
@@ -1495,9 +1510,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 302--303
  []
 
 
-Overfull \hbox (5.47281pt too wide) in paragraph at lines 304--305
+Overfull \hbox (11.34775pt too wide) in paragraph at lines 304--305
 []\OT1/cmr/m/n/12 Pentru aceast^^Ua in-te-ro-gare, am fo-lo-sit ad-no-ta-rea Sp
-ring Data JPA \OT1/cmtt/m/n/12 @Query\OT1/cmr/m/n/12 [[]8[]]
+ring Data JPA \OT1/cmtt/m/n/12 @Query\OT1/cmr/m/n/12 [[]10[]]
  []
 
 
@@ -1505,7 +1520,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 304--305
 
  []
 
-[37]
+[38]
 Underfull \hbox (badness 10000) in paragraph at lines 312--313
 
  []
@@ -1525,7 +1540,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 320--321
 
  []
 
-[38]
+[39]
 Underfull \hbox (badness 10000) in paragraph at lines 340--341
 
  []
@@ -1540,7 +1555,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 348--349
 
  []
 
-[39]
+[40]
 Underfull \hbox (badness 10000) in paragraph at lines 371--372
 
  []
@@ -1555,7 +1570,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 377--380
 
  []
 
-[40]
+[41]
 Underfull \hbox (badness 10000) in paragraph at lines 381--382
 
  []
@@ -1575,7 +1590,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 414--416
 
  []
 
-[41]
+[42]
 Underfull \hbox (badness 10000) in paragraph at lines 437--438
 
  []
@@ -1601,7 +1616,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 454--455
 
  []
 
-[42]
+[43]
 Underfull \hbox (badness 10000) in paragraph at lines 456--457
 
  []
@@ -1631,12 +1646,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 475--476
 
  []
 
-[43]
+[44]
 Underfull \hbox (badness 10000) in paragraph at lines 477--478
 
  []
 
-[44]
+[45]
 Underfull \hbox (badness 10000) in paragraph at lines 516--517
 
  []
@@ -1651,7 +1666,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 520--521
 
  []
 
-) [45]
+) [46]
 \openout2 = `./TeX_files/chapter04.aux'.
 
  (TeX_files/chapter04.tex
@@ -1676,7 +1691,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
  []
 
-<images//login-page.png, id=795, 1143.0705pt x 534.19576pt>
+<images//login-page.png, id=803, 1143.0705pt x 534.19576pt>
 File: images//login-page.png Graphic file (type png)
 <use images//login-page.png>
 Package pdftex.def Info: images//login-page.png  used on input line 15.
@@ -1686,7 +1701,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 15--16
  [] 
  []
 
-[46
+[47
 
 
 
@@ -1696,7 +1711,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 29--31
 
  []
 
-<images//signup-page.png, id=800, 1138.2525pt x 529.98pt>
+<images//signup-page.png, id=808, 1138.2525pt x 529.98pt>
 File: images//signup-page.png Graphic file (type png)
 <use images//signup-page.png>
 Package pdftex.def Info: images//signup-page.png  used on input line 35.
@@ -1706,7 +1721,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 35--36
  [] 
  []
 
-[47
+[48
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1718,7 +1733,7 @@ Overfull \hbox (3.12926pt too wide) in paragraph at lines 40--42
 et la re-sur-sele aplica[]iei,
  []
 
-<images//email-confirmation.png, id=807, 1141.26375pt x 412.54124pt>
+<images//email-confirmation.png, id=815, 1141.26375pt x 412.54124pt>
 File: images//email-confirmation.png Graphic file (type png)
 <use images//email-confirmation.png>
 Package pdftex.def Info: images//email-confirmation.png  used on input line 45.
@@ -1734,7 +1749,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
 
-[48
+[49
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.2}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1751,7 +1766,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--54
 
  []
 
-<images//resend-email.png, id=816, 906.38625pt x 387.24675pt>
+<images//resend-email.png, id=825, 906.38625pt x 387.24675pt>
 File: images//resend-email.png Graphic file (type png)
 <use images//resend-email.png>
 Package pdftex.def Info: images//resend-email.png  used on input line 60.
@@ -1766,7 +1781,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
 
-<images//email-confirmed.png, id=817, 1138.2525pt x 531.1845pt>
+<images//email-confirmed.png, id=826, 1138.2525pt x 531.1845pt>
 File: images//email-confirmed.png Graphic file (type png)
 <use images//email-confirmed.png>
 Package pdftex.def Info: images//email-confirmed.png  used on input line 73.
@@ -1776,7 +1791,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 73--74
  [] 
  []
 
-[49
+[50
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.4}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1792,7 +1807,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--84
 
  []
 
-<images//post-feed-ok.png, id=825, 1155.71774pt x 534.798pt>
+<images//post-feed-ok.png, id=833, 1155.71774pt x 534.798pt>
 File: images//post-feed-ok.png Graphic file (type png)
 <use images//post-feed-ok.png>
 Package pdftex.def Info: images//post-feed-ok.png  used on input line 90.
@@ -1802,7 +1817,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 90--91
  [] 
  []
 
-[50
+[51
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.5}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1813,7 +1828,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 95--96
 
  []
 
-<images//post-submit.png, id=832, 635.976pt x 142.131pt>
+<images//post-submit.png, id=840, 635.976pt x 142.131pt>
 File: images//post-submit.png Graphic file (type png)
 <use images//post-submit.png>
 Package pdftex.def Info: images//post-submit.png  used on input line 102.
@@ -1823,12 +1838,12 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 102--103
  [] 
  []
 
-<images//new-post-loaded.png, id=833, 567.3195pt x 449.88075pt>
+<images//new-post-loaded.png, id=841, 567.3195pt x 449.88075pt>
 File: images//new-post-loaded.png Graphic file (type png)
 <use images//new-post-loaded.png>
 Package pdftex.def Info: images//new-post-loaded.png  used on input line 112.
 (pdftex.def)             Requested size: 367.04037pt x 291.05983pt.
-[51
+[52
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.6}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1845,7 +1860,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 118--119
 
  []
 
-<images//user-reaction.png, id=842, 701.62125pt x 109.00725pt>
+<images//user-reaction.png, id=850, 701.62125pt x 109.00725pt>
 File: images//user-reaction.png Graphic file (type png)
 <use images//user-reaction.png>
 Package pdftex.def Info: images//user-reaction.png  used on input line 125.
@@ -1855,7 +1870,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 132--133
 
  []
 
-[52
+[53
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.8}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1868,7 +1883,7 @@ has been already used, duplicate ignored
                                                   \__shipout_drop_firstpage_...
 l.133 
        <./images//new-post-loaded.png> <./images//user-reaction.png>]
-<images//user-page.png, id=851, 1108.14pt x 526.3665pt>
+<images//user-page.png, id=859, 1108.14pt x 526.3665pt>
 File: images//user-page.png Graphic file (type png)
 <use images//user-page.png>
 Package pdftex.def Info: images//user-page.png  used on input line 140.
@@ -1884,24 +1899,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--147
 
  []
 
-<images//security-page.png, id=852, 1142.46825pt x 534.19576pt>
+<images//security-page.png, id=860, 1142.46825pt x 534.19576pt>
 File: images//security-page.png Graphic file (type png)
 <use images//security-page.png>
 Package pdftex.def Info: images//security-page.png  used on input line 153.
 (pdftex.def)             Requested size: 389.80266pt x 182.2681pt.
-[53
+[54
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.10})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.158 
        <./images//user-page.png>]
-<images//user-feeds.png, id=859, 1084.05pt x 533.5935pt>
+<images//user-feeds.png, id=867, 1084.05pt x 533.5935pt>
 File: images//user-feeds.png Graphic file (type png)
 <use images//user-feeds.png>
 Package pdftex.def Info: images//user-feeds.png  used on input line 164.
 (pdftex.def)             Requested size: 389.80266pt x 191.86554pt.
- [54
+ [55
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.11})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1914,12 +1929,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.12})
                                                   \__shipout_drop_firstpage_...
 l.175 
        <./images//security-page.png> <./images//user-feeds.png>]
-<images//auth-required.png, id=868, 1143.0705pt x 532.389pt>
+<images//auth-required.png, id=877, 1143.0705pt x 532.389pt>
 File: images//auth-required.png Graphic file (type png)
 <use images//auth-required.png>
 Package pdftex.def Info: images//auth-required.png  used on input line 178.
 (pdftex.def)             Requested size: 372.73126pt x 173.60115pt.
-<images//anonymous-user.png, id=869, 1073.81175pt x 344.487pt>
+<images//anonymous-user.png, id=878, 1073.81175pt x 344.487pt>
 File: images//anonymous-user.png Graphic file (type png)
 <use images//anonymous-user.png>
 Package pdftex.def Info: images//anonymous-user.png  used on input line 189.
@@ -1929,7 +1944,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 195--196
 
  []
 
-[55
+[56
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.13})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1942,7 +1957,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.14})
                                                   \__shipout_drop_firstpage_...
 l.196 
        <./images//auth-required.png> <./images//anonymous-user.png>]
-<images//session-expired.png, id=879, 1141.866pt x 534.19576pt>
+<images//session-expired.png, id=887, 1141.866pt x 534.19576pt>
 File: images//session-expired.png Graphic file (type png)
 <use images//session-expired.png>
 Package pdftex.def Info: images//session-expired.png  used on input line 202.
@@ -1952,7 +1967,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 202--203
  [] 
  []
 
-) [56
+) [57
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.15})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1979,12 +1994,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--16
 
  []
 
-) [57
+) [58
 
 
 
 
-] [58]
+] [59]
 Overfull \hbox (0.2822pt too wide) in paragraph at lines 48--48
 []\OT1/cmr/m/it/12 Hibernate\OT1/cmr/m/n/12 , \OT1/cmr/m/sc/12 url\OT1/cmr/m/n/
 12 : []$\OT1/cmtt/m/n/12 https : / / www . springboottutorial . com / hibernate
@@ -2021,11 +2036,11 @@ Overfull \hbox (11.52765pt too wide) in paragraph at lines 48--48
 R & sig = GjICrC5VouK -[]
  []
 
-[59
+[60
 
 
 
-] [60] (Licenta.aux (TeX_files/cover.aux) (TeX_files/chapter01.aux)
+] [61] (Licenta.aux (TeX_files/cover.aux) (TeX_files/chapter01.aux)
 (TeX_files/chapter02.aux) (TeX_files/chapter03.aux) (TeX_files/chapter04.aux)
 (TeX_files/chapter05.aux))
 
@@ -2043,10 +2058,10 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20388 strings out of 478582
- 359626 string characters out of 2844816
- 1030241 words of memory out of 3000000
- 37866 multiletter control sequences out of 15000+600000
+ 20399 strings out of 478582
+ 359975 string characters out of 2844816
+ 1030826 words of memory out of 3000000
+ 37874 multiletter control sequences out of 15000+600000
  479771 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,8n,68p,1823b,2073s stack positions out of 10000i,1000n,20000p,200000b,80000s
@@ -2069,9 +2084,9 @@ onts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (60 pages, 3250919 bytes).
+Output written on Licenta.pdf (61 pages, 3255168 bytes).
 PDF statistics:
- 1100 PDF objects out of 1200 (max. 8388607)
- 426 named destinations out of 1000 (max. 500000)
+ 1114 PDF objects out of 1200 (max. 8388607)
+ 429 named destinations out of 1000 (max. 500000)
  517 words of extra memory for PDF output out of 10000 (max. 10000000)
 
