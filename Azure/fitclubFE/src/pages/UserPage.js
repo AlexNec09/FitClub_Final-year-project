@@ -164,17 +164,21 @@ const UserPage = (props) => {
           setSessionExpired(true);
         });
 
-      apiCalls
-        .getUser(username)
-        .then((response) => {
-          dispatch({ type: "load-user-success", payload: response.data });
-        })
-        .catch((error) => {
-          dispatch({ type: "load-user-failure" });
-        });
+      if ((props.loggedInUser.isTokenValid && props.loggedInUser.isLoggedIn) || (!props.loggedInUser.isLoggedIn)
+        || (!props.loggedInUser.isTokenValid && props.loggedInUser.username !== "login") ||
+        (!props.loggedInUser.isTokenValid && props.loggedInUser.username === "login" && props.match.params.username !== "login")) {
+        apiCalls
+          .getUser(username)
+          .then((response) => {
+            dispatch({ type: "load-user-success", payload: response.data });
+          })
+          .catch((error) => {
+            dispatch({ type: "load-user-failure" });
+          });
+      }
     };
     loadUser();
-  }, [props.match.params.username, token]);
+  }, [props.match.params.username, token, props.loggedInUser.isLoggedIn, props.loggedInUser.isTokenValid, props.loggedInUser.username]);
 
   const onClickSave = () => {
     const userId = props.loggedInUser.id;

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as apiCalls from "../api/apiCalls";
 import Spinner from "./Spinner";
 import PostView from "./PostView";
@@ -54,7 +54,7 @@ const PostFeed = (props) => {
       }
     };
     loadPosts();
-  }, [props.user, props.loggedInUser, hasFullAccess]);
+  }, [props.user, dispatch, props.loggedInUser, hasFullAccess]);
 
   useEffect(() => {
     const checkCount = () => {
@@ -91,7 +91,7 @@ const PostFeed = (props) => {
       };
     }
 
-  }, [props.user, props, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess, hasLoadedPosts]);
+  }, [props.user, props, dispatch, page.content, isLoadingNewPosts, props.loggedInUser, hasFullAccess, hasLoadedPosts]);
 
   const onClickLoadMore = () => {
     if (isLoadingOldPosts) {

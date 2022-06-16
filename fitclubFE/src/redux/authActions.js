@@ -15,6 +15,7 @@ export const loginHandler = (credentials) => {
             dispatch(
                 loginSuccess({
                     ...response.data,
+                    isTokenValid: true,
                     password: credentials.password
                 }));
             return response;

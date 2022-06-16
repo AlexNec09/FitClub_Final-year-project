@@ -15,7 +15,7 @@ export default function authReducer(state = initialState, action) {
         return {
             ...action.payload,
             isLoggedIn: true,
-            isTokenValid: true,
+            isTokenValid: true
         };
     } else if (action.type === 'update-success') {
         return {

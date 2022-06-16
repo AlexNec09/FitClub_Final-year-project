@@ -32,7 +32,7 @@ spring:
 
 jwt:
   secret: FitClubJWTSecretKey
-  expirationInMs: 60480000
+  expirationInMs: 20000
 
 ---
 spring:
