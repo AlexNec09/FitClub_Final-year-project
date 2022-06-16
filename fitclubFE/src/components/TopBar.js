@@ -51,7 +51,7 @@ const TopBar = (props) => {
             </span>
           </div>
           <div className={dropDownClass} data-testid="drop-down-menu">
-            <Link to={`/${props.user.username}`} className="dropdown-item">
+            <Link to={`/users/${props.user.username}`} className="dropdown-item">
               <i className="fas fa-user text-info mx-2"></i>My Profile
             </Link>
             <span

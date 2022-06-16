@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const UserListItem = (props) => {
     return (
 
-        <Link to={`/${props.user.username}`} className="list-group-item list-group-item-action">
+        <Link to={`/users/${props.user.username}`} className="list-group-item list-group-item-action">
             <div className="d-flex">
                 <ProfileImageWithDefault
                     className="rounded-circle m-1"

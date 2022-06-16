@@ -86,7 +86,7 @@ const PostView = (props) => {
         />
         <div className="flex-fill m-auto ps-2">
           <div>
-            <Link to={`/${username}`} className="custom-link-for-user">
+            <Link to={`/users/${username}`} className="custom-link-for-user">
               <h6 className="d-inline">
                 {displayName}
               </h6>
