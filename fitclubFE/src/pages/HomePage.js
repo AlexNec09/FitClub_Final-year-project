@@ -47,7 +47,7 @@ class HomePage extends React.Component {
                       <hr width="98%"></hr>
 
                       <Link to={{
-                        pathname: `/${this.props.loggedInUser.username}`,
+                        pathname: `/users/${this.props.loggedInUser.username}`,
                         tabValue: '1',
                       }}
                         className="my-nav-item"
