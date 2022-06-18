@@ -47,6 +47,14 @@ const mockFailGetUser = {
   },
 };
 
+const mockValidToken = {
+  response: {
+    data: {
+      result: "VALID",
+    },
+  },
+};
+
 const mockFailUpdateUser = {
   response: {
     data: {
@@ -91,7 +99,8 @@ const setUserOneLoggedInStorage = () => {
       image: "image1.png",
       password: "P4ssword",
       isLoggedIn: true,
-      jwt: "test-jwt-token"
+      isTokenValid: true,
+      jwt: "jwt-test-token"
     })
   );
 };
@@ -172,6 +181,16 @@ describe("HomePage", () => {
       });
     };
 
+    const mockDelayedValidToken = () => {
+      return jest.fn().mockImplementation(() => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(mockValidToken);
+          }, 300);
+        });
+      });
+    };
+
     it("displays edit layout when clicking edit button", async () => {
       const { queryByText } = await setupForEdit();
       expect(queryByText("Save")).toBeInTheDocument();
@@ -233,6 +252,7 @@ describe("HomePage", () => {
 
     it("return to original displayName after its changed in edit mode but cancelled", async () => {
       const { queryByText, container } = await setupForEdit();
+      apiCalls.checkValidToken = mockDelayedValidToken();
 
       const displayInput = container.querySelector("input");
       fireEvent.change(displayInput, { target: { value: "display1-update" } });
@@ -245,6 +265,7 @@ describe("HomePage", () => {
 
     it("return to last updated displayName when displayName is changed for another time but cancelled", async () => {
       const { queryByText, queryByRole, findByText, container, getByTestId } = await setupForEdit();
+      apiCalls.checkValidToken = mockDelayedValidToken();
 
       let displayInput = container.querySelector("input");
       fireEvent.change(displayInput, { target: { value: "display1-update" } });
@@ -307,6 +328,7 @@ describe("HomePage", () => {
 
     it("enables save button after updateUser api call success", async () => {
       const { queryByText, queryByRole, findByText, container } = await setupForEdit();
+      apiCalls.checkValidToken = mockDelayedValidToken();
 
       let displayInput = container.querySelector("input");
       fireEvent.change(displayInput, { target: { value: "display1-update" } });
@@ -352,15 +374,14 @@ describe("HomePage", () => {
     });
 
     it("displays validation error for displayName when update api fails", async () => {
-      const { queryByRole, queryByText } = await setupForEdit();
+      const { queryByRole, findByText } = await setupForEdit();
       apiCalls.updateUser = jest.fn().mockRejectedValue(mockFailUpdateUser);
 
       await waitFor(() => {
         const saveButton = queryByRole("button", { name: "Save" });
         fireEvent.click(saveButton);
       });
-
-      const errorMessage = queryByText(
+      const errorMessage = await findByText(
         "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters."
       );
       expect(errorMessage).toBeInTheDocument();

@@ -153,7 +153,6 @@ const UserPage = (props) => {
 
       apiCalls.checkValidToken(token)
         .then((response) => {
-          console.log(response.data);
           if (response.data.result === "VALID") {
             setSessionExpired(false);
           } else {

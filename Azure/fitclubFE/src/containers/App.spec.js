@@ -260,7 +260,7 @@ describe("App", () => {
   });
 
   it("set axios authorization with base64 encoded user credentials after login success", async () => {
-    const { queryByPlaceholderText, container, queryByText } = setup("/login");
+    const { container, queryByText } = setup("/login");
     const usernameInput = container.querySelector(`input[name="username"]`);
     fireEvent.change(usernameInput, changeEvent("user1"));
     const passwordInput = container.querySelector(`input[name="password"]`);

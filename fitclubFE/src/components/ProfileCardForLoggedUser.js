@@ -188,7 +188,6 @@ const ProfileCardForLoggedUser = (props) => {
                 <Row>
                     <Col xs={12} md={12} lg={12} xl={8}>
                         <div className="card-body d-flex flex-column mt-2">
-                            {/* {`${emailVerificationStatus}`} */}
                             {emailVerificationStatus && (
 
                                 <h5 className="text-center text-success font-weight-bold pt-4 text-center success-text-resend">
