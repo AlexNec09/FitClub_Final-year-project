@@ -157,8 +157,7 @@ describe("HomePage", () => {
       setUserOneLoggedInStorage();
       apiCalls.getUser = jest.fn().mockResolvedValue(mockSuccessGetUser);
       const rendered = setup({ match });
-      await waitFor(() => { });
-      const editButton = rendered.queryByText("Edit Profile");
+      const editButton = await rendered.findByText("Edit Profile");
       fireEvent.click(editButton);
       return rendered;
     };

@@ -201,7 +201,7 @@ const ProfileCardForLoggedUser = (props) => {
 
                     <Col xs={12} md={12} lg={12} xl={4}>
                         <div className="d-flex justify-content-center pr-5 pt-4 pb-2">
-                            <img className="m-auto" src={confirmationEmail} width="230" alt="Hoaxify" />
+                            <img className="m-auto" src={confirmationEmail} width="230" alt="EmailConfirmed" />
                         </div>
                     </Col>
 

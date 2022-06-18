@@ -68,7 +68,7 @@ class ConfirmationToken extends Component {
                     <div className="container card d-flex p-1 card-confirmation shadow-sm">
                         <div className="alert text-center pb-0 mb-0" role="alert">
                             <div className="">
-                                <img className="m-auto pl-3 pt-3" src={yes_icon} width="200" alt="Hoaxify" />
+                                <img className="m-auto pl-3 pt-3" src={yes_icon} width="200" alt="ConfirmationSuccess" />
                             </div>
 
                             <h4 className="pt-5 confirmation-header">

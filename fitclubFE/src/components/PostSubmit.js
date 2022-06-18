@@ -29,6 +29,7 @@ class PostSubmit extends Component {
   };
 
   onFileSelect = (event) => {
+    this.setState({ pendingApiCall: true, });
     if (event.target.files.length === 0) {
       return;
     }
@@ -54,7 +55,7 @@ class PostSubmit extends Component {
     const body = new FormData();
     body.append("file", this.state.file);
     apiCalls.postUserPostFile(body, this.props.loggedInUser.jwt).then((response) => {
-      this.setState({ fileError: undefined, attachment: response.data });
+      this.setState({ fileError: undefined, attachment: response.data, pendingApiCall: false });
     }).catch((error) => {
       let fileError;
       if (error.response && error.response.data) {
@@ -62,7 +63,7 @@ class PostSubmit extends Component {
       } else {
         fileError = "The uploaded file exceeds maximum permitted size of 10MB."
       }
-      this.setState({ fileError });
+      this.setState({ fileError, pendingApiCall: false });
     });
   };
 

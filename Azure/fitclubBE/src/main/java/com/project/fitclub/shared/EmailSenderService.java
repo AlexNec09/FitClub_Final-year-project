@@ -22,31 +22,38 @@ public class EmailSenderService {
     final String SUBJECT_CHANGE_PASSWORD = "Change your password on FitClub platform";
 
     final String TEXTBODY_EMAIL_CONFIRMATION = "Hi, $fullName!" + System.lineSeparator()
+            + System.lineSeparator()
             + "In order to gain access to all the resources available, "
             + "you need to confirm your email address by opening the following URL in your browser window:" + System.lineSeparator()
-            + "http://frontend-fitclub-by-alexnec.azurewebsites.net/#/verification/confirmationToken?token=$tokenValue" + System.lineSeparator();
+            + " http://fitclub.azurewebsites.net/#/verification/confirmationToken?token=$tokenValue";
 
     final String TEXTBODY_CHANGE_EMAIL = "Hi, $fullName!" + System.lineSeparator()
+            + System.lineSeparator()
             + "You're receiving this email because you requested to change your email on FitClub platform." + System.lineSeparator()
             + "If you did not request this, please disregard this email." + System.lineSeparator()
+            + System.lineSeparator()
             + "This confirmation link is valid for 1 hour and can be used only once."
             + " Please be aware that you must confirm your new email address after you have made the change. "
             + "If you would like to continue and change it, please click the following link:" + System.lineSeparator()
-            + "http://frontend-fitclub-by-alexnec.azurewebsites.net/#/verification/changeEmail?token=$tokenValue";
+            + " http://fitclub.azurewebsites.net/#/verification/changeEmail?token=$tokenValue";
 
     final String TEXTBODY_PASSWORD_RESET = "Hi, $fullName! " + System.lineSeparator()
+            + System.lineSeparator()
             + "You're receiving this email because you requested to reset your password on FitClub platform." + System.lineSeparator()
             + "If you did not request this, please disregard this email." + System.lineSeparator()
+            + System.lineSeparator()
             + "This confirmation link is valid for 1 hour and can be used only once."
             + "If you would like to continue and change it, please open the following URL in your browser window:" + System.lineSeparator()
-            + " http://frontend-fitclub-by-alexnec.azurewebsites.net/#/verification/passwordReset?token=$tokenValue";
+            + " http://fitclub.azurewebsites.net/#/verification/passwordReset?token=$tokenValue";
 
     final String TEXTBODY_CHANGE_PASSWORD = "Hi, $fullName! " + System.lineSeparator()
+            + System.lineSeparator()
             + "You're receiving this email because you requested to change your password on FitClub platform." + System.lineSeparator()
             + "If you did not request this, please disregard this email." + System.lineSeparator()
+            + System.lineSeparator()
             + "This confirmation link is valid for 1 hour and can be used only once."
             + "To complete this process, you need to open the following URL in your browser window:" + System.lineSeparator()
-            + " http://frontend-fitclub-by-alexnec.azurewebsites.net/#/verification/passwordReset?token=$tokenValue";
+            + " http://fitclub.azurewebsites.net/#/verification/passwordReset?token=$tokenValue";
 
 
     public void verifyEmail(User user) {

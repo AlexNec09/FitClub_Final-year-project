@@ -328,7 +328,7 @@ const UserPage = (props) => {
                   {!sessionExpired && props.loggedInUser.isLoggedIn ? (<div className="pt-4">
                     <ProfileCardForLoggedUser
                       user={state.user}
-                      isEditable={isEditable}
+                      isEditable={isEditable && !sessionExpired}
                       inEditMode={state.inEditMode}
                       onClickEdit={() => dispatch({ type: "edit-mode" })}
                       onClickCancel={() => dispatch({ type: "cancel" })}
@@ -355,22 +355,7 @@ const UserPage = (props) => {
                   </div>) : (<div className="pt-4 mt-2">
                     <ProfileCard
                       user={state.user}
-                      inEditMode={state.inEditMode}
-                      onClickEdit={() => dispatch({ type: "edit-mode" })}
-                      onClickCancel={() => dispatch({ type: "cancel" })} // inline function
-                      onClickSave={onClickSave}
-                      onChangeDisplayName={(event) =>
-                        dispatch({
-                          type: "update-displayName",
-                          payload: event.target.value,
-                        })
-                      }
-                      pendingUpdateCall={state.pendingUpdateCall}
                       loadedImage={state.image}
-                      onFileSelect={onFileSelect}
-                      isFollowable={props.loggedInUser.isLoggedIn && !isEditable}
-                      onToggleFollow={onToggleFollow}
-                      pendingFollowToggleCall={state.pendingFollowToggleCall}
                       errors={state.errors}
                     />
                     <div className="pt-4">
@@ -382,8 +367,6 @@ const UserPage = (props) => {
                         )}
                     </div>
                   </div>
-
-
                   )}
                 </Tab.Pane>
 

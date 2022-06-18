@@ -88,7 +88,7 @@ class ResendConfirmationEmail extends Component {
                     <div className="container card d-flex p-1 card-confirmation shadow-sm">
                         <div className="alert text-center pb-0 mb-0" role="alert">
                             <div className="login-logo">
-                                <img className="m-auto pl-3 pt-1" src={image} width="270" alt="Hoaxify" />
+                                <img className="m-auto pl-3 pt-1" src={image} width="270" alt="ConfirmationRequired" />
                             </div>
 
                             <div>
