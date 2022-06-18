@@ -14,6 +14,7 @@ class PostSubmit extends Component {
     content: undefined,
     pendingApiCall: false,
     errors: {},
+    fileError: undefined,
     file: undefined,
     image: undefined,
     attachment: undefined,
@@ -38,6 +39,7 @@ class PostSubmit extends Component {
       this.setState(
         {
           image: reader.result,
+          errors: {},
           file,
         },
         () => {
@@ -52,7 +54,15 @@ class PostSubmit extends Component {
     const body = new FormData();
     body.append("file", this.state.file);
     apiCalls.postUserPostFile(body, this.props.loggedInUser.jwt).then((response) => {
-      this.setState({ attachment: response.data });
+      this.setState({ fileError: undefined, attachment: response.data });
+    }).catch((error) => {
+      let fileError;
+      if (error.response && error.response.data) {
+        fileError = error.response.data.message;
+      } else {
+        fileError = "The uploaded file exceeds maximum permitted size of 10MB."
+      }
+      this.setState({ fileError });
     });
   };
 
@@ -62,6 +72,7 @@ class PostSubmit extends Component {
       focused: false,
       content: "",
       errors: {},
+      fileError: undefined,
       image: undefined,
       file: undefined,
       attachment: undefined,
@@ -103,8 +114,12 @@ class PostSubmit extends Component {
 
   render() {
     let textAreaClassName = "form-control w-100";
+    let inputClassName = "pt-2";
+
     if (this.state.errors.content) {
       textAreaClassName += " is-invalid";
+    } else if (this.state.fileError) {
+      inputClassName += " is-invalid";
     }
     return (
       <div className="pb-3">
@@ -131,24 +146,33 @@ class PostSubmit extends Component {
               </span>
             )}
 
+
             {this.state.focused && (
               <div>
-                <div className="pt-2">
-                  <Input type="file" accept="image/png, image/jpeg" onChange={this.onFileSelect} />
+                <div className={inputClassName}>
+                  <Input type="file" accept="image/png, image/jpeg, image/gif" onChange={this.onFileSelect} />
                   {this.state.image && (
                     <img
                       className="mt-2 img-thumbnail"
                       src={this.state.image}
-                      alt="uploadedImg"
+                      alt="Uploaded File"
                       width="128"
                       height="64"
                     />
                   )}
                 </div>
+
+                {this.state.fileError && (
+                  <span className="invalid-feedback pt-2">
+                    {this.state.fileError}
+                  </span>
+                )}
+
+
                 <div className="text-end mt-2">
                   <ButtonWithProgress
                     className="btn btn-success"
-                    disabled={this.state.pendingApiCall}
+                    disabled={this.state.pendingApiCall || this.state.fileError}
                     onClick={this.onClickSend}
                     pendingApiCall={this.state.pendingApiCall}
                     text="Send"

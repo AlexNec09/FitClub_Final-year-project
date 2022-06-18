@@ -17,7 +17,6 @@ const ProfileCardForLoggedUser = (props) => {
 
     const relativeDate = format(date);
 
-
     return (
         <React.Fragment>
             <div className="card shadow-sm">
@@ -79,9 +78,6 @@ const ProfileCardForLoggedUser = (props) => {
                     <Col xs={12} md={12} lg={8}>
                         <div className="card-body d-flex flex-column m-2 float-left pl-3 mt-2">
                             {!props.inEditMode && (
-                                // <h4>Displayname: {`${displayName}`} 
-                                // <br></br>
-                                // Email: {`${username}`} </h4>
                                 <div className="float-left pl-5">
 
                                     <Row className="pt-1">
@@ -110,11 +106,10 @@ const ProfileCardForLoggedUser = (props) => {
                             )}
 
                             {props.inEditMode && (
-                                <div className="">
+                                <div className="mb-1">
 
                                     <Input
                                         value={displayName}
-                                        // label={`Change Display Name for ${username}`}
                                         onChange={props.onChangeDisplayName}
                                         hasError={props.errors.displayName && true}
                                         error={props.errors.displayName}
@@ -126,15 +121,23 @@ const ProfileCardForLoggedUser = (props) => {
                                             type="file"
                                             onChange={props.onFileSelect}
                                             hasError={props.errors.image && true}
-                                            error={props.errors.image}
                                         />
                                     </div>
 
                                 </div>
                             )}
 
+                            <div>
+                                {props.errors.image && (
+                                    <span className="invalid-feedback-forprofileCard pt-3">
+                                        {props.errors.image}
+                                    </span>
+                                )}
+                            </div>
+
+
                             {props.inEditMode && (
-                                <div className="row m-1 pt-1">
+                                <div className="row m-1 pt-2">
                                     <div className="d-flex justify-content-center">
                                         <ButtonWithProgress
                                             className="btn btn-primary"

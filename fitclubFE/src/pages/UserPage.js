@@ -194,12 +194,14 @@ const UserPage = (props) => {
           type: "update-success",
           payload: updatedUser,
         };
-        props.dispatch(action); // dispatching this new data to redux
+        props.dispatch(action);
       })
       .catch((error) => {
         let errors = {};
-        if (error.response.data.validationErrors) {
+        if (error.response && error.response.data.validationErrors) {
           errors = error.response.data.validationErrors;
+        } else {
+          errors = "The uploaded file exceeds maximum permitted size of 10MB."
         }
         dispatch({ type: "update-failure", payload: errors });
       });

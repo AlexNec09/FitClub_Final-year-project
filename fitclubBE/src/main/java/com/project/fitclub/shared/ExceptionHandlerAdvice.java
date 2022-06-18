@@ -1,10 +1,14 @@
 package com.project.fitclub.shared;
 
 import com.project.fitclub.error.ApiError;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +32,20 @@ public class ExceptionHandlerAdvice {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         apiError.setValidationErrors(validationErrors);
+        return apiError;
+    }
+
+    @ExceptionHandler({IOException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiError handleUploadFileExtensionException(IOException exception, HttpServletRequest request) {
+        ApiError apiError = new ApiError(400, exception.getMessage(), request.getServletPath());
+        return apiError;
+    }
+
+    @ExceptionHandler({FileSizeLimitExceededException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiError handleUploadFileSizeException(FileSizeLimitExceededException exception, HttpServletRequest request) {
+        ApiError apiError = new ApiError(400, exception.getMessage(), request.getServletPath());
         return apiError;
     }
 }
