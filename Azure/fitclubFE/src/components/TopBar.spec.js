@@ -75,7 +75,7 @@ describe('TopBar', () => {
         it('has link to user profile when user logged in', () => {
             const { queryByText } = setup(loggedInState);
             const profileLink = queryByText('My Profile');
-            expect(profileLink.getAttribute('href')).toBe('/user1');
+            expect(profileLink.getAttribute('href')).toBe('/users/user1');
         });
 
         it('displays the displayName when user logged in', () => {

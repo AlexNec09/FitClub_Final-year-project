@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/1.0")
 public class FileUploadController {
@@ -16,7 +18,7 @@ public class FileUploadController {
     FileService fileService;
 
     @PostMapping("/posts/upload")
-    FileAttachment uploadForUserPost(MultipartFile file) {
+    FileAttachment uploadForUserPost(MultipartFile file) throws IOException {
         return fileService.saveAttachment(file);
     }
 }

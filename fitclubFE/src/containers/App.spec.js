@@ -104,7 +104,7 @@ describe("App", () => {
   });
 
   it("displays userpage when url  other than /, /login or /signup", () => {
-    const { queryByTestId } = setup("/user1");
+    const { queryByTestId } = setup("/users/user1");
     expect(queryByTestId("userpage")).toBeInTheDocument();
   });
 
@@ -154,8 +154,8 @@ describe("App", () => {
     expect(navigation).toBeInTheDocument();
   });
 
-  it("displays topBar when url is /user1", () => {
-    const { container } = setup("/user1");
+  it("displays topBar when url is /users/user1", () => {
+    const { container } = setup("/users/user1");
     const navigation = container.querySelector("nav");
     expect(navigation).toBeInTheDocument();
   });
@@ -168,7 +168,7 @@ describe("App", () => {
   });
 
   it("displays My Profile on TopBar after login success", async () => {
-    const { container, queryByText } = setup("/login");
+    const { container, queryAllByText } = setup("/login");
     const usernameInput = container.querySelector(`input[name="username"]`);
     fireEvent.change(usernameInput, changeEvent("user1"));
     const passwordInput = container.querySelector(`input[name="password"]`);
@@ -184,11 +184,11 @@ describe("App", () => {
       },
     });
     fireEvent.click(button);
-    await waitFor(() => expect(queryByText("My Profile")).toBeInTheDocument());
+    await waitFor(() => expect(queryAllByText("My Profile")[0]).toBeInTheDocument());
   });
 
   it("displays My Profile on TopBar after signup success", async () => {
-    const { queryByPlaceholderText, container, queryByText } = setup("/signup");
+    const { queryByPlaceholderText, container, queryByText, queryAllByText } = setup("/signup");
 
     const displayNameInput = queryByPlaceholderText("Your display name");
     const userNameInput = container.querySelector(`input[name="username"]`);
@@ -218,7 +218,7 @@ describe("App", () => {
         },
       });
     fireEvent.click(button);
-    await waitFor(() => expect(queryByText("My Profile")).toBeInTheDocument());
+    await waitFor(() => expect(queryAllByText("My Profile")[0]).toBeInTheDocument());
   });
 
   it("saves logged in user data to localStorage after login success", async () => {
@@ -311,7 +311,7 @@ describe("App", () => {
       .mockResolvedValueOnce(mockSuccessGetUser2);
 
     setUserOneLoggedInStorage();
-    const { queryAllByText, queryByText } = setup("/user2");
+    const { queryAllByText, queryByText } = setup("/users/user2");
     await waitFor(() => queryByText("display2@user2"));
     const myProfileLink = queryAllByText("My Profile")[0];
     fireEvent.click(myProfileLink);
@@ -325,7 +325,7 @@ describe("App", () => {
       .mockResolvedValueOnce(mockSuccessGetUser2);
     setUserOneLoggedInStorage();
 
-    const { queryAllByText, queryByText } = setup("/user50");
+    const { queryAllByText, queryByText } = setup("/users/user50");
     await waitFor(() => queryByText("User not found"));
     const myProfileLink = queryAllByText("My Profile")[0];
     fireEvent.click(myProfileLink);

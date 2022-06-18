@@ -52,7 +52,7 @@ const mockFailUpdateUser = {
     data: {
       validationErrors: {
         displayName: "Length cannot be less than allowable minimum of 4 characters and should not exceed 255 characters.",
-        image: "Only PNG and JPG files are allowed",
+        image: "Only PNG, JPG and GIF files are allowed!",
       },
     },
   },
@@ -90,6 +90,7 @@ const setUserOneLoggedInStorage = () => {
       email: "email1@mail.com",
       image: "image1.png",
       password: "P4ssword",
+      isTokenValid: true,
       isLoggedIn: true,
       jwt: "test-jwt-token"
     })
@@ -376,7 +377,7 @@ describe("HomePage", () => {
         fireEvent.click(saveButton);
       });
 
-      const errorMessage = queryByText("Only PNG and JPG files are allowed");
+      const errorMessage = queryByText("Only PNG, JPG and GIF files are allowed!");
       expect(errorMessage).toBeInTheDocument();
     });
 
@@ -406,7 +407,7 @@ describe("HomePage", () => {
       fireEvent.click(saveButton);
 
       const errorMessage = await findByText(
-        "Only PNG and JPG files are allowed"
+        "Only PNG, JPG and GIF files are allowed!"
       );
 
       const fileInput = container.querySelectorAll("input")[1];

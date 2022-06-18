@@ -186,7 +186,7 @@ describe('UserList', () => {
             const { queryByText, container } = setup();
             await waitFor(() => queryByText('display1'));
             const firstAnchor = container.querySelectorAll('a')[0];
-            expect(firstAnchor.getAttribute('href')).toBe('/user1');
+            expect(firstAnchor.getAttribute('href')).toBe('/users/user1');
         });
 
         it('displays the displayName when listUser api returns users', async () => {

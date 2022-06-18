@@ -65,25 +65,21 @@ public class FileService {
         }
     }
 
-    public FileAttachment saveAttachment(MultipartFile file) {
+    public FileAttachment saveAttachment(MultipartFile file) throws IOException {
         FileAttachment fileAttachment = new FileAttachment();
         fileAttachment.setDate(new Date());
         String randomName = getRandomName();
         fileAttachment.setName(randomName);
 
         File target = new File(appConfiguration.getFullAttachmentsPath() + "/" + randomName);
-
-        try {
-            byte[] fileAsByte = file.getBytes();
-            FileUtils.writeByteArrayToFile(target, fileAsByte);
-            String fileType = detectType(fileAsByte);
-            if (fileType.equalsIgnoreCase("image/png") || fileType.equalsIgnoreCase("image/jpeg")) {
-                fileAttachment.setFileType(fileType);
-            } else {
-                throw new IOException("Only PNG and JPG files are allowed!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] fileAsByte = file.getBytes();
+        FileUtils.writeByteArrayToFile(target, fileAsByte);
+        String fileType = detectType(fileAsByte);
+        if (fileType.equalsIgnoreCase("image/png") ||
+                fileType.equalsIgnoreCase("image/jpeg") || fileType.equalsIgnoreCase("image/gif")) {
+            fileAttachment.setFileType(fileType);
+        } else {
+            throw new IOException("Only PNG, JPG and GIF files are allowed!");
         }
 
         return fileAttachmentRepository.save(fileAttachment);
@@ -92,10 +88,12 @@ public class FileService {
     @Scheduled(fixedRate = 60 * 60 * 1000)
     public void cleanupStorage() {
         Date oneHourAgo = new Date(System.currentTimeMillis() - (60 * 60 * 1000));
-        List<FileAttachment> oldFiles = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
-        for (FileAttachment file : oldFiles) {
-            deleteAttachmentImage(file.getName());
-            fileAttachmentRepository.deleteById(file.getId());
+        List<FileAttachment> oldFilesWithNoPost = fileAttachmentRepository.findByDateBeforeAndPostIsNull(oneHourAgo);
+        for (FileAttachment file : oldFilesWithNoPost) {
+            if (file.getPost() == null) {
+                deleteAttachmentImage(file.getName());
+                fileAttachmentRepository.deleteById(file.getId());
+            }
         }
     }
 

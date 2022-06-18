@@ -136,7 +136,7 @@ describe("PostView", () => {
     it("has link to user page", () => {
       const { container } = setup();
       const anchor = container.querySelector("a");
-      expect(anchor.getAttribute("href")).toBe("/user1");
+      expect(anchor.getAttribute("href")).toBe("/users/user1");
     });
 
     it("displays file attachment image", () => {

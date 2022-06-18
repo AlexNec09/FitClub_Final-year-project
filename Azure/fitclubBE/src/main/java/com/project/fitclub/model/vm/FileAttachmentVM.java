@@ -1,6 +1,7 @@
 package com.project.fitclub.model.vm;
 
 import com.project.fitclub.model.FileAttachment;
+import com.project.fitclub.shared.PostAttachment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FileAttachmentVM {
 
+    @PostAttachment
     private String name;
 
     private String fileType;
