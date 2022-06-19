@@ -327,24 +327,4 @@ Menționăm, așadar, câteva dintre caracteristicile productive de top ale Inte
 	\newline
 \end{itemize}
 
-\section{Găzduirea aplicației pe Microsoft Azure}
-
-Microsoft Azure pune la dispoziție un abonament destinat studenților care oferă 100 de dolari în credite Azure ce pot fi folosite pentru a accesa diverse servicii\footnote{Azure App Services} Azure, fără a fi nevoie de un card de credit la înscriere. Printre aceste servicii, se numără și posibilitatea de a găzdui o aplicație web.\newline
-
-Ca resurse principale, Microsoft Azure se bazează pe serviciile descrise anterior, în scopul găzduirii aplicațiilor web și a API-urilor web pentru orice platformă sau dispozitiv, și nu numai\cite{.azure}.\newline
-
-Pentru găzduirea platformei FitClub au fost necesare doua astfel de servicii Azure: unul pentru API-urile web, și unul pentru aplicația client-side. De asemenea, persistența datelor este asigurată și în acest caz, prin folosirea unui serviciu Azure care permite rularea unei instanțe de baze de date relaționale, numit Azure Database for MySQL: Single Server. Toate aceste servicii sunt definite în cadrul unui grup de resurse.\newline
-
-Aplicațiile sunt găzduite în planurile App Service, care sunt create într-un App Service Environment. Un App Service Plan este, în esență, un profil de planificare și configurare pentru găzduirea unei aplicații.\newline
-
-Fiecare aplicație, fie că este o aplicație web sau o aplicație ce implementează API-uri web, funcționează pe baza unui App Service Plan, fiind, de asemenea, limitată la puterea de calcul a acelui hardware dedicat, numit gazdă, care diferă în funcție de abonamentul și configurările specifice fiecărui utilizator\cite{.azurebook}.\newline
-
-\textbf{Observație}: Serviciul Azure responsabil pentru rularea unei instanțe de baze de date relaționale ce a fost descris anterior, nu are nevoie să opereze în cadrul unui App Service Plan.\newline\newline
-
-Pentru găzduirea aplicației ce implementează API-urile web, este necesară generarea unor artefacte, folosind în terminal comanda \code{mvn clean install}. Concret, se generează un fișier cu extensia .jar, după rularea cu succes a tuturor testelor și curățarea tuturor rezultatelor compilărilor anterioare. După aceea, sunt necesare câteva configurări adiționale în cadrul proiectului care vor fi folosite pentru a încărca aplicația cu succes pe Microsoft Azure.\newline
-
-Pentru găzduirea aplicației client-side, este necesară crearea unui director ce conține versiunea de producție a aplicației, prin rularea în terminal a comenzii \code{npm run build}. Acest director va conține un set minimal de fișiere ce vor putea fi copiate în cadrul oricărui server web și care vor acționa ca aplicația client-side propriu-zisă.\newline
-
-De asemenea, sunt necesare configurări adiționale în cadrul aplicației client-side pentru a putea accesa endpoint-urile corespunzătoare aplicației ce implementează API-urile web.
-
 \label{chap:02}

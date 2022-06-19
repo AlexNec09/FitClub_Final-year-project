@@ -33,28 +33,28 @@
 \contentsline {section}{\numberline {2.15}Editoare de cod sursă}{22}{section.2.15}%
 \contentsline {subsection}{\numberline {2.15.1}Visual Studio Code}{22}{subsection.2.15.1}%
 \contentsline {subsection}{\numberline {2.15.2}IntelliJ IDEA}{23}{subsection.2.15.2}%
-\contentsline {section}{\numberline {2.16}Găzduirea aplicației pe Microsoft Azure}{23}{section.2.16}%
-\contentsline {chapter}{\numberline {3}Proiectarea aplicației}{26}{chapter.3}%
-\contentsline {paragraph}{• RESTful API Web Service pe partea de server -}{26}{section*.7}%
-\contentsline {paragraph}{• Aplicația client-side -}{26}{section*.8}%
-\contentsline {section}{\numberline {3.1}Implementarea server-ului web}{26}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Securitatea aplicației}{26}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Utilizarea JWT}{29}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Distribuirea postărilor}{30}{subsection.3.1.3}%
-\contentsline {subsection}{\numberline {3.1.4}Afișarea postărilor}{33}{subsection.3.1.4}%
-\contentsline {subsection}{\numberline {3.1.5}Ștergerea postărilor}{34}{subsection.3.1.5}%
-\contentsline {subsection}{\numberline {3.1.6}Reacțiile utilizatorului la o postare}{35}{subsection.3.1.6}%
-\contentsline {subsection}{\numberline {3.1.7}Revizuirea credențialelor de securitate}{36}{subsection.3.1.7}%
-\contentsline {subsection}{\numberline {3.1.8}Afișarea listei cu utilizatori}{38}{subsection.3.1.8}%
-\contentsline {subsection}{\numberline {3.1.9}Tratarea excepțiilor și a erorilor de validare}{39}{subsection.3.1.9}%
-\contentsline {section}{\numberline {3.2}Implementarea aplicației client-side}{40}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Starea componentelor în React}{40}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}React Hooks}{41}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Ciclul de viață al componentelor în React}{43}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Reîmprospătarea fluxului de postări}{45}{subsection.3.2.4}%
-\contentsline {chapter}{\numberline {4}Ghid de utilizare a aplicației}{47}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Autentificarea}{47}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Înregistrarea}{48}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Navigarea pe site}{51}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Accesarea nepermisă a aplicației}{56}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Concluzii}{58}{chapter.5}%
+\contentsline {chapter}{\numberline {3}Proiectarea aplicației}{24}{chapter.3}%
+\contentsline {paragraph}{• RESTful API Web Service pe partea de server -}{24}{section*.7}%
+\contentsline {paragraph}{• Aplicația client-side -}{24}{section*.8}%
+\contentsline {section}{\numberline {3.1}Implementarea server-ului web}{24}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Securitatea aplicației}{24}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Utilizarea JWT}{27}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Distribuirea postărilor}{28}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Afișarea postărilor}{31}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.5}Ștergerea postărilor}{32}{subsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.1.6}Reacțiile utilizatorului la o postare}{33}{subsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.1.7}Revizuirea credențialelor de securitate}{34}{subsection.3.1.7}%
+\contentsline {subsection}{\numberline {3.1.8}Afișarea listei cu utilizatori}{36}{subsection.3.1.8}%
+\contentsline {subsection}{\numberline {3.1.9}Tratarea excepțiilor și a erorilor de validare}{37}{subsection.3.1.9}%
+\contentsline {section}{\numberline {3.2}Implementarea aplicației client-side}{38}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Starea componentelor în React}{38}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}React Hooks}{39}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Ciclul de viață al componentelor în React}{41}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Reîmprospătarea fluxului de postări}{43}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}Găzduirea aplicației pe Microsoft Azure}{44}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Ghid de utilizare a aplicației}{46}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Autentificarea}{46}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Înregistrarea}{47}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Navigarea pe site}{50}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Accesarea nepermisă a aplicației}{55}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Concluzii}{57}{chapter.5}%
