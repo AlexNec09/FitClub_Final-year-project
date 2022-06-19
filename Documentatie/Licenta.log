@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  19 JUN 2022 12:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  19 JUN 2022 13:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -787,6 +787,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 7--8
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
  []
@@ -838,14 +843,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 48--49
-
- []
-
 [8]
 Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
+ []
+
+
+Overfull \hbox (5.70703pt too wide) in paragraph at lines 52--53
+[][]\OT1/cmr/m/n/12 In compara[]ie cu edi[]ia an-te-ri-oar^^Ua de HTML, res-pec
+-tiv HTML4, ^^^Pn HTML5
  []
 
 
@@ -958,7 +964,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 128--129
 
  []
 
-<images//funct-app-web.png, id=362, 501.875pt x 444.66125pt>
+<images//funct-app-web.png, id=363, 501.875pt x 444.66125pt>
 File: images//funct-app-web.png Graphic file (type png)
 <use images//funct-app-web.png>
 Package pdftex.def Info: images//funct-app-web.png  used on input line 132.
@@ -973,7 +979,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 142--143
 
  []
 
-<images//2level-arch.jpg, id=369, 463.13025pt x 200.54926pt>
+<images//2level-arch.jpg, id=370, 463.13025pt x 200.54926pt>
 File: images//2level-arch.jpg Graphic file (type jpg)
 <use images//2level-arch.jpg>
 Package pdftex.def Info: images//2level-arch.jpg  used on input line 148.
@@ -994,7 +1000,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 165--166
 
  []
 
-<images//3level-arch.png, id=376, 463.13025pt x 200.54926pt>
+<images//3level-arch.png, id=377, 463.13025pt x 200.54926pt>
 File: images//3level-arch.png Graphic file (type png)
 <use images//3level-arch.png>
 Package pdftex.def Info: images//3level-arch.png  used on input line 171.
@@ -1067,7 +1073,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 225--226
 
  []
 
-<images//mvc-arch.png, id=393, 803.0pt x 501.875pt>
+<images//mvc-arch.png, id=394, 803.0pt x 501.875pt>
 File: images//mvc-arch.png Graphic file (type png)
 <use images//mvc-arch.png>
 Package pdftex.def Info: images//mvc-arch.png  used on input line 229.
@@ -1691,7 +1697,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
  []
 
-<images//login-page.png, id=799, 1143.0705pt x 534.19576pt>
+<images//login-page.png, id=800, 1143.0705pt x 534.19576pt>
 File: images//login-page.png Graphic file (type png)
 <use images//login-page.png>
 Package pdftex.def Info: images//login-page.png  used on input line 15.
@@ -1711,7 +1717,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 29--31
 
  []
 
-<images//signup-page.png, id=804, 1138.2525pt x 529.98pt>
+<images//signup-page.png, id=805, 1138.2525pt x 529.98pt>
 File: images//signup-page.png Graphic file (type png)
 <use images//signup-page.png>
 Package pdftex.def Info: images//signup-page.png  used on input line 35.
@@ -1733,7 +1739,7 @@ Overfull \hbox (3.12926pt too wide) in paragraph at lines 40--42
 et la re-sur-sele aplica[]iei,
  []
 
-<images//email-confirmation.png, id=811, 1141.26375pt x 412.54124pt>
+<images//email-confirmation.png, id=812, 1141.26375pt x 412.54124pt>
 File: images//email-confirmation.png Graphic file (type png)
 <use images//email-confirmation.png>
 Package pdftex.def Info: images//email-confirmation.png  used on input line 45.
@@ -1766,7 +1772,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--54
 
  []
 
-<images//resend-email.png, id=820, 906.38625pt x 387.24675pt>
+<images//resend-email.png, id=821, 906.38625pt x 387.24675pt>
 File: images//resend-email.png Graphic file (type png)
 <use images//resend-email.png>
 Package pdftex.def Info: images//resend-email.png  used on input line 60.
@@ -1781,7 +1787,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
 
-<images//email-confirmed.png, id=821, 1138.2525pt x 531.1845pt>
+<images//email-confirmed.png, id=822, 1138.2525pt x 531.1845pt>
 File: images//email-confirmed.png Graphic file (type png)
 <use images//email-confirmed.png>
 Package pdftex.def Info: images//email-confirmed.png  used on input line 73.
@@ -1807,7 +1813,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--84
 
  []
 
-<images//post-feed-ok.png, id=829, 1155.71774pt x 534.798pt>
+<images//post-feed-ok.png, id=830, 1155.71774pt x 534.798pt>
 File: images//post-feed-ok.png Graphic file (type png)
 <use images//post-feed-ok.png>
 Package pdftex.def Info: images//post-feed-ok.png  used on input line 90.
@@ -1828,7 +1834,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 95--96
 
  []
 
-<images//post-submit.png, id=836, 635.976pt x 142.131pt>
+<images//post-submit.png, id=837, 635.976pt x 142.131pt>
 File: images//post-submit.png Graphic file (type png)
 <use images//post-submit.png>
 Package pdftex.def Info: images//post-submit.png  used on input line 102.
@@ -1838,7 +1844,7 @@ Overfull \hbox (2.64812pt too wide) in paragraph at lines 102--103
  [] 
  []
 
-<images//new-post-loaded.png, id=837, 567.3195pt x 449.88075pt>
+<images//new-post-loaded.png, id=838, 567.3195pt x 449.88075pt>
 File: images//new-post-loaded.png Graphic file (type png)
 <use images//new-post-loaded.png>
 Package pdftex.def Info: images//new-post-loaded.png  used on input line 112.
@@ -1860,7 +1866,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 118--119
 
  []
 
-<images//user-reaction.png, id=846, 701.62125pt x 109.00725pt>
+<images//user-reaction.png, id=847, 701.62125pt x 109.00725pt>
 File: images//user-reaction.png Graphic file (type png)
 <use images//user-reaction.png>
 Package pdftex.def Info: images//user-reaction.png  used on input line 125.
@@ -1883,7 +1889,7 @@ has been already used, duplicate ignored
                                                   \__shipout_drop_firstpage_...
 l.133 
        <./images//new-post-loaded.png> <./images//user-reaction.png>]
-<images//user-page.png, id=855, 1108.14pt x 526.3665pt>
+<images//user-page.png, id=856, 1108.14pt x 526.3665pt>
 File: images//user-page.png Graphic file (type png)
 <use images//user-page.png>
 Package pdftex.def Info: images//user-page.png  used on input line 140.
@@ -1899,7 +1905,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--147
 
  []
 
-<images//security-page.png, id=856, 1142.46825pt x 534.19576pt>
+<images//security-page.png, id=857, 1142.46825pt x 534.19576pt>
 File: images//security-page.png Graphic file (type png)
 <use images//security-page.png>
 Package pdftex.def Info: images//security-page.png  used on input line 153.
@@ -1911,7 +1917,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.10})
                                                   \__shipout_drop_firstpage_...
 l.158 
        <./images//user-page.png>]
-<images//user-feeds.png, id=863, 1084.05pt x 533.5935pt>
+<images//user-feeds.png, id=864, 1084.05pt x 533.5935pt>
 File: images//user-feeds.png Graphic file (type png)
 <use images//user-feeds.png>
 Package pdftex.def Info: images//user-feeds.png  used on input line 164.
@@ -1929,12 +1935,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.12})
                                                   \__shipout_drop_firstpage_...
 l.175 
        <./images//security-page.png> <./images//user-feeds.png>]
-<images//auth-required.png, id=872, 1143.0705pt x 532.389pt>
+<images//auth-required.png, id=873, 1143.0705pt x 532.389pt>
 File: images//auth-required.png Graphic file (type png)
 <use images//auth-required.png>
 Package pdftex.def Info: images//auth-required.png  used on input line 178.
 (pdftex.def)             Requested size: 372.73126pt x 173.60115pt.
-<images//anonymous-user.png, id=873, 1073.81175pt x 344.487pt>
+<images//anonymous-user.png, id=874, 1073.81175pt x 344.487pt>
 File: images//anonymous-user.png Graphic file (type png)
 <use images//anonymous-user.png>
 Package pdftex.def Info: images//anonymous-user.png  used on input line 189.
@@ -1957,7 +1963,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.14})
                                                   \__shipout_drop_firstpage_...
 l.196 
        <./images//auth-required.png> <./images//anonymous-user.png>]
-<images//session-expired.png, id=883, 1141.866pt x 534.19576pt>
+<images//session-expired.png, id=884, 1141.866pt x 534.19576pt>
 File: images//session-expired.png Graphic file (type png)
 <use images//session-expired.png>
 Package pdftex.def Info: images//session-expired.png  used on input line 202.
@@ -2047,7 +2053,7 @@ R & sig = GjICrC5VouK -[]
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Licenta.out' has not changed.
-(rerunfilecheck)             Checksum: 36BCDDBD5DC78A55A126B01510E55897;8895.
+(rerunfilecheck)             Checksum: D10A98B067DFE8CE5984349666C58D30;8969.
 
 Package biblatex Warning: Please (re)run BibTeX on the file(s):
 (biblatex)                Licenta
@@ -2058,8 +2064,8 @@ Package logreq Info: Writing requests to 'Licenta.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20398 strings out of 478582
- 359966 string characters out of 2844816
+ 20399 strings out of 478582
+ 359977 string characters out of 2844816
  1030805 words of memory out of 3000000
  37874 multiletter control sequences out of 15000+600000
  479771 words of font info for 63 fonts, out of 8000000 for 9000
@@ -2084,9 +2090,9 @@ onts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (60 pages, 3255427 bytes).
+Output written on Licenta.pdf (60 pages, 3255733 bytes).
 PDF statistics:
- 1109 PDF objects out of 1200 (max. 8388607)
- 428 named destinations out of 1000 (max. 500000)
+ 1110 PDF objects out of 1200 (max. 8388607)
+ 429 named destinations out of 1000 (max. 500000)
  517 words of extra memory for PDF output out of 10000 (max. 10000000)
 

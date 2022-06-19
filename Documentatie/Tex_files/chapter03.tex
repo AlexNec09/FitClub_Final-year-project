@@ -108,7 +108,7 @@ Posibilitatea de a vedea postările anumitor utilizatori este definită astfel:\
 \bigskip
 Se identifică utilizatorul autentificat pe site, și apoi, folosind caracteristicile colecției de obiecte \code{Set} unde fiecare obiect este unic, adăugăm toți utilizatorii pe care acesta îi urmărește. Folosind acest set, vom căuta mai departe postările ce aparțin acestor utilizatori, folosindu-ne de o instanță a clasei care reprezintă o abstractizare a persistenței datelor si este responsabilă pentru efectuarea de operații CRUD, sortarea și paginarea datelor, care, în fragmentul de cod prezentat anterior, este denumită \code{postRepository}.\newline
 
-Pentru a identifica pe cine urmărește un utilizator, am conceput o relație "many-to-many" între entitatea denumită \code{User} și ea însăși, putând stabili așadar o legătură a unei astfel de instanțe cu mai multe instanțe de același tip.\newline
+Pentru a identifica pe cine urmărește un utilizator, am conceput o relație "many-to-many" între entitatea denumită \code{User} și ea însăși, putând stabili, așadar, o legătură a unei astfel de instanțe cu mai multe instanțe de același tip.\newline
 
 O postare suportă posibilitatea de a adăuga o imagine ca atașament, iar acest lucru necesită adăugarea de noi configurări, motiv pentru care am creat clasa \code{WebConfiguration} ce va fi verificată de Spring pentru configurațiile web, cum ar fi setarea de static resources sau setarea interceptorilor care vor intercepta cererile HTTP primite de pe partea de client.\newline
 

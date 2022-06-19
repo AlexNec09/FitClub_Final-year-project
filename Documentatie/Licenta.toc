@@ -12,6 +12,7 @@
 \contentsline {section}{\numberline {2.1}Descrierea unei aplicații web}{7}{section.2.1}%
 \contentsline {section}{\numberline {2.2}Generalități despre HTML}{8}{section.2.2}%
 \contentsline {section}{\numberline {2.3}HTML5}{9}{section.2.3}%
+\contentsline {paragraph}{•\, HTML4 vs HTML5}{9}{section*.7}%
 \contentsline {section}{\numberline {2.4}Bootstrap}{9}{section.2.4}%
 \contentsline {section}{\numberline {2.5}CSS}{10}{section.2.5}%
 \contentsline {section}{\numberline {2.6}Framework-uri în Java}{10}{section.2.6}%
@@ -34,8 +35,8 @@
 \contentsline {subsection}{\numberline {2.15.1}Visual Studio Code}{22}{subsection.2.15.1}%
 \contentsline {subsection}{\numberline {2.15.2}IntelliJ IDEA}{23}{subsection.2.15.2}%
 \contentsline {chapter}{\numberline {3}Proiectarea aplicației}{24}{chapter.3}%
-\contentsline {paragraph}{• RESTful API Web Service pe partea de server -}{24}{section*.7}%
-\contentsline {paragraph}{• Aplicația client-side -}{24}{section*.8}%
+\contentsline {paragraph}{• RESTful API Web Service pe partea de server -}{24}{section*.8}%
+\contentsline {paragraph}{• Aplicația client-side -}{24}{section*.9}%
 \contentsline {section}{\numberline {3.1}Implementarea server-ului web}{24}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Securitatea aplicației}{24}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}Utilizarea JWT}{27}{subsection.3.1.2}%
@@ -55,6 +56,6 @@
 \contentsline {chapter}{\numberline {4}Ghid de utilizare a aplicației}{46}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Autentificarea}{46}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Înregistrarea}{47}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Navigarea pe site}{50}{section.4.3}%
+\contentsline {section}{\numberline {4.3}Navigarea în cadrul aplicației}{50}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Accesarea nepermisă a aplicației}{55}{section.4.4}%
 \contentsline {chapter}{\numberline {5}Concluzii}{57}{chapter.5}%
