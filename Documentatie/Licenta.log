@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  19 JUN 2022 13:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.5.23)  20 JUN 2022 00:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1207,6 +1207,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 6--7
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 10.
 
+Overfull \hbox (0.58763pt too wide) in paragraph at lines 13--14
+\OT1/cmr/m/n/12 toda \OT1/cmtt/m/n/12 configure \OT1/cmr/m/n/12 din care pu-tem
+ ac-cesa obiec-tul co-res-punz^^Uator \OT1/cmtt/m/n/12 HttpSecurity\OT1/cmr/m/n
+/12 ,
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 13--14
 
  []
@@ -2090,7 +2097,7 @@ onts/cm/cmsy10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/type1/pub
 lic/amsfonts/cm/cmti12.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Alex/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Licenta.pdf (60 pages, 3255733 bytes).
+Output written on Licenta.pdf (60 pages, 3255773 bytes).
 PDF statistics:
  1110 PDF objects out of 1200 (max. 8388607)
  429 named destinations out of 1000 (max. 500000)

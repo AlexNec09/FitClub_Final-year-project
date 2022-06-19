@@ -1,19 +1,19 @@
 \chapter{Proiectarea aplicației}
-Aplicația FitClub este bazată pe doua mari module:
+Aplicația FitClub este bazată pe două mari module:
 
-\paragraph{•  RESTful API Web Service pe partea de server -}Acesta este creierul aplicației în sine unde se fac operațiile CRUD și accesăm API-uri înainte de a returna date structurate aplicației client-side.
+\paragraph{•  RESTful API pe partea de server -}Acesta este "creierul" aplicației în sine unde se fac operațiile CRUD și se accesează API-uri înainte de a returna date structurate aplicației client-side.
 
-\paragraph{•  Aplicația client-side -}Se realizează apeluri către Web Service-ul descris anterior, și se conectează elementele de UI pentru a accepta datele pe care ar trebui să le vadă fiecare tip de utilizator.\newline
+\paragraph{•  Aplicația client-side -}Se trimit cereri HTTP către serviciul web prezentat anterior, și se conectează elementele de UI pentru a accepta datele pe care ar trebui să le vadă fiecare utilizator.\newline
 
 \section{Implementarea server-ului web}
 
 \subsection{Securitatea aplicației}
 \lstset{frame=tb}
 
-Pentru a spori securitatea, am configurat manual comportamentul prin care Spring Security\cite{.springbootbook} interacționează cu aplicația. Implementarea corespunzătoare se află în clasa \code{SecurityConfiguration}, unde am suprascris metoda \code{configure} din care putem accesa obiectul corespunzător HttpSecurity care este obiectul de configurare utilizat de Spring Security, și în acest mod, putem să-i modificăm comportamentul. În mod implicit, Spring Security permite CSRF\footnote{Cross-site request forgery}, care este la bază un token generat de back-end care caută acest token pentru a fi adăugat la cererile ulterioare de tip POST sau PUT generate de client. Am decis să nu folosesc acest token, deoarece aplicația folosește JWT.\newline
+Pentru a spori securitatea, am configurat manual comportamentul prin care Spring Security\cite{.springbootbook} interacționează cu aplicația. Implementarea corespunzătoare se află în clasa \code{SecurityConfiguration}, unde am suprascris metoda \code{configure} din care putem accesa obiectul corespunzător \code{HttpSecurity}, reprezentând obiectul de configurare utilizat de Spring Security, și în acest mod, putem să-i modificăm comportamentul. În mod implicit, Spring Security permite CSRF\footnote{Cross-site request forgery}, care este la bază un token generat de back-end ce caută acest token pentru a fi adăugat la cererile ulterioare de tip POST sau PUT, generate de client. Am decis să nu folosesc acest token, deoarece aplicația folosește JWT.\newline
 
 Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-urile necesare pentru a evita cazul în care Spring să respingă cererile ulterioare, returnând codul 403 FORBIDDEN.\newline
-În acest caz, am folosit \code{http.authorizeRequests().antMatchers()} pentru a aplica autorizația la una sau mai multe căi, reprezentate prin tipul de cerere (HTTPMethod) și URL-ul corespunzător, pe care le specific în \code{antMatchers()}.\newline
+În acest caz, am folosit \code{http.authorizeRequests().antMatchers()} pentru a aplica autorizarea la una sau mai multe căi, reprezentate prin tipul de cerere (HTTPMethod) și URL-ul corespunzător, pe care le specific în \code{antMatchers()}.\newline
 
  \begin{lstlisting}[language=Java]
 	http.
@@ -43,7 +43,7 @@ Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-uri
 
 În contextul folosirii JSON Web Token, am personalizat și modul în care aplicația va gestiona excepțiile ce vor rezulta din punctul de intrare pentru autentificare, definit în cadrul clasei \code{JwtAuthenticationEntryPoint}. Pentru a oferi un context, acest punct de intrare pentru autentificare gestionează excepțiile care trebuie aruncate atunci când un utilizator încearcă să acceseze o resursă care necesită autentificare, cum ar fi posibilitatea de a vedea postările unui alt utilizator.\newline
 
-În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un REST API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea și de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, pot conține informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
+În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un RESTful API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea, și astfel, de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, pot conține informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
 
 De asemenea, în cadrul fișierului de configurări, am ales sa evit injectarea directa a valorilor, și am creat o clasă denumita \code{AppConfiguration} pentru aceste proprietăți personalizate. Presupunând că este necesară o proprietate pe care dorim să o numim \code{uploadsPath} în cadrul aplicației, atunci, pentru ca Spring să o poată recunoaște în fișierul de configurări denumit \code{application.yml}, o vom scrie prin unirea cuvintelor cu liniuță, adica \code{uploads-path}.
 Pentru această clasă, trebuie, de asemenea, să folosim adnotarea \code{@ConfigurationProperties}, care este necesară pentru a lega proprietățile externe de acest obiect și putem, de asemenea, să definim un prefix pentru aceste proprietăți personalizate, cum ar fi "fitclub". Concret, în fișierul de configurări \code{application.yml}, valoarea setată prin \code{fitclub.uploads-path} va seta așadar valoarea proprietății personalizate din clasă.\newline 
@@ -533,7 +533,7 @@ Fiecare aplicație, fie că este o aplicație web sau o aplicație ce implemente
 
 \textbf{Observație}: Serviciul Azure responsabil pentru rularea unei instanțe de baze de date relaționale ce a fost descris anterior, nu are nevoie să opereze pe baza unui App Service Plan.\newline
 
-Pentru găzduirea aplicației ce implementează API-urile web, este necesară generarea unor artefacte, folosind în terminal comanda \,\code{mvn clean install}. Concret, se generează un fișier cu extensia .jar, după rularea cu succes a tuturor testelor și curățarea tuturor rezultatelor compilărilor anterioare. După aceea, sunt necesare câteva configurări adiționale în cadrul proiectului care vor fi folosite pentru a încărca aplicația cu succes pe Microsoft Azure.\newline
+Pentru găzduirea aplicației ce implementează API-urile web, este necesară generarea unor artefacte, folosind în terminal comanda \,\code{mvn clean install}. Concret, se generează un fișier cu extensia ".jar", după rularea cu succes a tuturor testelor și curățarea tuturor rezultatelor compilărilor anterioare. După aceea, sunt necesare câteva configurări adiționale în cadrul proiectului care vor fi folosite pentru a încărca aplicația cu succes pe Microsoft Azure.\newline
 
 Pentru găzduirea aplicației client-side, este necesară crearea unui director ce conține versiunea de producție a aplicației, prin rularea în terminal a comenzii \code{npm run build}. Acest director va conține un set minimal de fișiere ce vor putea fi copiate în cadrul oricărui server web și care vor acționa ca aplicația client-side propriu-zisă.\newline
 
