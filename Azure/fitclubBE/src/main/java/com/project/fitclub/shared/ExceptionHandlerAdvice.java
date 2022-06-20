@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +47,13 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ApiError handleUploadFileSizeException(FileSizeLimitExceededException exception, HttpServletRequest request) {
         ApiError apiError = new ApiError(400, exception.getMessage(), request.getServletPath());
+        return apiError;
+    }
+
+    @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiError handleEmailAlreadyInUseException(SQLIntegrityConstraintViolationException exception, HttpServletRequest request) {
+        ApiError apiError = new ApiError(400, "This email is already connected to an account!", request.getServletPath());
         return apiError;
     }
 }

@@ -6,7 +6,6 @@ import * as authActions from "../redux/authActions";
 import signupImg from '../assets/signup-image.png';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-// form-group py-4
 
 export const UserSignupPage = (props) => {
   const [form, setForm] = useState({
@@ -55,6 +54,8 @@ export const UserSignupPage = (props) => {
         .catch((apiError) => {
           if (apiError.response.data && apiError.response.data.validationErrors) {
             setErrors(apiError.response.data.validationErrors);
+          } else if (apiError.response.data) {
+            setErrors({ "email": apiError.response.data.message });
           }
           setPendingApiCall(false);
         });
