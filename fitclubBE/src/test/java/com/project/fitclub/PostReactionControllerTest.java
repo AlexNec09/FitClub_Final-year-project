@@ -178,8 +178,6 @@ public class PostReactionControllerTest {
 
         Post post = postService.save(inDB, TestUtil.createValidPost());
 
-        System.out.println(post.getId());
-
         String path = String.format(API_1_0_POSTS_DISLIKE, post.getId());
         ResponseEntity<GenericResponse> result = testRestTemplate.exchange(path, HttpMethod.PUT, null, GenericResponse.class);
         assertThat(result.getBody().getMessage()).isNotNull();

@@ -45,7 +45,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
   datasource:
-    url: jdbc:mysql://some-server.mysql.database.azure.com:3306/fitclubdb?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://some-server.mysql.database.azure.com:3306/fitclubdatabase?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: alexnec@fitclubmysqldb
     password: Dadada12@
 fitclub:
@@ -57,7 +57,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://fitclubmysqldb.mysql.database.azure.com:3306/fitclubdb?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://fitclubmysqldb.mysql.database.azure.com:3306/fitclubdatabase?useSSL=true&requireSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: alexnec@fitclubmysqldb
     password: Dadada12@
   jpa:

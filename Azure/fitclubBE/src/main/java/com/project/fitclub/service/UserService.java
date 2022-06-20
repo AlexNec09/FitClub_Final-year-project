@@ -142,10 +142,6 @@ public class UserService {
             }
             updatedToken.setEmailToken(jwtTokenProvider.generateVerificationToken(userDB.getUsername()));
             verificationTokenService.saveToken(updatedToken);
-
-            System.out.println("In resendEmail");
-            System.out.println(userDB.getEmail());
-
             emailSender.verifyEmail(userDB);
             return true;
         } catch (Exception e) {

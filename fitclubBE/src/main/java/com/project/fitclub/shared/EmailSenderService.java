@@ -88,7 +88,5 @@ public class EmailSenderService {
         mailToBeSent.setSubject(subject);
 
         mailSender.send(mailToBeSent);
-
-        System.out.println("Email sent to: " + user.getEmail());
     }
 }

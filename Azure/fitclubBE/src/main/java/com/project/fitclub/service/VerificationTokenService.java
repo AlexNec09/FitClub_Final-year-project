@@ -64,7 +64,6 @@ public class VerificationTokenService {
             changeEmailToken.setEmailToken(null);
             User userDB = changeEmailToken.getUser();
             if (changeEmailToken.getPasswordToken() == null) {
-                System.out.println("entered here");
                 deleteTokenById(changeEmailToken);
                 userDB.setVerificationToken(null);
             }

@@ -65,13 +65,11 @@ public class UserController {
             boolean isSaveToDBAndSentWithSuccess = userService.resendEmailById(id);
 
             if (isSaveToDBAndSentWithSuccess) {
-                System.out.println("Email Resending was successfully!");
                 return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
             } else {
                 throw new Exception("Email already confirmed!");
             }
         } catch (Exception e) {
-            System.out.println("An error has occurred on the process of sending email!");
             return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
         }
     }
@@ -97,13 +95,11 @@ public class UserController {
             boolean isVerified = userService.verifyEmailToken(token);
 
             if (isVerified) {
-                System.out.println("SUCCESS");
                 return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
             } else {
                 throw new Exception("Token expired!");
             }
         } catch (Exception e) {
-            System.out.println("FAILING");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
@@ -114,12 +110,10 @@ public class UserController {
         try {
             boolean isSaveToDBAndSentWithSuccess = verificationTokenService.changeEmailById(id);
             if (isSaveToDBAndSentWithSuccess) {
-                System.out.println("Email for changing email address was successfully!");
                 return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
             }
 
         } catch (Exception e) {
-            System.out.println("An error has occurred on the process of sending email!");
             return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
         }
         return null;
@@ -133,14 +127,12 @@ public class UserController {
             if (user != null) {
                 boolean isEmailChanged = userService.changeEmail(user.getEmail(), updatedEmail);
                 if (isEmailChanged) {
-                    System.out.println("SUCCESS");
                     return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
                 }
             } else {
                 throw new Exception("Token already used or expired!");
             }
         } catch (Exception e) {
-            System.out.println("FAILING");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return null;
@@ -150,7 +142,6 @@ public class UserController {
     public ResponseEntity isTokenValid(@PathVariable String tokenIdentifier, @PathVariable String token) {
         try {
             boolean isValid = userService.checkTokenValidity(tokenIdentifier, token);
-
             if (isValid) {
                 return ResponseEntity.ok(Collections.singletonMap("result", "VALID"));
             } else {
@@ -167,12 +158,10 @@ public class UserController {
         try {
             boolean isSavedToDBWithSuccess = verificationTokenService.changePasswordById(id);
             if (isSavedToDBWithSuccess) {
-                System.out.println("Email for changing password was successfully!");
                 return ResponseEntity.ok(Collections.singletonMap("result", "SUCCESS"));
             }
 
         } catch (Exception e) {
-            System.out.println("An error has occurred on the process of sending email!");
             return ResponseEntity.ok(Collections.singletonMap("result", "FAIL"));
         }
         return null;
@@ -186,14 +175,12 @@ public class UserController {
             if (user != null) {
                 boolean isPasswordChanged = userService.changePassword(user.getEmail(), updatedPassword);
                 if (isPasswordChanged) {
-                    System.out.println("SUCCESS");
                     return ResponseEntity.ok(Collections.singletonMap("value", "SUCCESS"));
                 }
             } else {
                 throw new Exception("Token already used or expired!");
             }
         } catch (Exception e) {
-            System.out.println("FAILING");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return null;
