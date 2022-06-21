@@ -43,7 +43,7 @@ Pe partea de autorizare, a fost necesar, de asemenea, să securizez endpoint-uri
 
 În contextul folosirii JSON Web Token, am personalizat și modul în care aplicația va gestiona excepțiile ce vor rezulta din punctul de intrare pentru autentificare, definit în cadrul clasei \code{JwtAuthenticationEntryPoint}. Pentru a oferi un context, acest punct de intrare pentru autentificare gestionează excepțiile care trebuie aruncate atunci când un utilizator încearcă să acceseze o resursă care necesită autentificare, cum ar fi posibilitatea de a vedea postările unui alt utilizator.\newline
 
-În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un RESTful API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, acesta fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea, și astfel, de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, pot conține informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
+În ceea ce privește gestionarea sesiunii, am optat pentru configurarea \code{SessionCreationPolicy.STATELESS}, deoarece acesta este un RESTful API și nu am dorit ca acesta să salveze sesiuni sau cookie-uri, fiind și principalul motiv pentru care am optat să folosesc JWT, astfel încât serverul să nu fie nevoit să rețină sesiunea, și astfel, de fiecare dată când o cerere vine cu un token valid, serverul o va prelucra corespunzător si va trimite un răspuns. Token-urile vor avea date de expirare, pot conține informații succinte despre utilizator, însă, la bază, aplicația folosește un JWT din dorința de a ne asigura că nicio stare nu se va salva pe server și pentru a valida cererile ce vin de pe partea de client. În schimb, sesiunea se va salva prin intermediul React Redux, indiferent dacă utilizatorul este sau nu autentificat.\newline
 
 De asemenea, în cadrul fișierului de configurări, am ales sa evit injectarea directa a valorilor, și am creat o clasă denumita \code{AppConfiguration} pentru aceste proprietăți personalizate. Presupunând că este necesară o proprietate pe care dorim să o numim \code{uploadsPath} în cadrul aplicației, atunci, pentru ca Spring să o poată recunoaște în fișierul de configurări denumit \code{application.yml}, o vom scrie prin unirea cuvintelor cu liniuță, adica \code{uploads-path}.
 Pentru această clasă, trebuie, de asemenea, să folosim adnotarea \code{@ConfigurationProperties}, care este necesară pentru a lega proprietățile externe de acest obiect și putem, de asemenea, să definim un prefix pentru aceste proprietăți personalizate, cum ar fi "fitclub". Concret, în fișierul de configurări \code{application.yml}, valoarea setată prin \code{fitclub.uploads-path} va seta așadar valoarea proprietății personalizate din clasă.\newline 
@@ -110,7 +110,7 @@ Se identifică utilizatorul autentificat pe site, și apoi, folosind caracterist
 
 Pentru a identifica pe cine urmărește un utilizator, am conceput o relație "many-to-many" între entitatea denumită \code{User} și ea însăși, putând stabili, așadar, o legătură a unei astfel de instanțe cu mai multe instanțe de același tip.\newline
 
-O postare suportă posibilitatea de a adăuga o imagine ca atașament, iar acest lucru necesită adăugarea de noi configurări, motiv pentru care am creat clasa \code{WebConfiguration} ce va fi verificată de Spring pentru configurațiile web, cum ar fi setarea de static resources sau setarea interceptorilor care vor intercepta cererile HTTP primite de pe partea de client.\newline
+O postare suportă posibilitatea de a adăuga o imagine ca atașament, iar acest lucru necesită adăugarea de noi configurări, motiv pentru care am creat clasa \code{WebConfiguration} ce va fi verificată de Spring pentru configurațiile web, cum ar fi setarea de static resources (resurse statice) sau setarea interceptorilor care vor intercepta cererile HTTP primite de pe partea de client.\newline
 
 \begin{lstlisting}[language=Java]
 	    @Override
@@ -166,11 +166,11 @@ Aplicația este configurată să afișeze un număr inițial de 10 postări pe p
 
 În aceste două exemple, unde am folosit \code{Specifications}, am tratat două situații care apar frecvent atunci când un utilizator navighează pe site.\newline 
 
-Primul exemplu se rezumă la identificarea postărilor noi. Se consideră o postare nouă, daca aceasta are "id-ul", reținut in baza de date, mai mare decât cea mai recentă postare ce se afișează pe pagină, al cărei id îl primim ca parametru în cadrul metodei numite \code{getPostsAfter}. A se avea în vedere faptul că ordinea afișării acestor postări este descrescătoare, în funcție de id.\newline
+Primul exemplu se rezumă la identificarea postărilor noi. Se consideră o postare nouă, dacă aceasta are "id-ul", reținut în baza de date, mai mare decât cea mai recentă postare ce se afișează pe pagină, al cărei "id" îl primim ca parametru în cadrul metodei numite \code{getPostsAfter}. A se avea în vedere faptul că ordinea afișării acestor postări este descrescătoare, în funcție de "id".\newline
 
 Al doilea exemplu se rezumă la identificarea postărilor vechi. Această căutare funcționează similar cu cea din primul exemplu, doar că în acest caz, se vor identifica doar acele postări care au "id-ul" mai mic decât ultima postare afișată pe pagină, deoarece, așa cum am spus anterior, ordinea afișării acestor postări este descrescătoare, în funcție de id.\newline
 
-De asemenea, aceeasi funcționalitate este prezentă și pe pagina de utilizator, afișând pentru fiecare utilizator doar postările care îi aparțin, cu posibilitatea de a încărca postări mai vechi, și de vedea în timp real dacă apare o postare nouă din partea acestuia.\newline
+De asemenea, aceeași funcționalitate este prezentă și pe pagina de utilizator, afișând pentru fiecare utilizator doar postările care îi aparțin, cu posibilitatea de a încărca postări mai vechi, și de vedea în timp real dacă apare o postare nouă din partea acestuia.\newline
 
 \subsection{Ștergerea postărilor}
 
@@ -207,7 +207,7 @@ Parametrii acestei metode sunt \code{userPrincipal}, prin care se identifică ut
 
 Aplicația permite 2 tipuri de reacții la o postare și anume, utilizatorul poate să aprecieze sau să nu aprecieze postarea. Astfel, am declarat un enum cu aceste doua valori (LIKE, DISLIKE), iar pentru a gestiona o astfel de cerere trimisă de un utilizator, am folosit adnotarea \code{@PutMapping}. Această adnotare acționează ca o prescurtare, adnotarea echivalentă acesteia fiind: \code{@RequestMapping(method = RequestMethod.PUT)}.\newline
 
-Această metodă este utilizată pentru a modifica/actualiza o resursă din baza de date, utilizatorul trimițând date care actualizează întreaga resursă. În acest sens, PUT este similară cu POST în sensul că poate crea resurse, însă, PUT poate să suprascrie întreaga entitate dacă aceasta există deja sau să creeaze o nouă resursă, dacă nu există.\newline
+Această metodă este utilizată pentru a modifica/actualiza o resursă din baza de date, utilizatorul trimițând date care actualizează întreaga resursă. În acest sens, PUT este similară cu POST în sensul că poate crea resurse, însă, PUT poate să suprascrie întreaga entitate, dacă aceasta există deja sau să creeze o nouă resursă, dacă nu există.\newline
 
 \begin{lstlisting}[language=Java]
 	private void react(Reaction reaction, long id, User user) {
@@ -337,7 +337,7 @@ Pentru a gestiona toate aceste situații de excepție, am creat o nouă clasă n
 \end{lstlisting}
 \bigskip
 
-Așadar, în cadrul metodei \code{handleValidationException}, se vor colecta aceste excepții, adăugând atât câmpul care a generat excepția, dar și mesajul aferent, acestea fiind utile în aplicația client-side, deoarece, folosind și o interfață prietenoasă cu utilizatorul, acestuia i se vor afișa mesaje clare și sugestive pentru a-l sprijini să finalizeze ceea ce a dorit să facă pe site.\newline
+Așadar, în cadrul metodei \code{handleValidationException}, se vor colecta aceste excepții, adăugând atât câmpul care a generat excepția, dar și mesajul aferent, acestea fiind utile în aplicația client-side, deoarece, folosind și o interfață prietenoasă cu utilizatorul, acestuia i se vor afișa mesaje clare și sugestive, pentru a-l sprijini să finalizeze ceea ce a dorit să facă pe site.\newline
 
 \section{Implementarea aplicației client-side}
 
