@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 const UserList = (props) => {
   const [search, setSearch] = useState();
-  const [infoText, setInfoText] = useState("");
+  const [infoText, setInfoText] = useState("No users found!");
 
   const [page, setPage] = useState({
     content: [],
@@ -24,24 +24,20 @@ const UserList = (props) => {
           .listUsers({ page: requestedPage, size: page.size })
           .then((response) => {
             setPage(response.data);
-            if (response.data.content.length === 0) {
-              setInfoText("No users found!")
-            } else {
+            if (response.data.content.length !== 0) {
               setInfoText("Users")
             }
             setLoadError();
           })
           .catch((error) => {
-            setLoadError("User load failed!");
+            setLoadError("Unable to load users!");
           });
       } else {
         apiCalls
           .searchUsers(search, { page: requestedPage, size: page.size })
           .then((response) => {
             setPage(response.data);
-            if (response.data.content.length === 0) {
-              setInfoText("No users found!")
-            } else {
+            if (response.data.content.length !== 0) {
               setInfoText("Users")
             }
             setLoadError();
@@ -88,7 +84,7 @@ const UserList = (props) => {
         </div>
         <div className="clearfix">
           <div>
-            {!first && (
+            {(!first && (page.content.length > 0 || loadError === undefined)) && (
               <span
                 className="badge rounded-pill bg-light text-dark float-start"
                 style={{ cursor: "pointer" }}
@@ -98,7 +94,7 @@ const UserList = (props) => {
               </span>
             )}
 
-            {!last && (
+            {(!last && (page.content.length > 0 || loadError === undefined)) && (
               <span
                 className="badge rounded-pill bg-light text-dark float-end"
                 style={{ cursor: "pointer" }}
@@ -110,7 +106,7 @@ const UserList = (props) => {
           </div>
         </div>
         {loadError && (
-          <span className="text-center text-danger">{loadError}</span>
+          <span className="text-center text-danger pt-3">{loadError}</span>
         )}
       </div>
     </div>

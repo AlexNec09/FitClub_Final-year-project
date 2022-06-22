@@ -142,7 +142,7 @@ const mockFailGet = {
     response: {
         data:
         {
-            message: 'User load failed'
+            message: 'No users found!'
         }
     }
 };
@@ -238,7 +238,7 @@ describe('UserList', () => {
             const { queryByText } = setup();
             const previousLink = await waitFor(() => queryByText('< previous'));
             fireEvent.click(previousLink);
-            expect(await waitFor(() => { expect(queryByText('User load failed!')).toBeInTheDocument() }));
+            await waitFor(() => { expect(queryByText('Unable to load users!')).toBeInTheDocument() });
         });
 
         it('hides error message when successfully loading other page', async () => {
@@ -249,9 +249,9 @@ describe('UserList', () => {
             const { queryByText } = setup();
             const previousLink = await waitFor(() => queryByText('< previous'));
             fireEvent.click(previousLink);
-            await waitFor(() => queryByText('User load failed'));
+            await waitFor(() => queryByText('Unable to load users!'));
             fireEvent.click(previousLink);
-            expect(await waitFor(() => { expect(queryByText('User load failed')).not.toBeInTheDocument() }));
+            expect(await waitFor(() => { expect(queryByText('Unable to load users!')).not.toBeInTheDocument() }));
         });
     });
 });
